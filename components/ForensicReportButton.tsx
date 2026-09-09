@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileText, Loader2 } from "lucide-react";
 import { useForensicReport } from "@/lib/useForensicReport";
+import { createClient } from "@/lib/supabase/browser";
 
 interface Session {
   id: string;
@@ -27,10 +28,13 @@ export function ForensicReportButton({ session }: { session: Session }) {
   const handleGenerate = async () => {
     setLoading(true);
     try {
-      // Small delay to show loading state then generate
-      await new Promise((r) => setTimeout(r, 300));
-
       const risk = session.risk_summary;
+      const { data: events } = await createClient()
+        .from("detection_events")
+        .select("explainability_markers")
+        .eq("session_id", session.id)
+        .order("chunk_index", { ascending: false })
+        .limit(12);
       const riskScore = risk?.max_risk ?? 0;
       const isBlocked = session.status === "flagged" || risk?.decision === "blocked";
 
@@ -44,11 +48,11 @@ export function ForensicReportButton({ session }: { session: Session }) {
         originLocation: risk?.origin_location ?? "Unavailable (location not collected)",
         decision: isBlocked ? "blocked" : "allowed",
         reason: risk?.reason ?? (isBlocked ? "High spoof probability — vocoder artifacts detected" : "No anomalies found"),
-        dspMarkers: risk?.dsp_markers ?? [
-          { feature: "Spectral Roll-off", value: riskScore > 0.6 ? 7800 : 4200, anomaly: riskScore > 0.6 },
-          { feature: "Zero Crossing Rate", value: riskScore > 0.6 ? 0.18 : 0.09, anomaly: riskScore > 0.6 },
-          { feature: "Phase Jitter", value: riskScore > 0.6 ? "Detected" : "Normal", anomaly: riskScore > 0.6 },
-        ],
+        dspMarkers: risk?.dsp_markers ?? Object.entries(events?.[0]?.explainability_markers ?? {}).map(([feature, value]) => ({
+          feature,
+          value: typeof value === "number" ? value : String(value),
+          anomaly: riskScore >= 0.7,
+        })),
         latencyMs: risk?.latency_ms,
       });
     } catch (err) {
