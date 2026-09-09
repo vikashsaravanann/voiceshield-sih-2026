@@ -4,6 +4,8 @@ services:
     env: docker
     dockerfilePath: apps/api/Dockerfile
     dockerContext: apps/api
+    branch: main
+    autoDeploy: true
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
@@ -19,7 +21,7 @@ services:
       - key: STORE_RAW_AUDIO
         value: "false"
       - key: NEXT_PUBLIC_SITE_URL
-        value: https://voiceshield-sih-2026.vercel.app
+        value: https://voiceshield-live.vercel.app
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
