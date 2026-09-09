@@ -126,7 +126,7 @@ export default function DemoPage() {
               </h1>
               <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
                 333 ms raw PCM16 audio hops inspected via hybrid LFCC &amp; deep neural representations.
-                Sub-300 ms decision latency.
+                Designed for sub-300 ms decision latency on an available inference service.
               </p>
             </div>
 
@@ -228,7 +228,7 @@ export default function DemoPage() {
         {/* ══════════════════════════════════════════════════════════
             BACKEND HEALTH
         ══════════════════════════════════════════════════════════ */}
-        <BackendHealth />
+        <BackendHealth wsConnected={isConnected} />
 
         {/* ══════════════════════════════════════════════════════════
             PIPELINE STEPS
