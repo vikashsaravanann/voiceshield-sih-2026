@@ -59,6 +59,7 @@ code { font-family: var(--mono); color: var(--steel); }
 .nav { display: none; gap: 0.15rem; }
 @media (min-width: 768px) { .nav { display: flex; } }
 .nav a, .mnav a {
+  display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.5rem 0.75rem; border-radius: 7px; font-size: 0.75rem; color: var(--muted);
   transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
 }
