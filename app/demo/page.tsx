@@ -7,6 +7,7 @@ import { SpectrogramView } from "@/components/SpectrogramView";
 import { ChallengeResponse } from "@/components/ChallengeResponse";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { SessionSummary } from "@/components/SessionSummary";
+import { BackendHealth } from "@/components/BackendHealth";
 import { DetectionResponse, ConnectionState, SessionStats } from "@/types/detection";
 import { Mic, MicOff, WifiOff, Volume2, ShieldAlert } from "lucide-react";
 
@@ -35,6 +36,8 @@ export default function DemoPage() {
   const currentProbability = latestDetection?.spoof_probability ?? 0.04;
   const currentRisk = latestDetection?.risk_level ?? "low";
   const latencyMs = latestDetection?.latency_ms ?? 0;
+  const decisionLabel =
+    currentRisk === "high" ? "BLOCK / ESCALATE" : currentRisk === "medium" ? "CHALLENGE CALLER" : "ALLOW / MONITOR";
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
@@ -65,6 +68,7 @@ export default function DemoPage() {
               reconnectDelayMs,
               bufferedCount,
               start,
+              startFromFile,
               stop,
               simulateDisconnect,
               toggleCloneSimulation,
@@ -80,13 +84,30 @@ export default function DemoPage() {
 
                 <div className="flex items-center gap-2 flex-wrap">
                   {!isStreaming ? (
-                    <button
-                      onClick={start}
-                      className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs tracking-wider uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
-                    >
-                      <Mic className="w-4 h-4" />
-                      <span>Start Live Audio</span>
-                    </button>
+                    <>
+                      <button
+                        onClick={start}
+                        className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs tracking-wider uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                      >
+                        <Mic className="w-4 h-4" />
+                        <span>Start Live Audio</span>
+                      </button>
+
+                      <label className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer border border-slate-700">
+                        <Volume2 className="w-4 h-4" />
+                        <span>Upload .wav</span>
+                        <input
+                          type="file"
+                          accept=".wav,audio/wav"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) startFromFile(file);
+                            e.target.value = ""; // Reset to allow same file upload again
+                          }}
+                        />
+                      </label>
+                    </>
                   ) : (
                     <>
                       <button
@@ -128,6 +149,22 @@ export default function DemoPage() {
           </AudioStreamer>
         </div>
 
+        <BackendHealth />
+
+        <div className="grid gap-3 sm:grid-cols-4">
+          {[
+            ["01", "CAPTURE", connectionState !== "disconnected"],
+            ["02", "INFER", Boolean(latestDetection)],
+            ["03", "DECIDE", Boolean(latestDetection)],
+            ["04", "PREVENT", challengeActive || currentRisk === "high"],
+          ].map(([step, label, active]) => (
+            <div key={String(label)} className={`rounded-xl border p-4 ${active ? "border-emerald-500/40 bg-emerald-950/20" : "border-slate-800 bg-slate-900/40"}`}>
+              <span className="font-mono text-xs text-slate-500">{step}</span>
+              <p className={`mt-2 text-xs font-bold tracking-widest ${active ? "text-emerald-300" : "text-slate-500"}`}>{label}</p>
+            </div>
+          ))}
+        </div>
+
         {/* Live Visualizers Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Left: Risk Meter */}
@@ -143,6 +180,25 @@ export default function DemoPage() {
             isActive={connectionState === "connected"}
             spoofProbability={currentProbability}
           />
+        </div>
+
+        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="eyebrow">Policy decision</p>
+              <h2 className="mt-1 text-xl font-bold text-white">{decisionLabel}</h2>
+            </div>
+            <span className={`badge ${currentRisk === "high" ? "bg-rose-950/70 text-rose-300" : currentRisk === "medium" ? "bg-amber-950/70 text-amber-300" : "bg-emerald-950/70 text-emerald-300"}`}>
+              {latestDetection ? `model confidence ${Math.round((1 - currentProbability) * 100)}%` : "awaiting audio"}
+            </span>
+          </div>
+          <p className="mt-3 text-sm text-slate-400">
+            {currentRisk === "high"
+              ? "Session should be blocked and escalated for operator review."
+              : currentRisk === "medium"
+              ? "The caller must complete the multilingual phonemic challenge before continuing."
+              : "No active spoof signal detected. Continue monitoring the call path."}
+          </p>
         </div>
 
         {/* Active Challenge-Response Trigger */}
@@ -161,7 +217,9 @@ export default function DemoPage() {
                     risk_level: "low",
                   });
                 }
+                setChallengeActive(false);
               }}
+              spoofProbability={currentProbability}
             />
           </div>
         )}

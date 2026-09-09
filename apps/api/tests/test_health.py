@@ -19,3 +19,18 @@ def test_root():
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "online"
+
+
+def test_challenge_round_trip():
+    response = client.get("/api/challenges?language=hi")
+    assert response.status_code == 200
+    challenge = response.json()
+    assert challenge["language"] == "hi"
+    assert challenge["challenge_text"]
+
+    verified = client.post(
+        "/api/challenges/verify",
+        json={"challenge_text": challenge["challenge_text"], "spoof_probability": 0.08},
+    )
+    assert verified.status_code == 200
+    assert verified.json()["passed"] is True

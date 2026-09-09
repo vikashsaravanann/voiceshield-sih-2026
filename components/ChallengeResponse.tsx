@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ChallengeResponseProps {
   onChallengeComplete?: (passed: boolean, newRisk: number) => void;
+  spoofProbability?: number;
 }
 
 const PHRASES: Record<string, string[]> = {
@@ -21,25 +22,69 @@ const PHRASES: Record<string, string[]> = {
   ],
 };
 
-export function ChallengeResponse({ onChallengeComplete }: ChallengeResponseProps) {
+const apiUrl = () =>
+  process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL ||
+  (typeof window !== "undefined" && window.location.protocol === "https:"
+    ? "https://voiceshield-api.onrender.com"
+    : "http://localhost:8000");
+
+export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08 }: ChallengeResponseProps) {
   const [lang, setLang] = useState<"en" | "hi" | "ta">("hi");
   const [status, setStatus] = useState<"pending" | "recording" | "analyzing" | "passed" | "failed">("pending");
   const [resultScore, setResultScore] = useState<number | null>(null);
+  const [phrase, setPhrase] = useState(PHRASES.hi[0]);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const currentPhrase = PHRASES[lang][0];
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${apiUrl()}/api/challenges?language=${lang}`, { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("challenge service unavailable");
+        return (await response.json()) as { challenge_text: string };
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setPhrase(data.challenge_text);
+          setApiError(null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setPhrase(PHRASES[lang][0]);
+          setApiError("API challenge service unavailable; showing local fallback.");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
 
   const handleStartRecording = () => {
     setStatus("recording");
-    // Simulate active challenge analysis after 3 seconds of caller response
     setTimeout(() => {
       setStatus("analyzing");
       setTimeout(() => {
-        // Evaluate: Genuine caller passes with low risk
-        const passed = true;
-        const newRisk = 0.08;
-        setStatus(passed ? "passed" : "failed");
-        setResultScore(newRisk);
-        onChallengeComplete?.(passed, newRisk);
+        fetch(`${apiUrl()}/api/challenges/verify`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ challenge_text: phrase, spoof_probability: spoofProbability }),
+        })
+          .then(async (response) => {
+            if (!response.ok) throw new Error("verification failed");
+            return (await response.json()) as { passed: boolean; risk_level: string };
+          })
+          .then((result) => {
+            const newRisk = result.passed ? 0.08 : Math.max(spoofProbability, 0.7);
+            setStatus(result.passed ? "passed" : "failed");
+            setResultScore(newRisk);
+            onChallengeComplete?.(result.passed, newRisk);
+          })
+          .catch(() => {
+            setStatus("failed");
+            setResultScore(Math.max(spoofProbability, 0.7));
+            setApiError("Verification service unavailable. Failing closed.");
+            onChallengeComplete?.(false, Math.max(spoofProbability, 0.7));
+          });
       }, 1500);
     }, 3000);
   };
@@ -84,13 +129,14 @@ export function ChallengeResponse({ onChallengeComplete }: ChallengeResponseProp
       </div>
 
       <p className="text-xs text-slate-400 mb-3">
-        Caller exhibits high probability of voice cloning. Request the caller read the dynamic phonetic phrase below:
+        Caller exhibits elevated clone probability. Read the API-generated phrase below to verify biological speech:
       </p>
+      {apiError ? <p className="mb-3 text-xs text-amber-300" role="status">{apiError}</p> : null}
 
       {/* Challenge Phrase Box */}
       <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 mb-4 text-center">
         <span className="text-lg md:text-xl font-medium text-amber-200 tracking-wide font-sans">
-          "{currentPhrase}"
+        "{phrase}"
         </span>
       </div>
 

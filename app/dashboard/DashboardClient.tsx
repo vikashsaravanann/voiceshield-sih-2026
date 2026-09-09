@@ -4,6 +4,9 @@ import React, { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ShieldCheck, ShieldAlert, Activity, Users, Clock, AlertTriangle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { BackendHealth } from "@/components/BackendHealth";
+
+import { ThreatMap } from "@/components/ThreatMap";
 
 export default function DashboardClient({ sessions, stats }: { sessions: any[]; stats: any }) {
   // Process sessions for the chart (grouping by hour or just mapping them over time)
@@ -23,7 +26,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -33,6 +36,14 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
               <span>LIVE: TELEPHONY MONITORING CENTER</span>
+            </div>
+
+            <BackendHealth />
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <EvidenceCard title="SIH prevention loop" value="DETECT → CHALLENGE → BLOCK" detail="Active mitigation, not passive scoring" />
+              <EvidenceCard title="Privacy posture" value="0 BYTES STORED" detail="PCM remains in volatile memory only" />
+              <EvidenceCard title="Telephony target" value="< 250 MS" detail="Designed for real-time G.711 call paths" />
             </div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Security Operations Dashboard</h1>
             <p className="text-slate-400 mt-1">Real-time threat analytics and voice cloning mitigation</p>
@@ -45,71 +56,78 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <StatCard 
-            title="Total Calls Analyzed" 
-            value={stats.total} 
-            icon={<Users className="w-6 h-6 text-blue-400" />} 
-            trend="+12%" 
+          <StatCard
+            title="Total Calls Analyzed"
+            value={stats.total}
+            icon={<Users className="w-6 h-6 text-blue-400" />}
+            trend="+12%"
           />
-          <StatCard 
-            title="Threats Blocked" 
-            value={stats.blocked} 
-            icon={<ShieldAlert className="w-6 h-6 text-rose-500" />} 
+          <StatCard
+            title="Threats Blocked"
+            value={stats.blocked}
+            icon={<ShieldAlert className="w-6 h-6 text-rose-500" />}
             trend="High Risk"
             trendColor="text-rose-400"
           />
-          <StatCard 
-            title="Average Latency" 
-            value="18ms" 
-            icon={<Clock className="w-6 h-6 text-emerald-400" />} 
+          <StatCard
+            title="Average Latency"
+            value="18ms"
+            icon={<Clock className="w-6 h-6 text-emerald-400" />}
             trend="Sub-250ms SLA"
             trendColor="text-emerald-400"
           />
-          <StatCard 
-            title="Avg Confidence Score" 
-            value="98.2%" 
-            icon={<ShieldCheck className="w-6 h-6 text-teal-400" />} 
+          <StatCard
+            title="Avg Confidence Score"
+            value="98.2%"
+            icon={<ShieldCheck className="w-6 h-6 text-teal-400" />}
             trend="Optimal"
             trendColor="text-teal-400"
           />
         </div>
 
-        {/* Main Chart */}
-        <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-          <div className="mb-6">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
-              24-Hour Threat Trajectory
-            </h3>
-            <p className="text-sm text-slate-400">Maximum detected risk probability across voice sessions</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Chart */}
+          <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                24-Hour Threat Trajectory
+              </h3>
+              <p className="text-sm text-slate-400">Maximum detected risk probability across voice sessions</p>
+            </div>
+
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9', borderRadius: '8px' }}
+                    itemStyle={{ color: '#ef4444' }}
+                  />
+                  <Area type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-          
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9', borderRadius: '8px' }}
-                  itemStyle={{ color: '#ef4444' }}
-                />
-                <Area type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
-              </AreaChart>
-            </ResponsiveContainer>
+
+          {/* Threat Map */}
+          <div className="lg:col-span-1 h-[400px] lg:h-auto">
+            <ThreatMap />
           </div>
         </div>
 
         {/* Recent Sessions Table */}
         <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
           <h3 className="text-lg font-bold text-white mb-6">Recent Sessions Audit</h3>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -125,7 +143,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                 {sessions.map((session) => {
                   const maxRisk = session.risk_summary?.max_risk ? Math.round(session.risk_summary.max_risk * 100) : 0;
                   const isBlocked = session.status === 'flagged' || session.risk_summary?.decision === 'blocked';
-                  
+
                   return (
                     <tr key={session.id} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
                       <td className="py-4 px-4 font-mono text-slate-300">{session.id.split('-')[0]}</td>
@@ -135,8 +153,8 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-2">
                           <div className="w-16 h-2 rounded-full bg-slate-800 overflow-hidden">
-                            <div 
-                              className={`h-full ${isBlocked ? 'bg-rose-500' : 'bg-emerald-500'}`} 
+                            <div
+                              className={`h-full ${isBlocked ? 'bg-rose-500' : 'bg-emerald-500'}`}
                               style={{ width: `${Math.max(maxRisk, 5)}%` }}
                             />
                           </div>
@@ -171,6 +189,16 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
         </div>
 
       </div>
+    </div>
+  );
+}
+
+function EvidenceCard({ title, value, detail }: { title: string; value: string; detail: string }) {
+  return (
+    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</p>
+      <p className="mt-3 font-mono text-lg font-bold text-emerald-300">{value}</p>
+      <p className="mt-1 text-xs text-slate-400">{detail}</p>
     </div>
   );
 }

@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.ml.spoof_model import SpoofModel
-from app.routes import audit, health, sessions
+from app.routes import audit, challenges, health, sessions, twilio
 from app.websocket import router as websocket_router
 
 
@@ -47,6 +47,8 @@ app.include_router(health.router)
 app.include_router(websocket_router)
 app.include_router(sessions.router, prefix="/api/sessions")
 app.include_router(audit.router, prefix="/api/audit")
+app.include_router(challenges.router, prefix="/api")
+app.include_router(twilio.router, prefix="/api/twilio")
 
 
 @app.get("/", tags=["Health"])

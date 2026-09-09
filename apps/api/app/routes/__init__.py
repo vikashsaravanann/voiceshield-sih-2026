@@ -1,4 +1,4 @@
 """VoiceShield Routes Package."""
-from app.routes import health, sessions, audit
+from app.routes import audit, challenges, health, sessions
 
-__all__ = ["health", "sessions", "audit"]
+__all__ = ["health", "sessions", "audit", "challenges"]
