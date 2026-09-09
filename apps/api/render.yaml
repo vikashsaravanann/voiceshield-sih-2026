@@ -2,8 +2,8 @@ services:
   - type: web
     name: voiceshield-api
     env: docker
-    dockerfilePath: Dockerfile
-    dockerContext: .
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: apps/api
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
@@ -18,3 +18,9 @@ services:
         value: "true"
       - key: STORE_RAW_AUDIO
         value: "false"
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://voiceshield-sih-2026.vercel.app
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

@@ -5,28 +5,30 @@ SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
 from datetime import datetime, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import structlog
 from app.db.supabase_client import get_supabase
 
 logger = structlog.get_logger()
 
 
-async def create_session(session_id: str, user_id: str, client_info: Dict[str, Any]) -> None:
+async def create_session(session_id: str, user_id: Optional[str], client_info: Dict[str, Any]) -> None:
     """Register new audio stream session."""
     try:
         supabase = get_supabase()
         if supabase:
-            supabase.table("sessions").insert({
+            payload = {
                 "id": session_id,
-                "user_id": user_id,
                 "started_at": datetime.now(timezone.utc).isoformat(),
                 "client_info": client_info,
                 "status": "active",
-            }).execute()
+            }
+            if user_id and _is_uuid(user_id):
+                payload["user_id"] = user_id
+            supabase.table("sessions").insert(payload).execute()
         logger.info("session.created", session_id=session_id)
     except Exception as e:
-        logger.debug("session.create_skipped", reason=str(e))
+        logger.warning("session.create_failed", session_id=session_id, reason=str(e))
 
 
 async def finalize_session(session_id: str, total_chunks: int, risk_summary: Dict[str, Any] = None) -> None:
@@ -42,7 +44,7 @@ async def finalize_session(session_id: str, total_chunks: int, risk_summary: Dic
             }).eq("id", session_id).execute()
         logger.info("session.finalized", session_id=session_id, total_chunks=total_chunks)
     except Exception as e:
-        logger.debug("session.finalize_skipped", reason=str(e))
+        logger.warning("session.finalize_failed", session_id=session_id, reason=str(e))
 
 
 async def batch_insert_events(events: List[Dict[str, Any]]) -> None:
@@ -55,4 +57,14 @@ async def batch_insert_events(events: List[Dict[str, Any]]) -> None:
             supabase.table("detection_events").insert(events).execute()
         logger.info("events.batch_inserted", count=len(events))
     except Exception as e:
-        logger.debug("events.batch_insert_skipped", reason=str(e))
+        logger.warning("events.batch_insert_failed", reason=str(e))
+
+
+def _is_uuid(value: str) -> bool:
+    import uuid
+
+    try:
+        uuid.UUID(value)
+        return True
+    except (ValueError, AttributeError, TypeError):
+        return False

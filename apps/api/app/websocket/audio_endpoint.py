@@ -37,6 +37,7 @@ async def audio_websocket(websocket: WebSocket):
     user_id: Optional[str] = None
     chunk_index: int = 0
     pending_events: List[Dict[str, Any]] = []
+    risk_values: List[float] = []
 
     try:
         # ── Step 1: Handshake and Session Registration ────────────────
@@ -47,7 +48,7 @@ async def audio_websocket(websocket: WebSocket):
 
             if msg_type in ("session.start", "start"):
                 session_id = raw_init.get("session_id", f"sess_{int(time.time())}")
-                user_id = raw_init.get("user_id", "demo-user")
+                user_id = raw_init.get("user_id")
                 await create_session(session_id, user_id, raw_init.get("client", {}))
                 await log_connection_event(session_id, "connected", {"client": raw_init.get("client", {})})
                 await websocket.send_json({"type": "session.ack", "session_id": session_id})
@@ -141,6 +142,7 @@ async def audio_websocket(websocket: WebSocket):
                     "risk_level": risk_level,
                     "explainability_markers": markers,
                 })
+                risk_values.append(spoof_prob)
 
                 if len(pending_events) >= 10:
                     asyncio.create_task(batch_insert_events(pending_events.copy()))
@@ -162,5 +164,14 @@ async def audio_websocket(websocket: WebSocket):
         if pending_events:
             await batch_insert_events(pending_events)
         if session_id:
-            await finalize_session(session_id, chunk_index)
+            await finalize_session(
+                session_id,
+                chunk_index,
+                {
+                    "total_chunks": len(risk_values),
+                    "avg_risk": round(sum(risk_values) / len(risk_values), 4) if risk_values else 0,
+                    "max_risk": round(max(risk_values), 4) if risk_values else 0,
+                    "decision": "blocked" if risk_values and max(risk_values) >= 0.7 else "allowed",
+                },
+            )
         logger.info("ws.session_closed", session_id=session_id, total_chunks=chunk_index)

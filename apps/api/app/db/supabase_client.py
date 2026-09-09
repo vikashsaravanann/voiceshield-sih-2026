@@ -18,8 +18,11 @@ def get_supabase() -> Any:
     if _client is None:
         try:
             from supabase import create_client
-            if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_ROLE_KEY:
-                _client = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_ROLE_KEY)
+            service_key = settings.SUPABASE_SERVICE_ROLE_KEY
+            if service_key == "mock-service-role-key" and settings.SUPABASE_SERVICE_KEY:
+                service_key = settings.SUPABASE_SERVICE_KEY
+            if settings.SUPABASE_URL and service_key and "mock.supabase.co" not in settings.SUPABASE_URL:
+                _client = create_client(settings.SUPABASE_URL, service_key)
                 logger.info("supabase.client_initialized", url=settings.SUPABASE_URL)
             else:
                 _client = None

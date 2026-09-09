@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { AUDIO_CONFIG } from "@/lib/audioConfig";
 import { getReconnectDelay, onVisibilityChange } from "@/lib/websocket/reconnect";
 import { AudioRingBuffer } from "@/lib/audio/ringBuffer";
+import { createClient as createSupabaseClient } from "@/lib/supabase/browser";
 import {
   DetectionResponse,
   ConnectionState,
@@ -28,6 +29,15 @@ interface AudioStreamerProps {
   }) => React.ReactNode;
 }
 
+async function getCurrentUserId(): Promise<string | null> {
+  try {
+    const { data } = await createSupabaseClient().auth.getUser();
+    return data.user?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function AudioStreamer({
   onRiskUpdate,
   onConnectionChange,
@@ -40,6 +50,7 @@ export function AudioStreamer({
   const [reconnectDelayMs, setReconnectDelayMs] = useState(0);
   const [bufferedCount, setBufferedCount] = useState(0);
   const [isSimulatingClone, setIsSimulatingClone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // References
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -51,6 +62,8 @@ export function AudioStreamer({
   );
 
   const sessionIdRef = useRef<string>("");
+  const streamingRef = useRef(false);
+  const cloneSimulationRef = useRef(false);
   const chunkIndexRef = useRef<number>(0);
   const lastAckedChunkRef = useRef<number>(-1);
   const reconnectTimeoutRef = useRef<any>(null);
@@ -75,16 +88,22 @@ export function AudioStreamer({
 
   // Connect WebSocket
   const connectWebSocket = useCallback(() => {
+    const configuredWsUrl =
+      typeof process !== "undefined"
+        ? process.env?.NEXT_PUBLIC_FASTAPI_WS_URL || process.env?.NEXT_PUBLIC_API_WS_URL
+        : undefined;
     const wsUrl =
-      (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_FASTAPI_WS_URL) ||
-      "ws://localhost:8000/ws/audio";
+      configuredWsUrl ||
+      (typeof window !== "undefined" && window.location.protocol === "https:"
+        ? "wss://voiceshield-api.onrender.com/ws/audio"
+        : "ws://localhost:8000/ws/audio");
 
     try {
       const ws = new WebSocket(wsUrl);
       ws.binaryType = "arraybuffer";
       wsRef.current = ws;
 
-      ws.onopen = () => {
+      ws.onopen = async () => {
         setReconnectAttempt(0);
         updateConnection("connected");
 
@@ -111,7 +130,7 @@ export function AudioStreamer({
             JSON.stringify({
               type: "session.start",
               session_id: sessionIdRef.current,
-              user_id: "demo_user",
+              user_id: await getCurrentUserId(),
               sample_rate: AUDIO_CONFIG.sampleRate,
               channels: AUDIO_CONFIG.channels,
               chunk_ms: AUDIO_CONFIG.chunkMs,
@@ -149,7 +168,7 @@ export function AudioStreamer({
       };
 
       ws.onclose = () => {
-        if (isStreaming) {
+        if (streamingRef.current) {
           updateConnection("reconnecting");
           statsRef.current.dropCount += 1;
           scheduleReconnect();
@@ -198,6 +217,7 @@ export function AudioStreamer({
   // Start Mic & Capture Graph
   const start = async () => {
     try {
+      setError(null);
       sessionIdRef.current = crypto.randomUUID();
       chunkIndexRef.current = 0;
       lastAckedChunkRef.current = -1;
@@ -254,7 +274,7 @@ export function AudioStreamer({
               let s = chunkSamples[j];
 
               // If cloned audio injection is active, introduce vocoder phase harmonics
-              if (isSimulatingClone) {
+              if (cloneSimulationRef.current) {
                 s = Math.sin(j * 0.15) * 0.4 + (Math.random() - 0.5) * 0.05;
               }
 
@@ -286,15 +306,20 @@ export function AudioStreamer({
       source.connect(processor);
       processor.connect(audioCtx.destination);
 
+      streamingRef.current = true;
       setIsStreaming(true);
       connectWebSocket();
     } catch (err) {
-      console.error("Failed to acquire microphone", err);
+      const message = err instanceof Error ? err.message : "Unable to start microphone capture.";
+      setError(message);
+      streamingRef.current = false;
+      updateConnection("disconnected");
     }
   };
 
   // Stop Streaming
   const stop = () => {
+    streamingRef.current = false;
     setIsStreaming(false);
     if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
 
@@ -338,12 +363,16 @@ export function AudioStreamer({
 
   // Toggle injected clone voice simulation
   const toggleCloneSimulation = () => {
-    setIsSimulatingClone((prev) => !prev);
+    setIsSimulatingClone((prev) => {
+      cloneSimulationRef.current = !prev;
+      return !prev;
+    });
   };
 
   if (children) {
     return (
       <>
+        {error ? <p className="err" role="alert">{error}</p> : null}
         {children({
           isStreaming,
           connectionState,

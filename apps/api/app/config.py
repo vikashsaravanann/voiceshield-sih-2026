@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = "https://mock.supabase.co"
     SUPABASE_ANON_KEY: str = "mock-anon-key"
     SUPABASE_SERVICE_ROLE_KEY: str = "mock-service-role-key"
+    SUPABASE_SERVICE_KEY: str = ""
     SUPABASE_JWT_SECRET: str = "mock-jwt-secret"
     SUPABASE_STORAGE_BUCKET: str = "challenge-audio"
 
