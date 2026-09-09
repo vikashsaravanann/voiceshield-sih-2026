@@ -45,11 +45,22 @@ def evaluate_acoustic_spoof(audio_bytes: bytes) -> float:
         samples = np.frombuffer(audio_bytes, dtype=np.int16)
         features = extract_acoustic_features(samples)
         
+        # --- NOISE CALIBRATION FOR SIH HACKATHON HALL ---
+        # If the volume (variance) is very low, it's just background room noise, not a person.
+        # We ignore it to prevent false positives from AC units or distant chatter.
+        if features["variance"] < 15000:
+            return 0.05  # Baseline human score (low risk)
+            
         # Heuristic scoring based on vocoder spectral patterns
         score = 0.15
-        if features["spectral_rolloff"] > 6800 or features["spectral_rolloff"] < 2500:
+        
+        # Neural vocoders often struggle with extreme high/low frequencies
+        if features["spectral_rolloff"] > 7000 or features["spectral_rolloff"] < 2000:
             score += 0.35
-        if features["zero_crossings"] > 0.12:
+            
+        # Background chatter increases zero-crossings. 
+        # Increased threshold from 0.12 to 0.16 for loud hackathon environments.
+        if features["zero_crossings"] > 0.16:
             score += 0.30
             
         return min(max(score, 0.05), 0.98)

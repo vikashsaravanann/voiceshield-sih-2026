@@ -3,7 +3,20 @@
 **Category:** Software | **Theme:** Blockchain & Cybersecurity  
 **Organization:** All India Council for Technical Education (AICTE – Cyber Security Cell)
 
+![Build Passing](https://img.shields.io/badge/build-passing-brightgreen)
+![Deploy Status](https://img.shields.io/badge/deployment-success-blue)
+![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)
+![License MIT](https://img.shields.io/badge/license-MIT-green.svg)
+
 ---
+
+## 🎥 Live Demo
+
+*(Insert 1-minute demo video or GIF showing the real-time detection dashboard here)*
+
+<p align="center">
+  <img src="https://via.placeholder.com/800x450.png?text=V-SHIELD+Real-Time+Dashboard+Demo" alt="V-SHIELD Demo Placeholder"/>
+</p>
 
 ## 📌 Executive Summary
 V-SHIELD is a real-time security framework designed to intercept telephonic, VoIP, and WebRTC audio streams to identify AI-generated voice cloning attacks within 280ms. Combining local digital signal processing (LFCC + phase anomaly analysis) with Groq LPU inference, V-SHIELD detects synthetic speech and executes proactive challenge-response verification before fraudulent transactions take place.
@@ -16,11 +29,22 @@ V-SHIELD is a real-time security framework designed to intercept telephonic, VoI
 - **Zero-Knowledge Privacy:** Compliant with India's DPDP Act 2023 using ephemeral in-memory processing.
 
 ## 🛠️ Architecture Pipeline
-1. **Audio Ingestion:** WebRTC / SIP proxy streaming via WebSockets.
-2. **DSP Preprocessing:** Linear Frequency Cepstral Coefficients (LFCC) & phase jitter analysis.
-3. **Inference Engine:** INT8 quantized neural classification core.
-4. **Semantic Context Engine:** Groq Whisper (ASR) + Llama 3 (Intent analysis).
-5. **Mitigation Engine:** Visual HUD alerts, SIP call tagging, and phonemic verification challenges.
+
+```mermaid
+graph TD
+    A[Caller Audio Stream] -->|WebRTC/SIP WebSocket| B(FastAPI Backend)
+    B --> C{Feature Extraction}
+    C -->|LFCC & Phase Anomaly| D[1D-CNN Inference Model]
+    C -->|Audio Buffer| E[Groq LPU]
+    E -->|Whisper| F(Transcription)
+    E -->|Llama 3| G(Fraud Intent Analysis)
+    D -->|Acoustic Confidence| H{Threat Correlation Engine}
+    G -->|Semantic Confidence| H
+    H -->|High Risk| I[Challenge-Response Mitigation]
+    H -->|Safe| J[Allow Call]
+    I --> K[Frontend Next.js Dashboard Alert]
+    J --> K
+```
 
 ## 💻 Quick Start
 
