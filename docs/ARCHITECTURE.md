@@ -1,139 +1,167 @@
-# VoiceShield architecture
+# VoiceShield Architecture Blueprint
 
-Five coupled subsystems sit on the media path. The live console in this preview runs the same control plane in-browser. Production inference is an INT8 ONNX graph on a GPU Space or CPU FastAPI worker.
+**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+*AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
-```
-mic / SIP / WebRTC
-        |
-        v
-  [1] resample 16 kHz + VAD + 333 ms hop + 4 s ring
-        |
-        v
-  [2] LFCC + bispectrum + F0 / harmonicity / jitter
-        |
-        v
-  [3] RawNet2 + SE-ResNet  -->  spoof_probability
-        |
-        v
-  [4] Kalman C(t)  -->  Green / Amber / Red + markers
-        |
-        v
-  [5] challenge  |  policy hook  |  audit (no PCM)
-```
+---
 
-## End-to-end (16 steps)
+## 1. System Overview & End-to-End Pipeline
 
-1. Operator opens the console and starts the live path.
-2. Browser requests the microphone; Web Audio captures at the native rate.
-3. Samples downsample to 16 kHz and chunk into 333 ms hops (configurable 250 / 333 / 500).
-4. A circular buffer holds the last 4 seconds (~12 hops) for reconnect replay.
-5. Each hop is sent over the inference link (`wss://<api>/ws/audio` in production).
-6. Worker extracts features, runs the graph, returns `spoof_probability`.
-7. Decision engine maps Kalman-smoothed C(t) to Green < 0.35 / Amber / Red ≥ 0.75.
-8. Frontend updates waveform, spectrogram, risk meter, explainability markers.
-9. Four consecutive Amber/Red hops arm a phonemic challenge (EN / HI / TA).
-10. Session summary: avg/max risk, hop count, challenge outcome, drop/resume counts.
-11. Signed-in operators persist `vs_sessions`, `detection_events`, `challenge_responses`.
-12. On `onclose` / `onerror` the client enters `reconnecting` with exponential backoff + jitter.
-13. Capture continues into the ring; on resume, hops after `last_chunk_index` replay.
-14. Connection events append to `connection_audit_logs`.
-15. Auth events append to `auth_audit_logs`.
-16. RLS / server-side `user_id` scope: analysts see own rows; admin sees all.
-
-## WebSocket fallback
-
-**Detect.** Frontend listens to `websocket.onclose` and `websocket.onerror`. State becomes `reconnecting`. A non-blocking banner is shown; capture does not stop.
-
-**Backoff + jitter** (SIH-tuned, identical to `src/lib/audio/config.ts`):
+VoiceShield implements a multi-tier, real-time defense architecture designed for sub-250ms voice cloning detection over web and Indian telephony audio streams.
 
 ```
-baseDelay    = 1000 ms
-maxDelay     = 30000 ms
-multiplier   = 2
-jitter       = 0.2          # ±20%
-maxAttempts  = 10
-
-delay        = min(baseDelay * multiplier^attempt, maxDelay)
-jittered     = delay * (1 + random(-jitter, +jitter))
-curve        = 1s, 2s, 4s, 8s, 16s, 30s, 30s…  (±20%)
++-------------------------------------------------------------------------+
+|                              CLIENT LAYER                               |
+|                                                                         |
+|  [Browser Mic / WebRTC] ---> [Web Audio API Node]                       |
+|                                    |                                    |
+|                                    v                                    |
+|                      [16kHz PCM16 Downsampler]                          |
+|                                    |                                    |
+|                                    v                                    |
+|                          [333ms Chunk Slicer]                           |
+|                             /              \                            |
+|                            v                v                           |
+|                   [WebSocket Stream]   [4s Circular Ring Buffer]        |
++---------------------------|---------------------------------------------+
+                            | wss://api/ws/audio (PCM16 chunks)
+                            v
++-------------------------------------------------------------------------+
+|                        FASTAPI INFERENCE WORKER                         |
+|                                                                         |
+|   1. Audio Chunk Ingestion (16kHz, mono, PCM16)                         |
+|   2. DSP Feature Extraction:                                            |
+|      - 40-dim Linear Frequency Cepstral Coefficients (LFCC) + deltas    |
+|      - 64-bin Log-scaled Mel-Spectrogram                                |
+|      - Phase Inconsistency (Instantaneous Frequency Variance)           |
+|   3. Anti-Spoofing Inference:                                           |
+|      - AASIST / Wav2Vec2-AASIST / RawNet2 (TorchScript/ONNX)            |
+|      - Returns raw spoof probability p in [0, 1]                        |
+|   4. Temporal Smoothing & Decision Engine:                              |
+|      - Kalman filter smoothing over sliding window                      |
+|      - Categorization: low (<0.3), medium (0.3-0.7), high (>=0.7)       |
+|   5. Explainability Synthesis:                                          |
+|      - High-frequency anomaly marker                                    |
+|      - Phase discontinuity marker                                       |
+|      - Prosody irregularity marker                                      |
++---------------------------|---------------------------------------------+
+                            | JSON Response (<250ms)
+                            v
++-------------------------------------------------------------------------+
+|                      RISK & PREVENTION DASHBOARD                        |
+|                                                                         |
+|   - Real-Time Risk Gauge & Telemetry Display                            |
+|   - Real-Time Spectrogram with Heatmap Anomaly Overlay                  |
+|   - Dynamic Challenge-Response (Phonemic phrases in EN / HI / TA)       |
++---------------------------|---------------------------------------------+
+                            | Async Batched Telemetry (No PCM stored)
+                            v
++-------------------------------------------------------------------------+
+|                         PERSISTENCE & AUDIT                             |
+|                                                                         |
+|   Supabase PostgreSQL (Protected by Strict Row-Level Security):        |
+|   - profiles, sessions, detection_events, challenge_responses           |
+|   - Append-only connection_audit_logs & auth_audit_logs                 |
++-------------------------------------------------------------------------+
 ```
 
-Jitter prevents a thundering herd after a backend blip. Hidden tabs (`document.visibilityState === "hidden"`) pause reconnect; visibility resume restarts the schedule.
+---
 
-**Ring buffer.** Circular PCM, 4 s default (2–5 s legal). At 16 kHz / 333 ms that is ~12 hops. While disconnected, hops continue to be captured and written into the ring. They are *not* dropped.
+## 2. WebSocket Fallback & Resilience Strategy
 
-**Resume.**
+Network instability in mobile telephony and field conditions must not cause detection failures or silent drops. VoiceShield incorporates an enterprise-grade reconnection and buffering protocol.
 
-```ts
-ws.send(JSON.stringify({ type: "resume", last_chunk_index: lastAcked }))
-for (const hop of ring.after(lastAcked)) {
-  ws.send(hop) // replay
+### Parameters
+- **Base Delay (`baseDelay`):** `1000ms`
+- **Multiplier (`multiplier`):** `2`
+- **Max Delay (`maxDelay`):** `30000ms`
+- **Jitter (`jitterRatio`):** `0.2` (±20%)
+- **Max Attempts (`maxAttempts`):** `10`
+
+### Mathematical Formula
+$$\text{delay} = \min\left(\text{baseDelay} \times \text{multiplier}^{\text{attempt}}, \text{maxDelay}\right)$$
+$$\text{jitteredDelay} = \text{delay} \times \left(1 + \text{Uniform}(-0.2, 0.2)\right)$$
+
+### Ring Buffer Specification
+- **Capacity:** 4 seconds of raw PCM16 audio (tunable 2–5s).
+- At 16kHz mono (2 bytes/sample), 4 seconds = 128,000 bytes (~12 chunks of 333ms).
+- While disconnected, mic capture continues writing into the ring buffer in memory. Oldest frames are dropped only if connection is severed for >4 seconds.
+
+### Session Resumption Protocol
+1. Client establishes initial connection and sends `session.start`.
+2. Server confirms with session ACK and assigns a monotonic `chunk_index` tracker.
+3. Upon disconnect, client enters `reconnecting` state and buffers incoming PCM frames.
+4. Upon reconnecting, client sends `session.resume`:
+   ```json
+   {
+     "type": "session.resume",
+     "session_id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+     "last_processed_chunk_index": 42
+   }
+   ```
+5. Client immediately flushes and replays buffered chunks starting from `chunk_index = 43`.
+6. Server processes the replayed chunks in sequence, maintaining audit log continuity.
+
+### Thundering Herd & Tab Visibility Mitigation
+- The randomized ±20% jitter prevents synchronized reconnection storms on backend restarts.
+- Reconnection attempts pause when `document.visibilityState === "hidden"` and resume immediately when the tab returns to foreground.
+
+### TypeScript Reconnection Implementation
+
+```typescript
+export interface ReconnectConfig {
+  baseDelayMs: number;
+  multiplier: number;
+  maxDelayMs: number;
+  jitterRatio: number;
+  maxAttempts: number;
+}
+
+export const DEFAULT_RECONNECT_CONFIG: ReconnectConfig = {
+  baseDelayMs: 1000,
+  multiplier: 2,
+  maxDelayMs: 30000,
+  jitterRatio: 0.2,
+  maxAttempts: 10,
+};
+
+export function getReconnectDelay(
+  attempt: number,
+  config: ReconnectConfig = DEFAULT_RECONNECT_CONFIG
+): number {
+  const exponentialDelay = Math.min(
+    config.baseDelayMs * Math.pow(config.multiplier, attempt),
+    config.maxDelayMs
+  );
+  const jitterOffset = exponentialDelay * config.jitterRatio * (Math.random() * 2 - 1);
+  return Math.floor(exponentialDelay + jitterOffset);
 }
 ```
 
-Backend tracks `last_chunk_index` per session and continues scoring from that index. A `reconnected` row is written to `connection_audit_logs`.
+---
 
-TypeScript sketch (matches `src/lib/audio/inference-bridge.ts`):
+## 3. Frontend Audio Pipeline
 
-```ts
-function jitteredDelay(attempt: number) {
-  const { baseDelay, maxDelay, multiplier, jitter } = AUDIO_CONFIG.reconnect
-  const delay = Math.min(baseDelay * multiplier ** attempt, maxDelay)
-  const j = 1 + (Math.random() * 2 - 1) * jitter
-  return Math.round(delay * j)
-}
-```
+1. **AudioContext Acquisition:** `navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true } })`.
+2. **DSP Processing:** Custom `AudioWorkletNode` or buffer-based processor accumulates samples up to `chunkMs` (default 333ms = 5,328 samples).
+3. **Quantization:** Converts `Float32Array` (-1.0 to 1.0) to signed `Int16Array` (-32768 to 32767).
+4. **Binary Transmission:** Sends raw binary PCM buffer directly over WebSocket frame, minimizing serialization overhead.
 
-## GPU posture (Hugging Face Spaces)
+---
 
-- Docker Space, GPU T4 or A10G.
-- Base: `nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04`.
-- Pin `torch` cu121 wheels. Mixed precision (FP16) or INT8 ONNX. Batch size = 1.
-- **Warm-up on boot:** load graph onto GPU, run three dummy hops so CUDA kernels are compiled before the first judge click.
-- **`GET /health`:** model loaded, one tiny inference, `torch.cuda` memory, optional `nvidia-smi`.
-- **Keep-alive:** external pinger every 2–5 minutes on `/health` (Spaces idle). Document ToS/cost.
-- Structured logs: hop latency, GPU memory, session id. Never PCM.
+## 4. Backend Processing Loop
 
-## Chunk size tuning (Next.js / this console)
+1. **Socket Ingestion:** Async read loop receives binary chunk.
+2. **DSP Worker:** Offloads LFCC and STFT computations.
+3. **TorchScript/ONNX Worker:** Executes forward pass under `torch.no_grad()`.
+4. **Decision Engine:** Evaluates output probability against low (<0.3), medium (0.3–0.7), and high (≥0.7) thresholds.
+5. **JSON Response:** Emits structured decision message back to client within 250ms total loop latency.
+6. **Async Database Logging:** Dispatches database writes to background worker queue without blocking the streaming audio loop.
 
-| Hop | Samples @ 16 kHz | Behaviour |
-| --- | --- | --- |
-| 250 ms | 4000 | lowest latency, chatty socket, busy UI |
-| **333 ms** | **~5333** | **SIH default — latency vs stability** |
-| 500 ms | 8000 | smoother spectrogram, slower challenge |
+---
 
-Config (`src/lib/audio/config.ts` / `lib/audioConfig.ts` in Next.js):
+## 5. Scaling Limits & Concurrency
 
-```
-CHUNK_SIZE_MS        = 333
-BUFFER_DURATION_SEC  = 4
-```
-
-Smaller hops move the UI more and hide vocoder frame edges less. Larger hops delay the challenge. Do not change the default for the SIH demo without re-timing the nine-minute script.
-
-## Audit
-
-`connection_audit_logs` — `connected` / `disconnected` / `resume` / `error`, with `session_id`, `details jsonb`, `user_agent`.
-
-`auth_audit_logs` — `signup` / `login` / `logout` / `token_refresh`, with `user_id`, `details jsonb`.
-
-Both are append-only. Server functions always filter by verified `user_id`. Admins (first signed-in operator, `profiles.role = 'admin'`) read all.
-
-Admin demo queries:
-
-```sql
--- Frequent disconnects in the last hour
-select user_id, count(*) as drops
-from connection_audit_logs
-where event_type = 'disconnected'
-  and created_at > now() - interval '1 hour'
-group by user_id
-order by drops desc;
-
--- Failed logins next to high-risk sessions
-select a.user_id, a.event_type, s.max_risk, s.id
-from auth_audit_logs a
-join vs_sessions s on s.user_id = a.user_id
-where a.event_type = 'login_failed'
-  and s.max_risk >= 0.75;
-```
+- **Single Worker Node (CPU):** Up to 25 concurrent audio streams at 333ms hops.
+- **GPU Node (NVIDIA T4 / A10G):** Up to 150 concurrent streams with batched dynamic tensor dispatch.
+- **Horizontal Scaling:** Stateless WebSocket workers coordinated via Redis Pub/Sub backplane; client sessions reconnect seamlessly to any available worker using `session.resume`.

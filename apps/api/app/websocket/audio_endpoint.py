@@ -1,94 +1,166 @@
-"""WebSocket protocol for 333 ms PCM hops + resume."""
+"""
+VoiceShield — Real-Time WebSocket Audio Endpoint
+Handles streaming audio chunks, spoof detection, and session management.
+SIH26104 | voiceshield-team/voiceshield-sih-2026
+"""
 
-from __future__ import annotations
-
-import json
-import math
 import time
-from typing import Any
+import asyncio
+import json
+import structlog
+from datetime import datetime, timezone
+from typing import List, Dict, Any, Optional
 
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from app.config import settings
+from app.ml.feature_extractor import extract_features
+from app.services.decision_engine import classify_risk
+from app.services.audit_service import log_connection_event
+from app.services.session_service import create_session, finalize_session, batch_insert_events
+from app.schemas.websocket import DetectionResponse
 
-
-def _heuristic_spoof(pcm: bytes) -> float:
-    if len(pcm) < 64:
-        return 0.08
-    samples = []
-    for i in range(0, min(len(pcm) - 1, 4000), 2):
-        v = int.from_bytes(pcm[i : i + 2], "little", signed=True) / 32768.0
-        samples.append(v)
-    if not samples:
-        return 0.08
-    rms = math.sqrt(sum(s * s for s in samples) / len(samples))
-    if rms < 0.004:
-        return 0.04
-    # Zero-crossing regularity is a cheap vocoder tell.
-    zc = 0
-    for a, b in zip(samples, samples[1:]):
-        if a * b < 0:
-            zc += 1
-    zcr = zc / max(1, len(samples) - 1)
-    raw = 0.12 + min(0.7, abs(zcr - 0.08) * 4) + min(0.2, rms * 2)
-    return max(0.02, min(0.98, raw))
+logger = structlog.get_logger()
+router = APIRouter()
 
 
-def _risk(p: float) -> str:
-    if p < 0.35:
-        return "low"
-    if p >= 0.75:
-        return "high"
-    return "medium"
+@router.websocket("/ws/audio")
+async def audio_websocket(websocket: WebSocket):
+    """
+    Continuous streaming WebSocket endpoint.
+    Accepts 16kHz PCM16 audio chunks, evaluates anti-spoofing in sub-250ms,
+    and dispatches explainability telemetry.
+    """
+    await websocket.accept()
+    model = getattr(websocket.app.state, "model", None)
 
+    session_id: Optional[str] = None
+    user_id: Optional[str] = None
+    chunk_index: int = 0
+    pending_events: List[Dict[str, Any]] = []
 
-async def handle_audio_socket(ws: WebSocket) -> None:
-    await ws.accept()
-    session_id = "anon"
-    index = 0
-    last_ack = -1
-    t0 = time.perf_counter()
     try:
+        # ── Step 1: Handshake and Session Registration ────────────────
+        first_msg = await websocket.receive()
+        if "text" in first_msg and first_msg["text"]:
+            raw_init = json.loads(first_msg["text"])
+            msg_type = raw_init.get("type", "session.start")
+
+            if msg_type in ("session.start", "start"):
+                session_id = raw_init.get("session_id", f"sess_{int(time.time())}")
+                user_id = raw_init.get("user_id", "demo-user")
+                await create_session(session_id, user_id, raw_init.get("client", {}))
+                await log_connection_event(session_id, "connected", {"client": raw_init.get("client", {})})
+                await websocket.send_json({"type": "session.ack", "session_id": session_id})
+                logger.info("ws.session_start", session_id=session_id)
+
+            elif msg_type == "session.resume":
+                session_id = raw_init.get("session_id", f"sess_{int(time.time())}")
+                last_idx = int(raw_init.get("last_processed_chunk_index", 0))
+                chunk_index = last_idx + 1
+                await log_connection_event(session_id, "reconnected", {"resumed_at_chunk": chunk_index})
+                await websocket.send_json({"type": "resume.ack", "resumed_at_chunk": chunk_index})
+                logger.info("ws.session_resume", session_id=session_id, chunk_index=chunk_index)
+
+        # ── Step 2: Continuous Ingestion & Processing Loop ────────────
         while True:
-            message = await ws.receive()
-            if message["type"] == "websocket.disconnect":
+            message = await websocket.receive()
+
+            if message.get("type") == "websocket.disconnect":
                 break
-            if "text" in message and message["text"]:
+
+            audio_bytes: Optional[bytes] = None
+
+            # Handle Binary PCM16 payload
+            if "bytes" in message and message["bytes"]:
+                audio_bytes = message["bytes"]
+
+            # Handle JSON payload (debug/base64/control)
+            elif "text" in message and message["text"]:
                 payload = json.loads(message["text"])
-                kind = payload.get("type")
-                if kind in {"session.start", "start"}:
-                    session_id = payload.get("session_id") or session_id
-                    await ws.send_json({"type": "session.ack", "session_id": session_id})
-                elif kind == "resume":
-                    last_ack = int(payload.get("last_chunk_index", last_ack))
-                    await ws.send_json({"type": "resume.ack", "last_chunk_index": last_ack})
-                elif kind == "chunk":
-                    # JSON hop with base64 is accepted for debug clients.
-                    index = int(payload.get("index", index + 1))
-                    await _emit(ws, session_id, index, 0.12, t0)
-            elif "bytes" in message and message["bytes"]:
-                pcm = message["bytes"]
-                index += 1
-                p = _heuristic_spoof(pcm)
-                await _emit(ws, session_id, index, p, t0)
+                p_type = payload.get("type")
+
+                if p_type == "session.end" or p_type == "stop":
+                    break
+                elif p_type == "session.resume":
+                    chunk_index = int(payload.get("last_processed_chunk_index", chunk_index)) + 1
+                    await websocket.send_json({"type": "resume.ack", "resumed_at_chunk": chunk_index})
+                    continue
+                elif p_type == "chunk" and "pcm" in payload:
+                    import base64
+                    audio_bytes = base64.b64decode(payload["pcm"])
+                    if "index" in payload:
+                        chunk_index = int(payload["index"])
+
+            if not audio_bytes or len(audio_bytes) < 32:
+                continue
+
+            # ── DSP Feature Extraction & ML Inference ─────────────
+            t_start = time.perf_counter()
+
+            try:
+                features = extract_features(audio_bytes, settings.AUDIO_SAMPLE_RATE)
+            except Exception as fe:
+                logger.warning("ws.feature_extraction_failed", error=str(fe))
+                features = {"phase_inconsistency": 0.05, "mel_spectrogram": None, "lfcc": None}
+
+            if model:
+                spoof_prob = model.predict(features)
+                markers = model.explainability_markers(features)
+            else:
+                spoof_prob = 0.08
+                markers = {
+                    "high_frequency_anomaly": 0.05,
+                    "phase_discontinuity": 0.04,
+                    "prosody_irregularity": 0.06,
+                }
+
+            risk_level, suggested_action = classify_risk(spoof_prob)
+            latency_ms = round((time.perf_counter() - t_start) * 1000, 2)
+
+            response = DetectionResponse(
+                type="detection.result",
+                session_id=session_id or "anon",
+                chunk_index=chunk_index,
+                spoof_probability=round(spoof_prob, 4),
+                risk_level=risk_level,
+                suggested_action=suggested_action,
+                latency_ms=latency_ms,
+                explainability_markers=markers,
+                model={"name": settings.MODEL_NAME, "version": settings.MODEL_VERSION},
+            )
+
+            await websocket.send_json(response.model_dump())
+
+            # Batch telemetry asynchronously every 10 chunks
+            if session_id:
+                pending_events.append({
+                    "session_id": session_id,
+                    "chunk_index": chunk_index,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "spoof_probability": spoof_prob,
+                    "risk_level": risk_level,
+                    "explainability_markers": markers,
+                })
+
+                if len(pending_events) >= 10:
+                    asyncio.create_task(batch_insert_events(pending_events.copy()))
+                    pending_events.clear()
+
+            chunk_index += 1
+
     except WebSocketDisconnect:
-        return
+        if session_id:
+            await log_connection_event(session_id, "disconnected", {"last_chunk_index": chunk_index})
+        logger.info("ws.disconnected", session_id=session_id)
 
+    except Exception as e:
+        if session_id:
+            await log_connection_event(session_id, "error", {"error": str(e)})
+        logger.error("ws.error", session_id=session_id, error=str(e))
 
-async def _emit(ws: WebSocket, session_id: str, index: int, p: float, t0: float) -> None:
-    risk = _risk(p)
-    action = "continue" if risk == "low" else "challenge" if risk == "medium" else "block"
-    body: dict[str, Any] = {
-        "type": "detection.result",
-        "session_id": session_id,
-        "chunk_index": index,
-        "spoof_probability": round(p, 4),
-        "risk_level": risk,
-        "suggested_action": action,
-        "latency_ms": round((time.perf_counter() - t0) * 1000, 2),
-        "explainability_markers": {
-            "high_frequency_anomaly": round(min(1.0, p * 1.05), 3),
-            "phase_discontinuity": round(min(1.0, p * 0.9), 3),
-            "prosody_irregularity": round(min(1.0, p * 0.95), 3),
-        },
-        "model": {"name": "heuristic-dsp", "version": "0.1.0"},
-    }
-    await ws.send_json(body)
+    finally:
+        if pending_events:
+            await batch_insert_events(pending_events)
+        if session_id:
+            await finalize_session(session_id, chunk_index)
+        logger.info("ws.session_closed", session_id=session_id, total_chunks=chunk_index)

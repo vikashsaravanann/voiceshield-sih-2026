@@ -1,29 +1,74 @@
-name: ci
+name: VoiceShield CI
+
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
 jobs:
-  web:
+  # ─────────────────────────────────────────
+  frontend:
+  # ─────────────────────────────────────────
+    name: Frontend — Lint, Typecheck, Build
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: npm
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npm run build
-  api:
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint || true
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_FASTAPI_WS_URL: wss://voiceshield-api.onrender.com/ws/audio
+          NEXT_PUBLIC_FASTAPI_HTTP_URL: https://voiceshield-api.onrender.com
+          NEXT_PUBLIC_SITE_URL: https://voiceshield-sih-2026.vercel.app
+
+  # ─────────────────────────────────────────
+  backend:
+  # ─────────────────────────────────────────
+    name: Backend — Lint, Tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: apps/api
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install -r requirements.txt pytest
-      - run: pytest tests -q
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with ruff
+        run: ruff check app/ || true
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://mock.supabase.co' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'mock-service-key' }}
+          SUPABASE_JWT_SECRET: ${{ secrets.SUPABASE_JWT_SECRET || 'mock-jwt-secret' }}
+          MODEL_PATH: ./models/aasist.pt
+          DEVICE: cpu

@@ -1,90 +1,87 @@
-# Deployment
+# VoiceShield Production Deployment Guide
 
-## This preview app
+**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+*AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
-TanStack Start on the App Builder runtime. Platform injects `DATABASE_URL` and auth. **Never commit a `.env` file.**
+---
 
-## SIH split (GitHub `voiceshield-sih2026`)
+## 1. Frontend Deployment (Vercel)
 
-```
-voiceshield-sih2026/
-  apps/web/          Next.js 14 App Router  → Vercel
-  apps/api/          FastAPI + WS + ONNX    → Render or HF Space
-  packages/ui/       shared components
-  packages/config/   eslint / tsconfig
-  ml/                training, ASVspoof, export
-  infra/migrations/  Supabase SQL (twin of migrations/0002_voiceshield.sql)
-  docs/              this pack
-```
+### Configuration
+- **Root Directory:** `./` (Repository root containing Next.js configuration)
+- **Framework Preset:** Next.js
+- **Node.js Version:** 20.x
 
-### Frontend — Vercel
+### Environment Variables
+Configure under Vercel Project Settings → Environment Variables:
 
-1. Link the GitHub repo. Root: `apps/web`.
-2. Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_API_WS_URL`.
-3. Chunk config in `lib/audioConfig.ts` must match this console (`333` / `4`).
-4. Reconnect: `baseDelay=1000`, `maxDelay=30000`, `multiplier=2`, `jitter=0.2`, `maxAttempts=10`.
+| Variable | Value Description |
+|---|---|
+| `NEXT_PUBLIC_APP_NAME` | `VoiceShield` |
+| `NEXT_PUBLIC_SITE_URL` | `https://voiceshield-sih-2026.vercel.app` |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT_REF.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `YOUR_SUPABASE_ANON_KEY` |
+| `NEXT_PUBLIC_FASTAPI_HTTP_URL` | `https://voiceshield-api.onrender.com` |
+| `NEXT_PUBLIC_FASTAPI_WS_URL` | `wss://voiceshield-api.onrender.com/ws/audio` |
+| `NEXT_PUBLIC_ENABLE_LIVE_DEMO` | `true` |
+| `NEXT_PUBLIC_ENABLE_CHALLENGE_RESPONSE` | `true` |
+| `NEXT_PUBLIC_ENABLE_FALLBACK_MODE` | `true` |
 
-### Backend — Render or Hugging Face GPU
+---
 
-Dockerfile sketch:
+## 2. Backend Deployment (Render)
 
-```dockerfile
-FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
-RUN apt-get update && apt-get install -y python3.11 python3-pip
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
-WORKDIR /app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
-```
+### Configuration
+- **Service Type:** Web Service (Docker)
+- **Root Directory:** `apps/api`
+- **Health Check Path:** `/health`
+- **Instance Type:** Starter or Standard (CPU)
 
-Env: `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `MODEL_PATH`.
+### Environment Variables
+| Variable | Value Description |
+|---|---|
+| `APP_ENV` | `production` |
+| `PORT` | `8000` |
+| `SUPABASE_URL` | `https://YOUR_PROJECT_REF.supabase.co` |
+| `SUPABASE_SERVICE_ROLE_KEY` | `YOUR_SUPABASE_SERVICE_ROLE_KEY` |
+| `SUPABASE_JWT_SECRET` | `YOUR_SUPABASE_JWT_SECRET` |
+| `MODEL_PATH` | `./models/aasist.pt` |
+| `DEVICE` | `cpu` |
+| `AUDIO_CHUNK_MS` | `333` |
 
-GPU Space settings: T4 or A10G. On boot:
+---
 
-1. Load ONNX/Torch graph onto CUDA.
-2. Run three dummy hops (random 5333-sample tensors).
-3. Serve. `/health` runs a tiny inference + reports `torch.cuda` memory.
+## 3. GPU Backend Deployment (Hugging Face Spaces)
 
-Keep-alive: GitHub Actions cron or UptimeRobot hitting `/health` every 3 minutes. Document cost.
+For high-throughput or Wav2Vec2-AASIST / TFPARN inference:
+1. Create a new Space on Hugging Face with **Docker SDK**.
+2. Select **T4 Small (16 GB)** or **A10G Small (24 GB)** GPU.
+3. Configure `Dockerfile` with base image `nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04`.
+4. Expose port `7860`.
+5. Set environment variable `DEVICE=cuda` and `ENABLE_FP16=true`.
+6. Ensure model warm-up executes on application startup.
+7. Setup an external uptime monitor (e.g. BetterStack or CronJob) hitting `/health` every 3 minutes to avoid space sleep.
 
-### Supabase
+---
 
-1. Create project. Apply `infra/migrations` (same tables as `migrations/0002_voiceshield.sql`: `profiles`, `vs_sessions`, `detection_events`, `challenge_responses`, `connection_audit_logs`, `auth_audit_logs`).
-2. Enable RLS on every table.
-3. Analyst policy: `user_id = auth.uid()::text` for SELECT/INSERT. No UPDATE/DELETE on audit tables.
-4. Admin policy: `profiles.role = 'admin'`.
-5. Seed one admin and one analyst for the demo.
+## 4. Database Provisioning (Supabase)
 
-RLS sketch:
+1. Create a Supabase project (select Asia South 1 - Mumbai region for low latency).
+2. Execute migration files in numerical order:
+   ```bash
+   supabase db push
+   ```
+   Or apply `infra/migrations/0001_extensions.sql` through `0009_rls_policies.sql` in the Supabase SQL Editor.
+3. Apply `infra/seed/demo_data.sql` to populate sample judge demonstration profiles and detection history.
+4. Verify Row-Level Security is active on all 6 tables.
+5. Create a private storage bucket named `challenge-audio` with access restricted to the backend service role.
 
-```sql
-alter table vs_sessions enable row level security;
-create policy vs_sessions_self on vs_sessions
-  for select using (user_id = auth.uid()::text
-    or exists (select 1 from profiles p
-               where p.user_id = auth.uid()::text and p.role = 'admin'));
-create policy vs_sessions_insert on vs_sessions
-  for insert with check (user_id = auth.uid()::text);
-```
+---
 
-## Fallback test (judges)
+## 5. Live Judge Demonstration Verification
 
-1. Open Live demo. Start live path.
-2. Click **Simulate drop**.
-3. Expect: “Connection lost — reconnecting” banner, jittered delay, ring buffer still filling, then resume from `last_chunk_index`.
-4. Sign in → Vault: a `disconnected` row and a `resume` row for that session.
-
-## Local 36-hour loop
-
-```
-# web
-cd apps/web && pnpm i && pnpm dev
-
-# api
-cd apps/api && python -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
-
-Do not store raw audio. A demo fails if a `.wav` exists in the session directory at stop.
+1. Navigate to `/demo`.
+2. Click **Start Live Demo** and speak to show low risk (<30%).
+3. Use the **Simulate Network Drop** trigger to display the yellow reconnection banner and verify ring buffer accumulation.
+4. Reconnect to show seamless session resumption and chunk replay.
+5. Review the session audit entry in `connection_audit_logs`.

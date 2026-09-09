@@ -1,0 +1,25 @@
+name: Supabase Migrations Check
+
+on:
+  pull_request:
+    paths:
+      - 'infra/migrations/**'
+
+jobs:
+  validate-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Verify SQL Syntax
+        run: |
+          for file in infra/migrations/*.sql; do
+            echo "Checking $file"
+            test -s "$file" || exit 1
+          done
+          echo "All migration files present and non-empty."

@@ -1,13 +1,63 @@
+# ============================================================
+# VoiceShield — Local Development with Docker Compose
+# voiceshield-team/voiceshield-sih-2026
+# ============================================================
+
+version: "3.9"
+
 services:
+  # ─────────────────────────────────────────
+  # FastAPI ML Backend
+  # ─────────────────────────────────────────
   api:
-    build: ./apps/api
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: voiceshield-api
     ports:
       - "8000:8000"
+    env_file:
+      - ./apps/api/.env
+    volumes:
+      - ./apps/api/models:/app/models:ro
+      - ./apps/api/app:/app/app
     environment:
-      APP_ENV: development
-      DEVICE: cpu
-      STORE_RAW_AUDIO: "false"
+      - APP_ENV=development
+      - DEVICE=cpu
+      - LOG_LEVEL=debug
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
-      interval: 10s
-      retries: 6
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # Next.js Frontend
+  # ─────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: voiceshield-web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_FASTAPI_HTTP_URL=http://localhost:8000
+      - NEXT_PUBLIC_FASTAPI_WS_URL=ws://localhost:8000/ws/audio
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+
+networks:
+  default:
+    name: voiceshield-network

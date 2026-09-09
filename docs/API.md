@@ -1,84 +1,161 @@
-# API
+# VoiceShield API & Protocol Specification
 
-Production FastAPI service. This console implements the same messages in-browser (`InferenceBridge`) so the live preview does not need a GPU worker.
+**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+*AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
-## `GET /health`
+---
+
+## 1. WebSocket Interface (`/ws/audio`)
+
+### Connection Handshake
+Client establishes a WebSocket connection to `ws://localhost:8000/ws/audio` (or `wss://api.voiceshield.ai/ws/audio`).
+
+---
+
+### Client Messages
+
+#### 1. Session Initialization (`session.start`)
+Sent immediately after socket connection opens.
 
 ```json
 {
-  "ok": true,
-  "model": true,
-  "gpu": true,
-  "infer_ms": 6.2,
-  "cuda_mem_mb": 812
+  "type": "session.start",
+  "session_id": "c7a840e6-7b24-4f93-8a9d-5d9c72e27601",
+  "user_id": "3b26c710-3882-421b-b4ea-47a8296a84c9",
+  "sample_rate": 16000,
+  "channels": 1,
+  "chunk_ms": 333,
+  "client": {
+    "user_agent": "Mozilla/5.0 ...",
+    "device_type": "desktop"
+  }
 }
 ```
 
-Warm-up must have completed. A 503 here means do not send judge traffic.
+#### 2. Streaming Audio Frames (Binary)
+- **Format:** Raw PCM 16-bit signed integer (little-endian), mono, 16,000 Hz.
+- **Frame Size:** 333ms = 5,328 samples = 10,656 bytes per WebSocket binary message.
 
-## `WS /ws/audio`
-
-Binary PCM is base64 int16 in JSON for the SIH demo (simplifies tracing). Production may switch to binary frames without changing indices.
-
-**Client → server**
-
-```json
-{ "type": "start", "session_id": "uuid", "chunk_ms": 333, "sample_rate": 16000 }
-{ "type": "chunk", "index": 12, "pcm": "<int16 little-endian b64>" }
-{ "type": "resume", "last_chunk_index": 12 }
-{ "type": "stop" }
-```
-
-**Server → client**
+#### 3. Session Resume (`session.resume`)
+Sent upon reconnecting following a network drop.
 
 ```json
 {
-  "type": "decision",
-  "index": 12,
-  "spoof_probability": 0.81,
-  "risk_level": "red",
-  "markers": ["F0 locked — vocoder-like", "Stair-step frame gain"],
-  "suggested_action": "challenge",
-  "latency_ms": 41.2
+  "type": "session.resume",
+  "session_id": "c7a840e6-7b24-4f93-8a9d-5d9c72e27601",
+  "last_processed_chunk_index": 42
 }
 ```
 
-`index` is monotonic per session. After resume the server must ignore chunks `<= last_chunk_index` (already scored) and continue.
-
-## REST
-
-All routes require a session cookie. Scope is the verified user unless `profiles.role = admin`.
-
-### `GET /sessions/:id/summary`
+#### 4. Session Termination (`session.end`)
+Sent when operator ends the call session.
 
 ```json
 {
-  "id": "…",
-  "chunk_count": 48,
-  "avg_risk": 0.22,
-  "max_risk": 0.86,
-  "drop_count": 1,
-  "reconnect_count": 1,
-  "challenge_fired": true,
-  "challenge_ok": false
+  "type": "session.end",
+  "session_id": "c7a840e6-7b24-4f93-8a9d-5d9c72e27601"
+}
+```
+
+---
+
+### Server Messages
+
+#### Detection Result (`detection.result`)
+Emitted by backend for each evaluated audio chunk.
+
+```json
+{
+  "type": "detection.result",
+  "session_id": "c7a840e6-7b24-4f93-8a9d-5d9c72e27601",
+  "chunk_index": 43,
+  "spoof_probability": 0.8842,
+  "risk_level": "high",
+  "suggested_action": "block",
+  "latency_ms": 142.6,
+  "explainability_markers": {
+    "high_frequency_anomaly": 0.892,
+    "phase_discontinuity": 0.765,
+    "prosody_irregularity": 0.814
+  },
+  "model": {
+    "name": "aasist",
+    "version": "0.1.0"
+  }
+}
+```
+
+---
+
+## 2. REST Endpoints
+
+### `GET /health`
+Returns service readiness and loaded model metadata.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "voiceshield-api",
+  "model_loaded": true,
+  "model_name": "AASIST",
+  "device": "cpu",
+  "version": "0.1.0"
+}
+```
+
+### `GET /sessions/{session_id}/summary`
+Retrieves cumulative telemetry and risk metrics for a session.
+
+**Response:**
+```json
+{
+  "session_id": "c7a840e6-7b24-4f93-8a9d-5d9c72e27601",
+  "user_id": "3b26c710-3882-421b-b4ea-47a8296a84c9",
+  "started_at": "2026-09-10T01:30:00Z",
+  "ended_at": "2026-09-10T01:35:00Z",
+  "status": "completed",
+  "total_chunks": 900,
+  "avg_spoof_prob": 0.14,
+  "max_spoof_prob": 0.89,
+  "high_risk_chunks": 12,
+  "challenge_status": "passed"
 }
 ```
 
 ### `GET /audit/connections?session_id=`
+Queries connection lifecycle events for diagnostic review.
 
-Rows from `connection_audit_logs`: `connected`, `disconnected`, `resume`, `error`.
+---
 
-### `GET /audit/auth`
+## 3. Client Code Examples
 
-Rows from `auth_audit_logs`: `signup`, `login`, `logout`, `token_refresh`. Analysts see own rows.
+### cURL Health Check
+```bash
+curl -X GET http://localhost:8000/health
+```
 
-## Error policy
+### TypeScript WebSocket Client
+```typescript
+import { AUDIO_CONFIG } from "@/lib/audioConfig";
 
-- Unknown session → 404
-- Chunk too large / sample rate ≠ 16 kHz → 4408 close, logged as `error`
-- Model not warm → 503 on `/health`; WS refuses `start`
-- Rate limit: 8 concurrent sockets per user, 4 hops/sec (matches 250 ms minimum hop)
+const ws = new WebSocket(process.env.NEXT_PUBLIC_FASTAPI_WS_URL!);
 
-## This preview
+ws.onopen = () => {
+  ws.send(JSON.stringify({
+    type: "session.start",
+    session_id: crypto.randomUUID(),
+    user_id: "demo-user-1",
+    sample_rate: AUDIO_CONFIG.sampleRate,
+    channels: AUDIO_CONFIG.channels,
+    chunk_ms: AUDIO_CONFIG.chunkMs
+  }));
+};
 
-Server functions in `src/lib/server/vault.ts` persist the same objects (`startSession`, `appendEvent`, `logConnection`, `logChallenge`, `logAuthEvent`) with `authMiddleware` and `context.userId` scoping.
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  if (data.type === "detection.result") {
+    console.log(`Risk: ${data.risk_level} (${data.spoof_probability})`);
+  }
+};
+```

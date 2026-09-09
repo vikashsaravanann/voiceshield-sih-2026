@@ -1,14 +1,119 @@
-node_modules
-.next
-out
-dist
-.vercel
+# ─────────────────────────────────────────
+# Node.js / Next.js
+# ─────────────────────────────────────────
+node_modules/
+.next/
+out/
+.turbo/
+.vercel/
+dist/
+build/
+*.tsbuildinfo
+
+# ─────────────────────────────────────────
+# Environment files — NEVER commit these
+# ─────────────────────────────────────────
 .env
 .env.local
-*.pyc
-__pycache__
-.venv
-apps/api/.venv
-apps/api/models/*.pt
-apps/api/models/*.onnx
+.env.development
+.env.production
+.env.staging
+.env.*.local
+apps/web/.env.local
+apps/api/.env
+
+# ─────────────────────────────────────────
+# Python / FastAPI
+# ─────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+dist/
+
+# ─────────────────────────────────────────
+# ML artifacts — never commit large files
+# ─────────────────────────────────────────
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.bin
+models/
+checkpoints/
+runs/
+wandb/
+mlruns/
+
+# ─────────────────────────────────────────
+# Audio / Dataset files
+# ─────────────────────────────────────────
+*.wav
+*.flac
+*.mp3
+*.ogg
+*.m4a
+datasets/
+data/
+ASVspoof*/
+
+# ─────────────────────────────────────────
+# Logs
+# ─────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ─────────────────────────────────────────
+# OS & Editor
+# ─────────────────────────────────────────
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# ─────────────────────────────────────────
+# Secrets & Certificates
+# ─────────────────────────────────────────
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+credentials*.json
+secrets/
+
+# ─────────────────────────────────────────
+# Docker
+# ─────────────────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ─────────────────────────────────────────
+# Supabase local
+# ─────────────────────────────────────────
+.supabase/
+
+# ─────────────────────────────────────────
+# Testing
+# ─────────────────────────────────────────
+coverage/
+.nyc_output/
+test-results/
+playwright-report/

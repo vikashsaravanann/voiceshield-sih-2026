@@ -1,6 +1,8 @@
 MIT License
 
 Copyright (c) 2026 VoiceShield SIH Team
+voiceshield-team/voiceshield-sih-2026
+Smart India Hackathon 2026 — Problem ID: SIH26104
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +21,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+This project was developed as part of Smart India Hackathon 2026 for the
+purpose of academic research and national cybersecurity innovation. The
+anti-spoofing models integrated in this project are used under their
+respective open-source licenses (see /ml/model_cards/ for details).
+
+Third-party datasets (ASVspoof 2019, ASVspoof 5) are subject to their own
+terms of use available at https://www.asvspoof.org/.

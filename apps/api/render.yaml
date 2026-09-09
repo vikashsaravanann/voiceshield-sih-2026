@@ -1,13 +1,20 @@
 services:
   - type: web
     name: voiceshield-api
-    runtime: docker
-    dockerfilePath: ./Dockerfile
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerContext: .
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
         value: production
+      - key: PORT
+        value: "8000"
       - key: DEVICE
         value: cpu
+      - key: ENABLE_FP16
+        value: "false"
+      - key: ENABLE_AUDIT_LOGGING
+        value: "true"
       - key: STORE_RAW_AUDIO
         value: "false"

@@ -1,101 +1,176 @@
 import Link from "next/link";
-import { ArrowRight, Gauge, Lock, Radio, Shield, Waypoints } from "lucide-react";
+import {
+  ShieldCheck,
+  Zap,
+  Activity,
+  Languages,
+  WifiOff,
+  Lock,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="hero">
-      <p className="eyebrow">SIH 2026 · SIH26104 · AICTE Cyber Security Cell</p>
-      <h1>Detect cloned voices before the transfer leaves the bank.</h1>
-      <p className="lede">
-        VoiceShield inspects live SIP, VoIP and browser media in 333 ms hops, scores neural-vocoder artefacts,
-        and challenges an Amber speaker before a privileged transfer leaves the bank. Raw audio never hits disk.
-      </p>
-      <div className="cta">
-        <Link href="/demo" className="btn btn-primary">
-          Open live console <ArrowRight size={16} />
-        </Link>
-        <Link href="/architecture" className="btn btn-ghost">
-          Read the architecture
-        </Link>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+      {/* Top Banner */}
+      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/20 py-2.5 px-4 text-center">
+        <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-emerald-300">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>SMART INDIA HACKATHON 2026 | PROBLEM ID: SIH26104 | AICTE CYBER SECURITY CELL</span>
+        </div>
       </div>
 
-      <dl className="metrics">
-        {[
-          ["≤ 3.2%", "EER · 16 kHz reference"],
-          ["≤ 5.4%", "EER · G.711 / AMR-NB"],
-          ["269 ms", "Decision round-trip"],
-          ["< 0.8%", "False positives in office noise"],
-        ].map(([k, v]) => (
-          <div className="card" key={v}>
-            <dt>{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))}
-      </dl>
+      {/* Hero Section */}
+      <section className="relative px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-6xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-xs text-slate-300 font-mono mb-8 backdrop-blur-md">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Production-Grade Telephony Voice Anti-Spoofing</span>
+        </div>
 
-      <div className="grid3">
-        {[
-          {
-            icon: Radio,
-            title: "Streaming media path",
-            body: "16 kHz capture, 333 ms hops, 4 s ring buffer, WebSocket control plane with exponential backoff and last_chunk_index resume.",
-          },
-          {
-            icon: Gauge,
-            title: "DSP + dual-path scoring",
-            body: "LFCC-style linear bands, F0 lock, harmonicity, vocoder stair-step jitter. Kalman-smoothed C(t) maps to Green / Amber / Red.",
-          },
-          {
-            icon: Lock,
-            title: "Active mitigation",
-            body: "Unpredictable phonemic prompts in English, Hindi and Tamil. Human latency vs 800–2500 ms live-conversion stacks.",
-          },
-        ].map((c) => (
-          <article className="card" key={c.title} style={{ padding: "1.25rem" }}>
-            <c.icon size={20} color="var(--accent)" strokeWidth={1.6} />
-            <h2>{c.title}</h2>
-            <p>{c.body}</p>
-          </article>
-        ))}
-      </div>
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+          Detect the clone. <br />
+          <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+            Protect the conversation.
+          </span>
+        </h1>
 
-      <section style={{ marginTop: "4rem" }}>
-        <p className="eyebrow">Five subsystems</p>
-        <h2 style={{ margin: "0.4rem 0 0", fontSize: "1.4rem" }}>From packet to policy in one hop budget</h2>
-        <div className="pipe">
-          {[
-            ["01", "Capture", "SIP / WebRTC / mic → 16 kHz PCM. Silero-class VAD. 250–333 ms hops."],
-            ["02", "DSP", "LFCC banks, F0 lock, harmonicity, bispectrum, stair-step jitter."],
-            ["03", "Score", "RawNet2 + SE-ResNet fused INT8. Browser demo uses the same cues."],
-            ["04", "Kalman", "C(t) over 1.5 s. Green < 0.35 · Amber · Red ≥ 0.75."],
-            ["05", "Act", "EN / HI / TA challenge. Fail closed. Persist scores, never PCM."],
-          ].map(([n, t, b]) => (
-            <article key={n}>
-              <div className="n">{n}</div>
-              <h3>{t}</h3>
-              <p>{b}</p>
-            </article>
-          ))}
+        <p className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Real-time AI voice cloning detection and active prevention for Indian telecommunication and BFSI networks. Sub-250ms latency with zero disk retention.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/demo"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm tracking-wider uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group"
+          >
+            <span>Start Live Demo</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+          <Link
+            href="/dashboard"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 font-semibold text-sm transition-all"
+          >
+            Operator Dashboard
+          </Link>
         </div>
       </section>
 
-      <section className="panel">
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <Shield size={20} color="var(--accent)" />
-          <div>
-            <h2>National impact</h2>
-            <p>
-              CEO-fraud RTGS instructions, IVR voiceprint bypass, and virtual-kidnapping calls all ride the same
-              narrowband channel. VoiceShield is specified for that channel — not a studio file — and aligns with
-              I4C / CERT-In: stop the transfer, keep the waveform off durable storage, leave an audit object of
-              scores and challenge outcomes.
+      {/* Target Metrics */}
+      <section className="border-y border-slate-800/80 bg-slate-900/40 py-12 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="p-4">
+            <span className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 block mb-1">
+              &lt; 250 ms
+            </span>
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              End-to-End Latency
+            </span>
+          </div>
+          <div className="p-4">
+            <span className="text-3xl sm:text-4xl font-extrabold font-mono text-teal-300 block mb-1">
+              &lt; 5.0%
+            </span>
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              Telephony EER (G.711)
+            </span>
+          </div>
+          <div className="p-4">
+            <span className="text-3xl sm:text-4xl font-extrabold font-mono text-cyan-400 block mb-1">
+              0 bytes
+            </span>
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              Audio Stored on Disk (DPDP)
+            </span>
+          </div>
+          <div className="p-4">
+            <span className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 block mb-1">
+              100%
+            </span>
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              RLS Audit Trail
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="px-6 py-20 max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 block mb-2">
+            Defense Architecture
+          </span>
+          <h2 className="text-3xl font-bold text-white">Engineered for Indian Voice Security</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+              <Zap className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Streaming WebSocket Inference</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              333ms raw PCM audio hops evaluated via hybrid DSP and deep attention heads in volatile RAM without blocking.
             </p>
-            <Link href="/docs" style={{ display: "inline-flex", gap: 8, marginTop: 16, color: "var(--steel)", fontSize: 14 }}>
-              SIH pitch pack <Waypoints size={16} />
-            </Link>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-4">
+              <Activity className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Explainable AI Spectrogram</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Waterfall spectral heatmaps surface plain-English anomaly markers like unnatural high-frequency energy and phase variance.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4">
+              <Languages className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Multilingual Challenge-Response</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Unpredictable phonemic phrases in Hindi, Tamil, and English that commercial voice clones cannot articulate in real time.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-4">
+              <WifiOff className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Resilient Jittered Fallback</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              4-second circular ring buffer prevents packet loss during network severance, resuming seamlessly with monotonic chunk tracking.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+              <Lock className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Append-Only RLS Audit Trail</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Every detection event, connection drop, and auth challenge logged to Supabase Postgres protected by strict Row-Level Security.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Zero Raw Audio Persistence</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Strict compliance with Digital Personal Data Protection (DPDP) Act. All feature tensors processed in ephemeral RAM.
+            </p>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="mt-auto border-t border-slate-800 py-8 px-6 text-center text-xs text-slate-500 font-mono">
+        <p>VoiceShield · Smart India Hackathon 2026 · Problem ID: SIH26104</p>
+        <p className="mt-1">Developed for AICTE Cyber Security Cell · Licensed under MIT</p>
+      </footer>
     </div>
   );
 }
