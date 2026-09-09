@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: voiceshield-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEVICE
+        value: cpu
+      - key: STORE_RAW_AUDIO
+        value: "false"

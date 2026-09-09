@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+dist
+.vercel
+.env
+.env.local
+*.pyc
+__pycache__
+.venv
+apps/api/.venv
+apps/api/models/*.pt
+apps/api/models/*.onnx
+.DS_Store
