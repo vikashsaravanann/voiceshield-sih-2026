@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Shield } from "lucide-react";
+import { Activity, BookOpen, Cpu, LayoutDashboard, Radio, Shield } from "lucide-react";
 
 const NAV = [
-  { href: "/", label: "Overview" },
-  { href: "/demo", label: "Live demo" },
-  { href: "/dashboard", label: "Vault" },
-  { href: "/architecture", label: "Architecture" },
-  { href: "/docs", label: "SIH pack" },
+  { href: "/", label: "Overview", icon: Activity },
+  { href: "/demo", label: "Live demo", icon: Radio },
+  { href: "/dashboard", label: "Vault", icon: LayoutDashboard },
+  { href: "/architecture", label: "Architecture", icon: Cpu },
+  { href: "/docs", label: "SIH pack", icon: BookOpen },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -32,7 +32,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {NAV.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
-                <Link key={item.href} href={item.href} className={active ? "active" : ""}>
+                <Link key={item.href} href={item.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>
+                  <item.icon size={13} aria-hidden="true" />
                   {item.label}
                 </Link>
               );
@@ -46,7 +47,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           {NAV.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} className={active ? "active" : ""}>
+              <Link key={item.href} href={item.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>
+                <item.icon size={13} aria-hidden="true" />
                 {item.label}
               </Link>
             );
