@@ -152,13 +152,15 @@ export default function DemoPage() {
         <BackendHealth />
 
         <div className="grid gap-3 sm:grid-cols-4">
-          {[
-            ["01", "CAPTURE", connectionState !== "disconnected"],
-            ["02", "INFER", Boolean(latestDetection)],
-            ["03", "DECIDE", Boolean(latestDetection)],
-            ["04", "PREVENT", challengeActive || currentRisk === "high"],
-          ].map(([step, label, active]) => (
-            <div key={String(label)} className={`rounded-xl border p-4 ${active ? "border-emerald-500/40 bg-emerald-950/20" : "border-slate-800 bg-slate-900/40"}`}>
+          {(
+            [
+              ["01", "CAPTURE", connectionState !== "disconnected"],
+              ["02", "INFER", Boolean(latestDetection)],
+              ["03", "DECIDE", Boolean(latestDetection)],
+              ["04", "PREVENT", challengeActive || currentRisk === "high"],
+            ] as [string, string, boolean][]
+          ).map(([step, label, active]) => (
+            <div key={label} className={`rounded-xl border p-4 ${active ? "border-emerald-500/40 bg-emerald-950/20" : "border-slate-800 bg-slate-900/40"}`}>
               <span className="font-mono text-xs text-slate-500">{step}</span>
               <p className={`mt-2 text-xs font-bold tracking-widest ${active ? "text-emerald-300" : "text-slate-500"}`}>{label}</p>
             </div>

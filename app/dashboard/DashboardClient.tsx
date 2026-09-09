@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ShieldCheck, ShieldAlert, Activity, Users, Clock, AlertTriangle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { BackendHealth } from "@/components/BackendHealth";
+import { ForensicReportButton } from "@/components/ForensicReportButton";
 
 import { ThreatMap } from "@/components/ThreatMap";
 
@@ -71,14 +72,14 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
           />
           <StatCard
             title="Average Latency"
-            value="18ms"
+            value="Live"
             icon={<Clock className="w-6 h-6 text-emerald-400" />}
-            trend="Sub-250ms SLA"
+            trend="WebSocket telemetry"
             trendColor="text-emerald-400"
           />
           <StatCard
             title="Avg Confidence Score"
-            value="98.2%"
+            value={stats.total ? `${Math.round((1 - stats.averageRisk) * 100)}%` : "—"}
             icon={<ShieldCheck className="w-6 h-6 text-teal-400" />}
             trend="Optimal"
             trendColor="text-teal-400"
@@ -120,7 +121,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
 
           {/* Threat Map */}
           <div className="lg:col-span-1 h-[400px] lg:h-auto">
-            <ThreatMap />
+            <ThreatMap sessions={sessions} />
           </div>
         </div>
 
@@ -171,7 +172,10 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                         </span>
                       </td>
                       <td className="py-4 px-4 text-slate-500 font-mono text-xs">
-                        {session.client_info?.browser || 'Unknown'} / {session.client_info?.os || 'Unknown'}
+                        <div className="flex items-center gap-2">
+                          <span>{session.client_info?.browser || 'Unknown'} / {session.client_info?.os || 'Unknown'}</span>
+                          <ForensicReportButton session={session} />
+                        </div>
                       </td>
                     </tr>
                   );

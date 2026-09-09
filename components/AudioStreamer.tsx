@@ -22,6 +22,7 @@ interface AudioStreamerProps {
     reconnectDelayMs: number;
     bufferedCount: number;
     start: () => Promise<void>;
+    startFromFile: (file: File) => Promise<void>;
     stop: () => void;
     simulateDisconnect: () => void;
     toggleCloneSimulation: () => void;
@@ -317,6 +318,97 @@ export function AudioStreamer({
     }
   };
 
+  const startFromFile = async (file: File) => {
+    try {
+      setError(null);
+      sessionIdRef.current = crypto.randomUUID();
+      chunkIndexRef.current = 0;
+      lastAckedChunkRef.current = -1;
+      ringBufferRef.current.clear();
+      statsRef.current = {
+        totalChunks: 0,
+        avgRisk: 0,
+        maxRisk: 0,
+        highRiskCount: 0,
+        dropCount: 0,
+        reconnectTimeMs: 0,
+      };
+
+      const audioCtx = new (window.AudioContext ||
+        (window as any).webkitAudioContext)({
+        sampleRate: AUDIO_CONFIG.sampleRate,
+      });
+      audioContextRef.current = audioCtx;
+
+      const arrayBuffer = await file.arrayBuffer();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+      const source = audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+
+      const bufferSize = 4096;
+      const processor = audioCtx.createScriptProcessor(bufferSize, 1, 1);
+      processorNodeRef.current = processor;
+
+      let sampleAccumulator: number[] = [];
+      const requiredSamples = AUDIO_CONFIG.chunkSizeSamples;
+
+      processor.onaudioprocess = (e) => {
+        const inputData = e.inputBuffer.getChannelData(0);
+
+        for (let i = 0; i < inputData.length; i++) {
+          sampleAccumulator.push(inputData[i]);
+
+          if (sampleAccumulator.length >= requiredSamples) {
+            const chunkSamples = sampleAccumulator.slice(0, requiredSamples);
+            sampleAccumulator = sampleAccumulator.slice(requiredSamples);
+
+            const pcm16 = new Int16Array(chunkSamples.length);
+            for (let j = 0; j < chunkSamples.length; j++) {
+              let s = chunkSamples[j];
+              const clamped = Math.max(-1, Math.min(1, s));
+              pcm16[j] = clamped < 0 ? clamped * 32768 : clamped * 32767;
+            }
+
+            const currentIdx = chunkIndexRef.current++;
+
+            if (
+              wsRef.current &&
+              wsRef.current.readyState === WebSocket.OPEN
+            ) {
+              wsRef.current.send(pcm16.buffer as ArrayBuffer);
+            } else {
+              ringBufferRef.current.push({
+                index: currentIdx,
+                pcm: pcm16,
+                timestamp: Date.now(),
+              });
+              setBufferedCount(ringBufferRef.current.length);
+            }
+          }
+        }
+      };
+
+      source.connect(audioCtx.destination); // Play the audio so judge can hear it
+      source.connect(processor);
+      processor.connect(audioCtx.destination); // Required for onaudioprocess to fire
+      source.start(0);
+
+      source.onended = () => {
+         stop();
+      };
+
+      streamingRef.current = true;
+      setIsStreaming(true);
+      connectWebSocket();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unable to process audio file.";
+      setError(message);
+      streamingRef.current = false;
+      updateConnection("disconnected");
+    }
+  };
+
   // Stop Streaming
   const stop = () => {
     streamingRef.current = false;
@@ -380,6 +472,7 @@ export function AudioStreamer({
           reconnectDelayMs,
           bufferedCount,
           start,
+          startFromFile,
           stop,
           simulateDisconnect,
           toggleCloneSimulation,

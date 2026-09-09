@@ -20,12 +20,15 @@ export default async function DashboardPage() {
   // Calculate stats
   const total = sessions?.length || 0;
   const blocked = sessions?.filter((s) => s.status === "flagged" || s.risk_summary?.decision === "blocked").length || 0;
+  const averageRisk = total
+    ? (sessions ?? []).reduce((sum, session) => sum + Number(session.risk_summary?.avg_risk ?? 0), 0) / total
+    : 0;
 
   const stats = {
     total,
     blocked,
+    averageRisk,
   };
 
   return <DashboardClient sessions={sessions || []} stats={stats} />;
 }
-

@@ -6,7 +6,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 client = AsyncGroq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 async def transcribe_audio_chunk(audio_bytes: bytes) -> str:
-    """Sub-150ms transcription using Groq's high-speed Whisper LPU."""
+    """Transcribe Indian regional speech with Whisper's automatic language detection."""
     if not client:
         return ""
     try:
@@ -14,7 +14,6 @@ async def transcribe_audio_chunk(audio_bytes: bytes) -> str:
             file=("chunk.wav", audio_bytes),
             model="whisper-large-v3-turbo",
             response_format="json",
-            language="en"
         )
         return transcription.text.strip()
     except Exception as e:
@@ -26,15 +25,20 @@ async def analyze_fraud_intent(transcript: str) -> dict:
     if not client or not transcript:
         return {"intent_risk": "LOW", "signals": []}
     
-    prompt = f"""You are an AI Cyber Security Analyst. Evaluate the following telephonic transcript for social engineering, urgent extortion, executive impersonation, or credential/OTP theft:
+    prompt = f"""You are an AI Cyber Security Analyst supporting Indian callers. Detect the transcript language
+(including English, Hindi, Tamil, Telugu, Bengali, Marathi, Kannada, Malayalam, Gujarati, and code-switching).
+Translate only for analysis; preserve the original meaning and do not infer identity, location, or intent from language.
+Evaluate the transcript for social engineering, urgent extortion, executive impersonation, or credential/OTP theft:
 "{transcript}"
 
 Respond strictly with a JSON object:
 {{
   "intent_risk": "LOW" | "MEDIUM" | "HIGH",
+  "detected_language": "ISO-639-1 code or 'mixed'",
   "urgency_detected": true | false,
   "suspicious_keywords": ["keyword1", "keyword2"],
-  "summary": "Brief 1-sentence analysis"
+  "translated_summary": "Brief English analysis",
+  "summary": "Brief analysis in the detected language when practical"
 }}"""
 
     try:
@@ -46,7 +50,7 @@ Respond strictly with a JSON object:
         return json.loads(response.choices[0].message.content)
     except Exception as e:
         print(f"Groq Intent Analysis Error: {e}")
-        return {"intent_risk": "LOW", "signals": []}
+        return {"intent_risk": "LOW", "signals": [], "detected_language": "unknown"}
 
 async def generate_phonemic_challenge() -> str:
     """Generates an unexpected phrase that neural vocoders struggle to articulate cleanly."""
