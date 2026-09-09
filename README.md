@@ -1,64 +1,138 @@
-# VoiceShield — Detect the clone. Protect the conversation.
 
-**SIH 2026 · Problem ID SIH26104 · AICTE Cyber Security Cell**
+---
 
-Real-time detection and prevention of voice-cloning impersonation attacks on Indian telephony (RTGS / IVR / virtual kidnapping). 333 ms hops, Kalman-smoothed C(t), EN/HI/TA phonemic challenge, DPDP: raw audio never hits disk.
+## 🛠️ Tech Stack
 
-## Live demo (this repo)
+**Frontend:** Next.js 14 · TypeScript · Tailwind CSS · Web Audio API · Vercel  
+**Backend:** FastAPI · PyTorch · Torchaudio · Librosa · WebSockets · Docker · Render/HF Spaces  
+**Database:** Supabase Postgres · Supabase Auth · Supabase Storage · RLS  
+**ML:** ASVspoof 2019/2021/5 · AASIST · RawNet2 · Wav2Vec2-AASIST · TFPARN  
+**DevOps:** GitHub · Vercel CI/CD · Supabase CLI · Docker  
 
-The Next.js app at the repository root is what Vercel builds.
+---
+
+## 📈 Target Metrics
+
+| Metric | Target |
+|---|---|
+| Equal Error Rate (EER) | < 5% on ASVspoof 2019 LA |
+| End-to-End Latency | < 250ms per 333ms chunk |
+| False Acceptance Rate | < 3% at operating threshold |
+| WebSocket Reconnect | < 2s average (backoff + jitter) |
+
+---
+
+## 🎬 Demo Flow (For Judges)
+
+1. Open [voiceshield-sih-2026.vercel.app](https://voiceshield-sih-2026.vercel.app)
+2. Click **Start Live Demo** — allow microphone
+3. Speak naturally → **risk meter stays green**
+4. Play cloned voice sample → **risk spikes red + heatmap appears**
+5. System triggers **challenge-response** (phrase in your language)
+6. Click **Simulate Network Drop** → reconnection banner → session resumes
+7. View **session summary** (avg risk, chunks, challenge outcome)
+8. Open **dashboard** → inspect full detection timeline + audit logs
+
+---
+
+## 🚀 Local Setup
+
+### Prerequisites
+- Node.js 20+, pnpm
+- Python 3.11+, pip
+- Supabase CLI, Vercel CLI
+
+### Steps
 
 ```bash
-npm install
-npm run dev
-# http://localhost:3000  →  /demo
-```
+# Clone
+git clone https://github.com/voiceshield-team/voiceshield-sih-2026.git
+cd voiceshield-sih-2026
 
-1. Open **Live demo**. Allow the microphone. Speak — the meter stays Green.
-2. **Inject cloned stream** — C(t) crosses 75% and arms a phonemic challenge.
-3. **Simulate drop** — 4 s ring buffer, jittered backoff, resume from `last_chunk_index`.
+# Frontend
+cd apps/web && pnpm install
 
-## Architecture
-
-```
-GitHub  ──►  Vercel (Next.js, this root)
-        ──►  Render / Hugging Face (apps/api FastAPI WebSocket)
-        ──►  Supabase (Postgres + Auth + RLS)
-```
-
-| Layer | Path | Deploy |
-| --- | --- | --- |
-| Judge UI + live DSP | `app/`, `components/`, `lib/audio/` | Vercel |
-| Inference worker | `apps/api` | Render or HF Docker Space |
-| Schema + RLS | `infra/migrations` | Supabase SQL editor |
-| Docs | `docs/` | in-repo |
-
-## Supabase (Mumbai)
-
-Project: `voiceshield-sih-2026`  
-URL: `https://lynxmidkzwxhsvoyqmpsh.supabase.co`
-
-Apply `infra/migrations/0001_*.sql` … `0009_rls_policies.sql` in order. First signed-in user becomes `admin`. Never put `SUPABASE_SERVICE_ROLE_KEY` in Vercel `NEXT_PUBLIC_*` vars.
-
-## FastAPI
-
-```bash
-cd apps/api
+# Backend
+cd ../api && python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-# GET /health   WS /ws/audio
+
+# Environment
+cp .env.example apps/web/.env.local
+cp .env.example apps/api/.env
+# Fill in Supabase URL, keys, and FastAPI URL
+
+# Database
+supabase db push  # from /infra/migrations/
+
+# Run
+pnpm --dir apps/web dev          # Frontend → localhost:3000
+uvicorn app.main:app --reload    # Backend  → localhost:8000
 ```
 
-## Contracts
+---
 
-| Knob | Value |
-| --- | --- |
-| Hop | 333 ms @ 16 kHz |
-| Ring | 4 s |
-| Backoff | 1 s × 2ⁿ, cap 30 s, ±20% jitter, 10 attempts |
-| Green / Red | C(t) < 0.35 / ≥ 0.75 |
-| Privacy | PCM in RAM only |
+## 📦 Deployment
 
-## Why Vercel was 404
+| Layer | Platform | URL |
+|---|---|---|
+| Frontend | Vercel | voiceshield-sih-2026.vercel.app |
+| Backend | Render / HF Spaces | voiceshield-api.onrender.com |
+| Database | Supabase | YOUR_PROJECT_REF.supabase.co |
 
-A README-only `main` branch produces Vercel `NOT_FOUND`. This tree is a real Next.js App Router app at the repo root so the existing Vercel project builds without changing Root Directory.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full step-by-step guide.
+
+---
+
+## 🔐 Security & Privacy
+
+- Raw audio is **never stored** by default (`STORE_RAW_AUDIO=false`)
+- Supabase **Row-Level Security** enforced on all tables
+- Service-role key **never exposed** to browser or frontend
+- All auth and connection events logged with **append-only audit tables**
+- See [SECURITY.md](SECURITY.md) and [docs/DATA_PRIVACY.md](docs/DATA_PRIVACY.md)
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Twilio / Exotel telephony integration
+- [ ] React Native / Flutter mobile SDKs
+- [ ] On-device inference (TFLite / ONNX Runtime Mobile)
+- [ ] Expanded Indian language challenge phrases
+- [ ] BFSI fraud monitoring dashboard integration
+- [ ] Federated learning for privacy-preserving model updates
+
+---
+
+## 👥 Team
+
+**Team Name:** [Your Team Name]  
+**Institution:** [Your College], [City], India  
+**SIH 2026 Problem ID:** SIH26104  
+
+| Name | Role |
+|---|---|
+| [Member 1] | ML Engineer |
+| [Member 2] | Full-Stack Developer |
+| [Member 3] | Backend & DevOps |
+| [Member 4] | UI/UX & Frontend |
+| [Member 5] | Research & Evaluation |
+| [Member 6] | Product & Documentation |
+
+**Mentor:** [Mentor Name], [Designation]
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🔗 Links
+
+- 🌐 [Live Demo](https://voiceshield-sih-2026.vercel.app)
+- 📁 [GitHub Repository](https://github.com/voiceshield-team/voiceshield-sih-2026)
+- 📘 [API Documentation](docs/API.md)
+- 🏗️ [Architecture](docs/ARCHITECTURE.md)
+- 🤖 [ML Pipeline](docs/ML_PIPELINE.md)
