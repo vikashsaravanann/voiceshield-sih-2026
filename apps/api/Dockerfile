@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Application code & models
 # ─────────────────────────────────────────
 COPY app/ ./app/
-COPY models/ ./models/ 2>/dev/null || true
+
 
 # ─────────────────────────────────────────
 # Non-root user for security
