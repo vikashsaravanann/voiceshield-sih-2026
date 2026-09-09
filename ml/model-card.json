@@ -1,0 +1,12 @@
+{
+  "name": "voiceshield-spoof-v0.1",
+  "format": "torchscript",
+  "path": "apps/api/models/voiceshield-spoof-v0.1.pt",
+  "input": {"name": "features", "shape": [1, 48], "dtype": "float32"},
+  "output": {"name": "spoof_probability", "shape": [1], "dtype": "float32", "range": [0, 1]},
+  "sample_rate": 16000,
+  "chunk_ms": 333,
+  "device": "cpu",
+  "status": "bootstrap",
+  "note": "SIH bootstrap head. Not a published AASIST checkpoint. Replace after ASVspoof fine-tune."
+}
