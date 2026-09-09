@@ -29,7 +29,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY app/ ./app/
 COPY core/ ./core/
 COPY services/ ./services/
-COPY models/ ./models/
 
 # ─────────────────────────────────────────
 # Non-root user for security
