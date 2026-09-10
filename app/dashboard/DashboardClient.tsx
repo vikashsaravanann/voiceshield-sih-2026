@@ -32,7 +32,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
     <>
       <LiveAlertToast />
       <div className="min-h-screen bg-[#030712] px-3 pb-8 pt-20 text-slate-100 font-sans sm:px-5 sm:pb-10 sm:pt-24 lg:px-8 lg:pt-28">
-        <div className="mx-auto grid w-full grid-cols-1 gap-5 lg:gap-7 xl:grid-cols-[minmax(0,3fr)_minmax(300px,1fr)]">
+        <div className="mx-auto grid w-full max-w-none grid-cols-1 items-stretch gap-5 lg:gap-7 xl:grid-cols-[minmax(0,1fr)_minmax(340px,420px)]">
           
           <div className="min-w-0 space-y-5 sm:space-y-6 lg:space-y-7">
             {/* Header */}
@@ -51,7 +51,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               </div>
               <div className="flex w-fit items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-100 sm:justify-self-end sm:px-4 sm:text-xs">
                 <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
-                <span>System healthy <span className="text-emerald-400">• live</span></span>
+                <BackendHealth compact />
               </div>
             </div>
 
@@ -82,9 +82,9 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               />
               <StatCard
                 title="AVERAGE LATENCY"
-                value="Live"
+                value={stats.averageLatency ? `${Math.round(stats.averageLatency)}ms` : "—"}
                 icon={<Clock className="w-6 h-6 text-emerald-400" />}
-                trend="WebSocket telemetry"
+                trend="Recorded inference latency"
                 trendColor="text-emerald-400"
               />
               <StatCard
@@ -214,7 +214,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
           </div>
 
           {/* Right Sidebar - Realtime Session Feed */}
-          <div className="min-w-0 xl:sticky xl:top-24 xl:h-[calc(100vh-7rem)]">
+          <div className="min-w-0 xl:h-full">
             <RealtimeSessionFeed />
           </div>
 

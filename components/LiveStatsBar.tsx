@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 
 export function LiveStatsBar() {
@@ -9,7 +9,7 @@ export function LiveStatsBar() {
     threatsBlocked: 0,
     activeStreams: 0,
   });
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     const fetchStats = async () => {

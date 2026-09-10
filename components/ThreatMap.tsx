@@ -12,21 +12,19 @@ interface ThreatEvent {
   label: string;
 }
 
-const REGIONS = [
-  { label: "Mumbai", lat: 19.076, lng: 72.877 },
-  { label: "Delhi", lat: 28.614, lng: 77.209 },
-  { label: "Bengaluru", lat: 12.972, lng: 77.594 },
-  { label: "Chennai", lat: 13.082, lng: 80.271 },
-  { label: "Hyderabad", lat: 17.385, lng: 78.486 },
-];
-
 export function ThreatMap({ sessions }: { sessions: any[] }) {
   const threats = useMemo<ThreatEvent[]>(() => {
-    return sessions.slice(0, REGIONS.length).map((session, index) => ({
-      id: session.id,
-      ...REGIONS[index],
-      risk: session.risk_summary?.max_risk ?? 0,
-    }));
+    return sessions.flatMap((session) => {
+      const location = session.risk_summary?.location ?? session.client_info?.location;
+      if (!location || typeof location.lat !== "number" || typeof location.lng !== "number") return [];
+      return [{
+        id: session.id,
+        lat: location.lat,
+        lng: location.lng,
+        label: location.label || "Observed location",
+        risk: session.risk_summary?.max_risk ?? 0,
+      }];
+    });
   }, [sessions]);
 
   // Convert lat/lng to SVG percentages (0-100)
@@ -89,7 +87,7 @@ export function ThreatMap({ sessions }: { sessions: any[] }) {
         </AnimatePresence>
         {threats.length === 0 ? (
           <div className="absolute inset-0 grid place-items-center text-center text-xs text-slate-500">
-            Regional activity appears after the first analyzed session.
+            Location telemetry is unavailable for the recorded sessions.
           </div>
         ) : null}
         

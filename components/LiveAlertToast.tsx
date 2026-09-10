@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/browser";
 import { AlertTriangle, X } from "lucide-react";
 
@@ -12,7 +12,7 @@ type Alert = {
 
 export function LiveAlertToast() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const playBeep = () => {

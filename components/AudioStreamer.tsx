@@ -71,7 +71,9 @@ export function AudioStreamer({
   const cloneSimulationRef = useRef(false);
   const chunkIndexRef = useRef<number>(0);
   const lastAckedChunkRef = useRef<number>(-1);
-  const reconnectTimeoutRef = useRef<any>(null);
+  const sessionEstablishedRef = useRef(false);
+  const reconnectAttemptRef = useRef(0);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Running stats
   const statsRef = useRef<SessionStats>({
@@ -93,6 +95,8 @@ export function AudioStreamer({
 
   // Connect WebSocket
   const connectWebSocket = useCallback(() => {
+    if (!streamingRef.current) return;
+
     let wsUrl = "ws://localhost:8000/ws/audio";
     const envWs = process.env.NEXT_PUBLIC_FASTAPI_WS_URL || process.env.NEXT_PUBLIC_API_WS_URL;
     const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
@@ -113,11 +117,13 @@ export function AudioStreamer({
       wsRef.current = ws;
 
       ws.onopen = async () => {
-        setReconnectAttempt(0);
+        if (wsRef.current !== ws || !streamingRef.current) {
+          ws.close(1000, "Stream stopped");
+          return;
+        }
         updateConnection("connected");
 
-        // Send init or resume message
-        if (lastAckedChunkRef.current >= 0) {
+        if (sessionEstablishedRef.current) {
           ws.send(
             JSON.stringify({
               type: "session.resume",
@@ -125,15 +131,6 @@ export function AudioStreamer({
               last_processed_chunk_index: lastAckedChunkRef.current,
             })
           );
-
-          // Flush & replay buffered chunks
-          const replayChunks = ringBufferRef.current.getReplayChunks(
-            lastAckedChunkRef.current
-          );
-          for (const chunk of replayChunks) {
-            ws.send(chunk.pcm.buffer as ArrayBuffer);
-          }
-          setBufferedCount(0);
         } else {
           ws.send(
             JSON.stringify({
@@ -155,6 +152,24 @@ export function AudioStreamer({
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+          if (data.type === "session.ack") {
+            sessionEstablishedRef.current = true;
+            reconnectAttemptRef.current = 0;
+            setReconnectAttempt(0);
+            setReconnectDelayMs(0);
+
+            if (data.resumed && wsRef.current === ws) {
+              const replayChunks = ringBufferRef.current.getReplayChunks(
+                lastAckedChunkRef.current
+              );
+              for (const chunk of replayChunks) {
+                if (ws.readyState !== WebSocket.OPEN) break;
+                ws.send(chunk.pcm.buffer as ArrayBuffer);
+              }
+              setBufferedCount(0);
+            }
+            return;
+          }
           if (data.type === "detection.result") {
             const resp = data as DetectionResponse;
             lastAckedChunkRef.current = resp.chunk_index;
@@ -177,6 +192,8 @@ export function AudioStreamer({
       };
 
       ws.onclose = () => {
+        if (wsRef.current !== ws) return;
+        wsRef.current = null;
         if (streamingRef.current) {
           updateConnection("reconnecting");
           statsRef.current.dropCount += 1;
@@ -193,16 +210,18 @@ export function AudioStreamer({
       updateConnection("reconnecting");
       scheduleReconnect();
     }
-  }, [isStreaming, onRiskUpdate, onStatsUpdate, updateConnection]);
+  }, [onRiskUpdate, onStatsUpdate, updateConnection]);
 
   // Schedule Exponential Backoff with Jitter
   const scheduleReconnect = useCallback(() => {
-    if (reconnectAttempt >= AUDIO_CONFIG.maxReconnectAttempts) {
+    if (!streamingRef.current || reconnectTimeoutRef.current) return;
+    if (reconnectAttemptRef.current >= AUDIO_CONFIG.maxReconnectAttempts) {
       updateConnection("offline_buffering");
       return;
     }
 
-    const nextAttempt = reconnectAttempt + 1;
+    const nextAttempt = reconnectAttemptRef.current + 1;
+    reconnectAttemptRef.current = nextAttempt;
     setReconnectAttempt(nextAttempt);
 
     const delay = getReconnectDelay(nextAttempt);
@@ -210,9 +229,10 @@ export function AudioStreamer({
 
     if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
     reconnectTimeoutRef.current = setTimeout(() => {
+      reconnectTimeoutRef.current = null;
       connectWebSocket();
     }, delay);
-  }, [reconnectAttempt, connectWebSocket, updateConnection]);
+  }, [connectWebSocket, updateConnection]);
 
   // Handle visibility changes (pause reconnect schedules when hidden)
   useEffect(() => {
@@ -230,6 +250,8 @@ export function AudioStreamer({
       sessionIdRef.current = crypto.randomUUID();
       chunkIndexRef.current = 0;
       lastAckedChunkRef.current = -1;
+      sessionEstablishedRef.current = false;
+      reconnectAttemptRef.current = 0;
       ringBufferRef.current.clear();
       statsRef.current = {
         totalChunks: 0,
@@ -332,6 +354,8 @@ export function AudioStreamer({
       sessionIdRef.current = crypto.randomUUID();
       chunkIndexRef.current = 0;
       lastAckedChunkRef.current = -1;
+      sessionEstablishedRef.current = false;
+      reconnectAttemptRef.current = 0;
       ringBufferRef.current.clear();
       statsRef.current = {
         totalChunks: 0,
@@ -421,7 +445,12 @@ export function AudioStreamer({
   const stop = () => {
     streamingRef.current = false;
     setIsStreaming(false);
-    if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+    reconnectAttemptRef.current = 0;
+    sessionEstablishedRef.current = false;
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
 
     if (processorNodeRef.current) {
       processorNodeRef.current.disconnect();

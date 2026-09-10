@@ -17,6 +17,7 @@ def test_websocket_audio_flow():
         })
         ack = websocket.receive_json()
         assert ack["type"] == "session.ack"
+        assert ack["session_id"] == "00000000-0000-0000-0000-000000000001"
 
         # Step 2: Stream PCM16 chunk
         samples = (np.sin(np.linspace(0, 2 * np.pi * 440, 5328)) * 16000).astype(np.int16)
@@ -31,4 +32,21 @@ def test_websocket_audio_flow():
         assert res["risk_level"] in ("low", "medium", "high")
 
         # Step 3: End session
+        websocket.send_json({"type": "session.end"})
+
+
+def test_websocket_resume_ack():
+    with client.websocket_connect("/ws/audio") as websocket:
+        websocket.send_json({
+            "type": "session.resume",
+            "session_id": "00000000-0000-0000-0000-000000000002",
+            "last_processed_chunk_index": 4,
+        })
+        ack = websocket.receive_json()
+        assert ack == {
+            "type": "session.ack",
+            "session_id": "00000000-0000-0000-0000-000000000002",
+            "resumed": True,
+            "last_processed_chunk_index": 4,
+        }
         websocket.send_json({"type": "session.end"})

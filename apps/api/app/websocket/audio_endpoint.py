@@ -49,6 +49,9 @@ async def audio_websocket(websocket: WebSocket):
     
     events_buffer = []
     chunk_index = 0
+    risk_sum = 0.0
+    max_risk = 0.0
+    latency_sum = 0
     total_audio_bytes = 0
     # Add a flag to prevent spamming WhatsApp with 50 messages per call
     alert_dispatched = False
@@ -56,15 +59,37 @@ async def audio_websocket(websocket: WebSocket):
     try:
         data = await websocket.receive_text()
         init_payload = json.loads(data)
+        message_type = init_payload.get("type")
+        if message_type not in {"session.start", "session.resume"}:
+            await websocket.close(code=1008, reason="Expected session.start or session.resume")
+            return
         
         raw_session_id = init_payload.get("session_id")
         session_id = _ensure_uuid(raw_session_id)
+        resumed = message_type == "session.resume"
+        last_processed_chunk_index = int(init_payload.get("last_processed_chunk_index", -1))
+        chunk_index = last_processed_chunk_index + 1 if resumed else 0
             
         logger.info("ws_connected", session_id=session_id, client_ip=client_ip)
         await log_connection_event(session_id, "connected", client_ip)
-        await create_session(session_id, client_ip)
+        if not resumed:
+            await create_session(
+                session_id=session_id,
+                user_id=init_payload.get("user_id"),
+                client_info={
+                    **(init_payload.get("client") or {}),
+                    "sample_rate": init_payload.get("sample_rate"),
+                    "channels": init_payload.get("channels"),
+                    "chunk_ms": init_payload.get("chunk_ms"),
+                },
+            )
         
-        await websocket.send_json({"status": "ready", "session_id": session_id})
+        await websocket.send_json({
+            "type": "session.ack",
+            "session_id": session_id,
+            "resumed": resumed,
+            "last_processed_chunk_index": last_processed_chunk_index,
+        })
         
         model = websocket.app.state.model
 
@@ -75,7 +100,7 @@ async def audio_websocket(websocket: WebSocket):
                 if "text" in message:
                     try:
                         text_data = json.loads(message["text"])
-                        if text_data.get("action") == "end_session":
+                        if text_data.get("type") == "session.end" or text_data.get("action") == "end_session":
                             break
                     except json.JSONDecodeError:
                         pass
@@ -101,13 +126,20 @@ async def audio_websocket(websocket: WebSocket):
             risk_level, explanation = classify_risk(prob)
             
             latency_ms = int((time.time() - process_start) * 1000)
+            risk_sum += float(prob)
+            max_risk = max(max_risk, float(prob))
+            latency_sum += latency_ms
             
+            markers = model.explainability_markers(features)
             resp = DetectionResponse(
-                chunk_id=chunk_index,
-                prob=float(prob),
+                session_id=session_id,
+                chunk_index=chunk_index,
+                spoof_probability=float(prob),
                 risk_level=risk_level,
+                suggested_action=explanation,
                 latency_ms=latency_ms,
-                explanation=explanation
+                explainability_markers=markers,
+                model={"name": model.model_name, "device": model.device},
             )
             
             await websocket.send_json(resp.model_dump())
@@ -129,11 +161,11 @@ async def audio_websocket(websocket: WebSocket):
             events_buffer.append({
                 "session_id": session_id,
                 "chunk_index": chunk_index,
-                "prob": float(prob),
+                "spoof_probability": float(prob),
                 "risk_level": risk_level,
-                "latency_ms": latency_ms,
-                "explanation": explanation,
-                "created_at": datetime.now(timezone.utc).isoformat()
+                "features_snapshot": {"latency_ms": latency_ms},
+                "explainability_markers": markers,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             })
             
             chunk_index += 1
@@ -157,5 +189,14 @@ async def audio_websocket(websocket: WebSocket):
         duration = int(time.time() - start_time)
         if session_id:
             await log_connection_event(session_id, "disconnected", client_ip)
-            await finalize_session(session_id, duration)
-
+            await finalize_session(
+                session_id,
+                chunk_index,
+                {
+                    "total_chunks": chunk_index,
+                    "avg_risk": round(risk_sum / chunk_index, 4) if chunk_index else 0.0,
+                    "max_risk": round(max_risk, 4),
+                    "latency_ms": round(latency_sum / chunk_index, 2) if chunk_index else 0.0,
+                    "decision": "blocked" if max_risk >= 0.7 else "allowed",
+                },
+            )

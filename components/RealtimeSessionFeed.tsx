@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 import { format } from "date-fns";
 
@@ -15,56 +15,118 @@ type DetectionEvent = {
 
 export function RealtimeSessionFeed() {
   const [events, setEvents] = useState<DetectionEvent[]>([]);
-  const [isActive, setIsActive] = useState(false);
-  const supabase = createClient();
+  const [connectionStatus, setConnectionStatus] = useState<
+    "connecting" | "live" | "retrying" | "offline"
+  >("connecting");
+  const supabase = useMemo(() => createClient(), []);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const channel = supabase
-      .channel("realtime-feed")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "detection_events",
-        },
-        (payload) => {
-          const newEvent = payload.new as DetectionEvent;
-          setEvents((prev) => {
-            const updated = [newEvent, ...prev];
-            return updated.slice(0, 20); // Keep last 20
-          });
-        }
-      )
-      .subscribe((status) => {
-        if (status === "SUBSCRIBED") {
-          setIsActive(true);
-        } else {
-          setIsActive(false);
-        }
-      });
+    let disposed = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    const loadRecentEvents = async () => {
+      const { data, error } = await supabase
+        .from("detection_events")
+        .select("id, session_id, timestamp, risk_level, spoof_probability, features_snapshot")
+        .order("timestamp", { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error("Failed to load recent detection events:", error.message);
+        return;
+      }
+
+      if (disposed) return;
+      setEvents(
+        (data ?? []).map((event) => ({
+          ...event,
+          created_at: event.timestamp,
+          latency_ms: Number((event.features_snapshot as { latency_ms?: number } | null)?.latency_ms ?? 0),
+        }))
+      );
+    };
+
+    const connect = () => {
+      if (disposed) return;
+      setConnectionStatus("connecting");
+      channel = supabase
+        .channel(`realtime-feed-${Date.now()}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "detection_events",
+          },
+          (payload) => {
+            const newEvent = payload.new as DetectionEvent & {
+              timestamp?: string;
+              features_snapshot?: { latency_ms?: number };
+            };
+            setEvents((prev) => {
+              const normalized = {
+                ...newEvent,
+                created_at: newEvent.created_at ?? newEvent.timestamp ?? new Date().toISOString(),
+                latency_ms: newEvent.latency_ms ?? newEvent.features_snapshot?.latency_ms ?? 0,
+              };
+              return [normalized, ...prev.filter((event) => event.id !== normalized.id)].slice(0, 20);
+            });
+          }
+        )
+        .subscribe((status) => {
+          if (disposed) return;
+          if (status === "SUBSCRIBED") {
+            setConnectionStatus("live");
+            return;
+          }
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+            setConnectionStatus("retrying");
+            if (!retryTimerRef.current) {
+              retryTimerRef.current = setTimeout(() => {
+                retryTimerRef.current = null;
+                if (channel) void supabase.removeChannel(channel);
+                connect();
+              }, 5000);
+            }
+          }
+        });
+    };
+
+    void loadRecentEvents();
+    connect();
+    const pollTimer = setInterval(() => void loadRecentEvents(), 15000);
 
     return () => {
-      supabase.removeChannel(channel);
+      disposed = true;
+      clearInterval(pollTimer);
+      if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+      if (channel) void supabase.removeChannel(channel);
     };
   }, [supabase]);
 
   return (
-    <div className="flex h-full min-h-[360px] flex-col space-y-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-2xl backdrop-blur-xl sm:min-h-[420px] sm:space-y-6 sm:p-5">
+    <div className="flex h-full min-h-[360px] flex-col space-y-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-2xl backdrop-blur-xl sm:min-h-[420px] sm:space-y-6 sm:p-5 xl:min-h-[calc(100vh-7rem)]">
       <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 sm:pb-4">
         <div>
           <h3 className="text-base font-bold text-white font-sans sm:text-lg">Live Feed</h3>
           <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Realtime detection events</p>
         </div>
         <div className="flex items-center gap-2">
-          {isActive && (
+          {connectionStatus === "live" && (
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
           )}
           <span className="text-xs font-mono tracking-widest text-slate-400">
-            {isActive ? "LIVE" : "CONNECTING..."}
+            {connectionStatus === "live"
+              ? "LIVE"
+              : connectionStatus === "retrying"
+              ? "RETRYING..."
+              : connectionStatus === "offline"
+              ? "OFFLINE"
+              : "CONNECTING..."}
           </span>
         </div>
       </div>
