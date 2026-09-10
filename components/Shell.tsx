@@ -221,77 +221,74 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
       {/* ── High-Tech Cyber Enterprise Footer ── */}
-      {/* ── High-Tech Cyber Enterprise Footer ── */}
-      <footer className="relative w-full border-t border-slate-800/60 bg-gradient-to-b from-[#02050e] to-slate-950 pt-12 sm:pt-20 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs overflow-hidden">
-        {/* Abstract background accents */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none -z-10" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none -z-10" />
-
-        <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16">
+      <footer className="relative w-full border-t border-slate-800/50 bg-[#030712] pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans overflow-hidden">
+        {/* Subtle ambient lighting */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+        
+        <div className="max-w-7xl mx-auto flex flex-col space-y-16">
           
           {/* Top Section: Brand & Mission */}
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 md:gap-12">
-            <div className="space-y-5 max-w-lg">
-              <Link href="/" className="inline-flex items-center gap-3 group">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-emerald-500/60 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.2)] group-hover:border-emerald-400 group-hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all overflow-hidden bg-slate-950 shrink-0 ring-1 ring-emerald-500/20 ring-offset-2 ring-offset-[#02050e]">
-                  <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover rounded-full" />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <span className="text-xl sm:text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 group-hover:from-emerald-300 group-hover:to-cyan-300 transition-all uppercase">
-                    VOICESHIELD
-                  </span>
-                </div>
-              </Link>
-              
-              <p className="text-sm sm:text-base text-slate-300/90 leading-relaxed font-medium">
-                Real-time telephony middleware mitigating AI synthetic voice clones and conversational deepfake fraud within 269ms.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-2 pt-2 font-mono text-[10px] sm:text-xs text-emerald-400 font-bold uppercase tracking-widest">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 backdrop-blur-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_rgba(52,211,153,0.8)]" />
-                  SUB-300MS RTT
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/50 border border-slate-700/50 text-slate-300 backdrop-blur-sm">
-                  DPDP ACT 2023
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/50 border border-slate-700/50 text-cyan-300 backdrop-blur-sm">
-                  G.711 / AMR
-                </span>
+          <div className="space-y-6 max-w-xl">
+            <Link href="/" className="inline-flex items-center gap-4 group">
+              <div className="w-10 h-10 rounded-full border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:shadow-emerald-500/20 transition-all bg-slate-950 shrink-0 p-0.5">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover rounded-full" />
               </div>
+              <span className="text-xl sm:text-2xl font-black tracking-[0.15em] text-white group-hover:text-emerald-300 transition-colors uppercase">
+                VOICESHIELD
+              </span>
+            </Link>
+            
+            <p className="text-[13px] sm:text-sm text-slate-300 leading-relaxed font-medium">
+              Real-time telephony middleware mitigating AI synthetic voice<br className="hidden sm:block" />
+              clones and conversational deepfake fraud within 269ms.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2 font-mono text-[10px] font-bold uppercase tracking-widest">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 shadow-sm transition-colors hover:border-emerald-500/40 cursor-default">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
+                SUB-300MS RTT
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-slate-300 transition-colors hover:border-slate-700 cursor-default">
+                DPDP ACT 2023
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-cyan-400 transition-colors hover:border-slate-700 cursor-default">
+                G.711 / AMR
+              </span>
             </div>
           </div>
 
+          <div className="w-full h-[1px] bg-gradient-to-r from-slate-800/80 via-slate-800/40 to-transparent" />
+
           {/* Middle Section: Navigation Links */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-12 pt-8 border-t border-slate-800/40">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16">
             {/* Col 1: Core Modules */}
-            <div className="space-y-4">
-              <h3 className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-500 pl-3">
+            <div className="space-y-6">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
                 CORE MODULES
               </h3>
-              <ul className="space-y-3 font-mono text-[11px] sm:text-xs text-slate-400 pl-3.5">
+              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400">
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     OVERVIEW
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/demo" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-0.5 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/demo" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                    <span className="text-slate-600 mr-1 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     LIVE DEMO
-                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold leading-none tracking-wider">MIC</span>
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 text-[9px] font-bold tracking-wider border border-emerald-500/20">MIC</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/dashboard" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/dashboard" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     SOC DASHBOARD
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/architecture" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/architecture" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     ARCHITECTURE
                   </Link>
                 </li>
@@ -299,32 +296,32 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Col 2: Documentation */}
-            <div className="space-y-4">
-              <h3 className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-500 pl-3">
+            <div className="space-y-6">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
                 DOCUMENTATION
               </h3>
-              <ul className="space-y-3 font-mono text-[11px] sm:text-xs text-slate-400 pl-3.5">
+              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400">
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/docs" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/docs" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     DEVELOPER API
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/about" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/brief" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     JUDGE BRIEF
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/docs#websocket" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/docs#websocket" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     WEBSOCKET WSS
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/docs#forensics" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="w-1 h-1 rounded-full bg-slate-600 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/docs#forensics" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     FORENSIC FIR PDF
                   </Link>
                 </li>
@@ -332,32 +329,32 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Col 3: Legal */}
-            <div className="space-y-4">
-              <h3 className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-500 pl-3">
+            <div className="space-y-6">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
                 COMPLIANCE &amp; LEGAL
               </h3>
-              <ul className="space-y-3 font-mono text-[11px] sm:text-xs text-slate-400 pl-3.5">
+              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400 font-medium">
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/privacy" className="hover:text-emerald-400 transition-colors flex items-center font-semibold text-slate-300 group">
-                    <span className="w-1 h-1 rounded-full bg-slate-500 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/privacy" className="hover:text-emerald-400 transition-colors flex items-center text-slate-300 group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     PRIVACY POLICY
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://voiceshield-live.vercel.app/terms" className="hover:text-emerald-400 transition-colors flex items-center font-semibold text-slate-300 group">
-                    <span className="w-1 h-1 rounded-full bg-slate-500 mr-2 group-hover:bg-emerald-400 transition-colors" />
+                  <Link href="/terms" className="hover:text-emerald-400 transition-colors flex items-center text-slate-300 group">
+                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     TERMS OF SERVICE
                   </Link>
                 </li>
                 <li>
                   <span className="flex items-center text-slate-500 uppercase">
-                    <span className="w-1 h-1 rounded-full bg-slate-700 mr-2" />
+                    <span className="text-slate-600 mr-3 text-xs">+</span>
                     DPDP ACT (INDIA) 2023
                   </span>
                 </li>
                 <li>
                   <span className="flex items-center text-slate-500 uppercase">
-                    <span className="w-1 h-1 rounded-full bg-slate-700 mr-2" />
+                    <span className="text-slate-600 mr-3 text-xs">+</span>
                     CERT-IN DIRECTIVES
                   </span>
                 </li>
@@ -366,23 +363,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Bottom Bar: Copyright & Badges */}
-          <div className="pt-8 sm:pt-10 border-t border-slate-800/60 flex flex-col items-center gap-4 text-center font-mono text-[10px] sm:text-xs text-slate-400 uppercase tracking-widest">
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 bg-slate-900/30 px-6 py-3 rounded-2xl border border-slate-800/50 backdrop-blur-sm">
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-white font-bold tracking-[0.2em]">VOICESHIELD</span>
-                <span className="text-slate-600 hidden sm:inline">·</span>
-              </div>
-              <span className="text-emerald-200/80 font-medium">SMART INDIA HACKATHON 2026</span>
+          <div className="pt-16 pb-8 flex flex-col items-center gap-5 text-center font-mono">
+            <div className="flex items-center gap-3 px-6 py-2.5 rounded-full bg-slate-900/40 border border-slate-800/80 hover:bg-slate-900/60 transition-colors cursor-default">
+              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-white text-[11px] font-bold tracking-[0.2em]">VOICESHIELD</span>
+              <span className="text-slate-600">·</span>
+              <span className="text-slate-400 text-[11px] tracking-widest">SMART INDIA HACKATHON 2026</span>
             </div>
             
-            <div className="space-y-1.5 flex flex-col items-center">
-              <p className="text-slate-500">
-                AICTE CYBER SECURITY CELL <span className="text-slate-700 mx-1">·</span> PROBLEM STATEMENT SIH26104
+            <div className="space-y-2 flex flex-col items-center">
+              <p className="text-[10px] text-slate-500 tracking-widest uppercase">
+                AICTE CYBER SECURITY CELL <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT SIH26104
               </p>
-              <div className="inline-flex items-center gap-2 text-emerald-400/90 font-bold bg-emerald-950/20 px-4 py-1.5 rounded-full border border-emerald-900/30">
-                <Lock className="w-3.5 h-3.5" />
-                ZERO RAW AUDIO DISK STORAGE · EPHEMERAL RAM ONLY
+              <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-[9px] uppercase tracking-widest bg-emerald-950/20 px-3 py-1.5 rounded border border-emerald-900/40">
+                <Lock className="w-3 h-3" />
+                ZERO RAW AUDIO DISK STORAGE <span className="text-emerald-900 mx-1">·</span> EPHEMERAL RAM ONLY
               </div>
             </div>
           </div>
