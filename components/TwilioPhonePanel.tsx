@@ -11,6 +11,8 @@ export function TwilioPhonePanel() {
     hasAuthToken: boolean;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [testing, setTesting] = useState(false);
+  const [testMessage, setTestMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/twilio/status")
@@ -25,8 +27,27 @@ export function TwilioPhonePanel() {
       });
   }, []);
 
-  const handleTestCall = () => {
-    alert("Test webhook ping initiated. Check backend logs for Twilio requests.");
+  const handleTestCall = async () => {
+    setTesting(true);
+    setTestMessage(null);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL || "http://localhost:8000";
+      const response = await fetch(`${apiUrl}/api/twilio/voice`, {
+        method: "POST",
+        headers: { Accept: "application/xml" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) throw new Error(`Webhook returned HTTP ${response.status}`);
+      const twiml = await response.text();
+      if (!twiml.includes("<Stream") || !twiml.includes("/ws/twilio")) {
+        throw new Error("Webhook response did not contain a Twilio media stream");
+      }
+      setTestMessage("Webhook verified. Twilio is returning a live media-stream instruction.");
+    } catch (error) {
+      setTestMessage(error instanceof Error ? error.message : "Webhook verification failed.");
+    } finally {
+      setTesting(false);
+    }
   };
 
   if (loading) {
@@ -108,11 +129,17 @@ export function TwilioPhonePanel() {
           <div className="mt-4">
             <button 
               onClick={handleTestCall}
-              className="w-full flex justify-center items-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95"
+              disabled={testing}
+              className="w-full flex justify-center items-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50"
             >
               <PhoneCall className="w-4 h-4" />
-              Simulate Test Call
+              {testing ? "Verifying Webhook..." : "Verify Twilio Webhook"}
             </button>
+            {testMessage && (
+              <p className={`mt-2 text-xs ${testMessage.startsWith("Webhook verified") ? "text-emerald-400" : "text-rose-400"}`}>
+                {testMessage}
+              </p>
+            )}
           </div>
         </div>
       </div>

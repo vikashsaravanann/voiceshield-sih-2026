@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function AlertSettings() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -8,6 +8,20 @@ export function AlertSettings() {
   const [smsEnabled, setSmsEnabled] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    fetch("/api/alert-settings")
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Unable to load alert settings");
+        return res.json();
+      })
+      .then((data) => {
+        setPhoneNumber(data.phone_number ?? "");
+        setWhatsappEnabled(Boolean(data.whatsapp_enabled));
+        setSmsEnabled(Boolean(data.sms_enabled));
+      })
+      .catch(() => setMessage("Unable to load saved preferences."));
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

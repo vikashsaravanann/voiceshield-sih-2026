@@ -53,7 +53,7 @@ export default function LoginPage() {
   const [mode, setMode] = useState<AuthMode>("in");
   const [message, setMessage] = useState<Message>(null);
   const [busy, setBusy] = useState<"email" | "google" | "github" | "demo" | null>(null);
-  const [callbackError, setCallbackError] = useState(false);
+  const [callbackError, setCallbackError] = useState<string | null>(null);
 
   const router = useRouter();
   const supabase = createClient();
@@ -62,7 +62,25 @@ export default function LoginPage() {
   const isSignUp = mode === "up";
 
   useEffect(() => {
-    setCallbackError(new URLSearchParams(window.location.search).get("error") === "auth-callback-failed");
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    if (!error) return;
+
+    const code = params.get("error_code");
+    const description = params.get("error_description");
+    const normalized = `${code ?? ""} ${description ?? ""}`.toLowerCase();
+
+    if (normalized.includes("provider") && normalized.includes("disabled")) {
+      setCallbackError("This sign-in provider is disabled in Supabase. Enable Google or GitHub under Authentication → Providers.");
+    } else if (normalized.includes("redirect") || normalized.includes("url")) {
+      setCallbackError("The OAuth redirect URL is not registered. Add this exact URL to Supabase Auth URL Configuration: https://voiceshield-live.vercel.app/auth/callback");
+    } else if (error === "access_denied") {
+      setCallbackError("Sign-in was cancelled. Choose an account and approve access to continue.");
+    } else if (description) {
+      setCallbackError(description.replace(/\+/g, " "));
+    } else {
+      setCallbackError("We could not complete sign-in. Please try again.");
+    }
   }, []);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -280,24 +298,6 @@ export default function LoginPage() {
                   </span>
                 </button>
 
-                {/* ONE-CLICK JUDGE BYPASS */}
-                <button
-                  type="button"
-                  onClick={async () => {
-                    setBusy("demo");
-                    document.cookie = "voiceshield_demo_access=granted; path=/; max-age=86400";
-                    window.location.href = "/dashboard";
-                  }}
-                  disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-emerald-500/50 bg-emerald-950/30 hover:bg-emerald-900/40 hover:border-emerald-400 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-lg active:scale-95 disabled:opacity-50 group"
-                >
-                  {busy === "demo" ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-                  ) : null}
-                  <span className="text-emerald-400 group-hover:text-emerald-300 transition-colors">
-                    {busy === "demo" ? "GRANTING CLEARANCE..." : "ONE-CLICK JUDGE BYPASS"}
-                  </span>
-                </button>
               </div>
 
               {/* Clearance Guarantee Banner */}
@@ -379,7 +379,7 @@ export default function LoginPage() {
             {callbackError && !message && (
               <div className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>We could not complete sign-in. Please try again.</span>
+                <span>{callbackError}</span>
               </div>
 
             )}
