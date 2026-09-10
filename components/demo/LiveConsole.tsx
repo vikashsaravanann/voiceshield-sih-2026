@@ -286,7 +286,7 @@ function Sparkline({ values }: { values: number[] }) {
 
 function drawWave(canvas: HTMLCanvasElement | null, pcm: Float32Array | null) {
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return;
   const { width, height } = canvas;
   ctx.fillStyle = "#0c121a";
@@ -307,7 +307,7 @@ function drawWave(canvas: HTMLCanvasElement | null, pcm: Float32Array | null) {
 
 function drawSpec(canvas: HTMLCanvasElement | null, pcm: Float32Array | null) {
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return;
   const { width, height } = canvas;
   if (!pcm) {

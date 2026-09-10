@@ -32,6 +32,18 @@ interface AudioStreamerProps {
   }) => React.ReactNode;
 }
 
+async function createAudioProcessor(
+  audioContext: AudioContext,
+  onAudio: (samples: Float32Array) => void
+) {
+  await audioContext.audioWorklet.addModule("/audio-processor.js");
+  const processor = new AudioWorkletNode(audioContext, "voiceshield-audio-processor");
+  processor.port.onmessage = (event: MessageEvent<Float32Array>) => {
+    onAudio(event.data);
+  };
+  return processor;
+}
+
 async function getCurrentUserId(): Promise<string | null> {
   // I tried putting this inside a useEffect but it caused race conditions
   // where the WS connected before we knew who was logged in.
@@ -60,7 +72,7 @@ export function AudioStreamer({
   // References
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
-  const processorNodeRef = useRef<ScriptProcessorNode | null>(null);
+  const processorNodeRef = useRef<AudioWorkletNode | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const ringBufferRef = useRef<AudioRingBuffer>(
     new AudioRingBuffer(AUDIO_CONFIG.ringBufferSeconds, AUDIO_CONFIG.chunkMs)
@@ -286,17 +298,9 @@ export function AudioStreamer({
 
       const source = audioCtx.createMediaStreamSource(stream);
 
-      // Buffer size: 4096 samples ~ 256ms at 16kHz
-      const bufferSize = 4096;
-      const processor = audioCtx.createScriptProcessor(bufferSize, 1, 1);
-      processorNodeRef.current = processor;
-
       let sampleAccumulator: number[] = [];
       const requiredSamples = AUDIO_CONFIG.chunkSizeSamples;
-
-      processor.onaudioprocess = (e) => {
-        const inputData = e.inputBuffer.getChannelData(0);
-
+      const processor = await createAudioProcessor(audioCtx, (inputData) => {
         for (let i = 0; i < inputData.length; i++) {
           sampleAccumulator.push(inputData[i]);
 
@@ -309,7 +313,6 @@ export function AudioStreamer({
             for (let j = 0; j < chunkSamples.length; j++) {
               let s = chunkSamples[j];
 
-              // If cloned audio injection is active, introduce vocoder phase harmonics
               if (cloneSimulationRef.current) {
                 s = Math.sin(j * 0.15) * 0.4 + (Math.random() - 0.5) * 0.05;
               }
@@ -320,14 +323,9 @@ export function AudioStreamer({
 
             const currentIdx = chunkIndexRef.current++;
 
-            // Dispatch or buffer
-            if (
-              wsRef.current &&
-              wsRef.current.readyState === WebSocket.OPEN
-            ) {
+            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
               wsRef.current.send(pcm16.buffer as ArrayBuffer);
             } else {
-              // Write into ring buffer during network sever
               ringBufferRef.current.push({
                 index: currentIdx,
                 pcm: pcm16,
@@ -337,8 +335,8 @@ export function AudioStreamer({
             }
           }
         }
-      };
-
+      });
+      processorNodeRef.current = processor;
       source.connect(processor);
       processor.connect(audioCtx.destination);
 
@@ -384,16 +382,9 @@ export function AudioStreamer({
       const source = audioCtx.createBufferSource();
       source.buffer = audioBuffer;
 
-      const bufferSize = 4096;
-      const processor = audioCtx.createScriptProcessor(bufferSize, 1, 1);
-      processorNodeRef.current = processor;
-
       let sampleAccumulator: number[] = [];
       const requiredSamples = AUDIO_CONFIG.chunkSizeSamples;
-
-      processor.onaudioprocess = (e) => {
-        const inputData = e.inputBuffer.getChannelData(0);
-
+      const processor = await createAudioProcessor(audioCtx, (inputData) => {
         for (let i = 0; i < inputData.length; i++) {
           sampleAccumulator.push(inputData[i]);
 
@@ -403,17 +394,13 @@ export function AudioStreamer({
 
             const pcm16 = new Int16Array(chunkSamples.length);
             for (let j = 0; j < chunkSamples.length; j++) {
-              let s = chunkSamples[j];
-              const clamped = Math.max(-1, Math.min(1, s));
+              const clamped = Math.max(-1, Math.min(1, chunkSamples[j]));
               pcm16[j] = clamped < 0 ? clamped * 32768 : clamped * 32767;
             }
 
             const currentIdx = chunkIndexRef.current++;
 
-            if (
-              wsRef.current &&
-              wsRef.current.readyState === WebSocket.OPEN
-            ) {
+            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
               wsRef.current.send(pcm16.buffer as ArrayBuffer);
             } else {
               ringBufferRef.current.push({
@@ -425,7 +412,8 @@ export function AudioStreamer({
             }
           }
         }
-      };
+      });
+      processorNodeRef.current = processor;
 
       source.connect(audioCtx.destination); // Play the audio so judge can hear it
       source.connect(processor);

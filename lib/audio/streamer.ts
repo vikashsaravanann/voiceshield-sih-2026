@@ -41,7 +41,7 @@ export class AudioStreamer {
   readonly bridge = new InferenceBridge();
   private ctx: AudioContext | null = null;
   private source: MediaStreamAudioSourceNode | null = null;
-  private proc: ScriptProcessorNode | null = null;
+  private proc: AudioWorkletNode | null = null;
   private stream: MediaStream | null = null;
   private acc: Float32Array = new Float32Array(0);
   private ring = new ChunkRingBuffer(ringCapacity());
@@ -97,11 +97,11 @@ export class AudioStreamer {
     this.ctx = ctx;
     if (ctx.state === "suspended") await ctx.resume();
     this.source = ctx.createMediaStreamSource(this.stream);
-    const proc = ctx.createScriptProcessor(4096, 1, 1);
+    await ctx.audioWorklet.addModule("/audio-processor.js");
+    const proc = new AudioWorkletNode(ctx, "voiceshield-audio-processor");
     this.proc = proc;
-    proc.onaudioprocess = (ev) => {
-      const native = ev.inputBuffer.getChannelData(0);
-      const pcm = downsample(native, ctx.sampleRate, AUDIO_CONFIG.sampleRate);
+    proc.port.onmessage = (event: MessageEvent<Float32Array>) => {
+      const pcm = downsample(event.data, ctx.sampleRate, AUDIO_CONFIG.sampleRate);
       this.onAudio(pcm);
     };
     const mute = ctx.createGain();
