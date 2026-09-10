@@ -100,6 +100,9 @@ export default function LoginPage() {
   async function signInWithProvider(provider: "google" | "github") {
     setBusy(provider);
     setMessage(null);
+    if (typeof document !== "undefined") {
+      document.cookie = "voiceshield_demo_access=1; path=/; max-age=2592000; SameSite=Lax";
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -115,11 +118,14 @@ export default function LoginPage() {
   // Instant demo access for Judges & evaluators
   function handleDemoAccess() {
     setBusy("demo");
-    setMessage({ type: "success", text: "Authorized Demo Operator clearance granted. Initializing SOC..." });
+    setMessage({ type: "success", text: "Authorized Operator clearance granted. Initializing SOC..." });
+    if (typeof document !== "undefined") {
+      document.cookie = "voiceshield_demo_access=1; path=/; max-age=2592000; SameSite=Lax";
+    }
     setTimeout(() => {
       router.push("/dashboard");
       router.refresh();
-    }, 600);
+    }, 400);
   }
 
   return (
@@ -256,8 +262,57 @@ export default function LoginPage() {
             {/* Glowing Top Edge Accent */}
             <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
 
-            {/* Quick Demo Access for Judges (Top Priority Action) */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/50 via-slate-950 to-teal-950/50 border border-emerald-500/40 space-y-3">
+            {/* Primary OAuth Sign In Options (Open to Any Gmail / GitHub) */}
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                  <span>OPEN OPERATOR ACCESS</span>
+                  <span className="text-[10px] text-cyan-300">NO DOMAIN RESTRICTIONS</span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Anyone with any Google account (@gmail.com or workspace) or GitHub account can sign in to access all platform modules.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {/* Full-width Google Login Button */}
+                <button
+                  type="button"
+                  onClick={() => signInWithProvider("google")}
+                  disabled={busy !== null}
+                  className="w-full flex items-center justify-center gap-3 py-3.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-emerald-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                >
+                  <GoogleIcon />
+                  <span className="text-white group-hover:text-emerald-300 transition-colors">
+                    CONTINUE WITH GOOGLE (ANY GMAIL)
+                  </span>
+                </button>
+
+                {/* Full-width GitHub Login Button */}
+                <button
+                  type="button"
+                  onClick={() => signInWithProvider("github")}
+                  disabled={busy !== null}
+                  className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-cyan-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                >
+                  <GithubIcon />
+                  <span className="text-white group-hover:text-cyan-300 transition-colors">
+                    CONTINUE WITH GITHUB
+                  </span>
+                </button>
+              </div>
+
+              {/* Clearance Guarantee Banner */}
+              <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>
+                  All authenticated Google &amp; GitHub accounts receive instantaneous clearance to the SOC Dashboard, Live Voice Streamer, Forensic FIR Reports, and Telephony Controls.
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Demo Access for Judges (Instant Bypass Option) */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-950 to-teal-950/40 border border-emerald-500/30 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -270,7 +325,7 @@ export default function LoginPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Smart India Hackathon judges and guest evaluators can enter the Security Operations Center dashboard instantly without registration.
+                Evaluating without an account? Enter the SOC threat portal instantly with one click.
               </p>
               <button
                 type="button"
@@ -292,11 +347,18 @@ export default function LoginPage() {
               </button>
             </div>
 
+            {/* Divider */}
+            <div className="relative py-1">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-800" />
+              </div>
+              <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-widest text-slate-500">
+                <span className="bg-slate-900/95 px-3">OR USE EMAIL CREDENTIALS</span>
+              </div>
+            </div>
+
             {/* Form Mode Tabs with Clear Visual State */}
             <div className="space-y-3">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 text-center">
-                OR AUTHENTICATE WITH CREDENTIALS
-              </div>
               <div className="flex rounded-xl bg-slate-950 p-1.5 border border-slate-800 font-mono text-xs">
                 <button
                   type="button"
@@ -356,42 +418,6 @@ export default function LoginPage() {
               <div className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                 <span>OAuth callback authentication failed. Please try again.</span>
-              </div>
-            )}
-
-            {/* OAuth Single-Click Login */}
-            {!isReset && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => signInWithProvider("google")}
-                    disabled={busy !== null}
-                    className="flex items-center justify-center gap-2.5 py-3 px-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-slate-600 text-xs font-mono font-bold tracking-wider uppercase transition-all active:scale-95 disabled:opacity-50"
-                  >
-                    <GoogleIcon />
-                    <span>GOOGLE</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => signInWithProvider("github")}
-                    disabled={busy !== null}
-                    className="flex items-center justify-center gap-2.5 py-3 px-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-slate-600 text-xs font-mono font-bold tracking-wider uppercase transition-all active:scale-95 disabled:opacity-50"
-                  >
-                    <GithubIcon />
-                    <span>GITHUB</span>
-                  </button>
-                </div>
-
-                <div className="relative py-1">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-800" />
-                  </div>
-                  <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-widest text-slate-500">
-                    <span className="bg-slate-900/95 px-3">ENTERPRISE CREDENTIALS</span>
-                  </div>
-                </div>
               </div>
             )}
 

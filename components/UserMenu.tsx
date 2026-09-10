@@ -16,7 +16,9 @@ export default function UserMenu() {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setEmail(user.email ?? null);
+        setEmail(user.email ?? (user.user_metadata?.email || "operator@voiceshield.internal"));
+      } else if (typeof document !== "undefined" && document.cookie.includes("voiceshield_demo_access=1")) {
+        setEmail("operator@sih2026.gov.in");
       }
       setLoading(false);
     };
@@ -25,6 +27,9 @@ export default function UserMenu() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    if (typeof document !== "undefined") {
+      document.cookie = "voiceshield_demo_access=; path=/; max-age=0";
+    }
     router.push("/login");
     router.refresh();
   };
