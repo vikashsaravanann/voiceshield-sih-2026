@@ -184,6 +184,25 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="text-slate-400 uppercase">TELEPHONY CODEC:</span>
                 <span className="text-cyan-400 font-bold uppercase whitespace-nowrap">G.711 / AMR RESILIENT</span>
               </div>
+              {/* Mobile Legal Links */}
+              <div className="flex items-center justify-center gap-3 pt-2 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+                <Link
+                  href="/privacy"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  PRIVACY POLICY
+                </Link>
+                <span>·</span>
+                <Link
+                  href="/terms"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  TERMS OF SERVICE
+                </Link>
+              </div>
+
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
@@ -200,21 +219,153 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {/* ── Main Content Area ── */}
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
-      {/* ── High-Tech Cyber Footer ── */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-8 px-4 sm:px-6 lg:px-8 text-slate-400 font-mono text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span className="font-bold text-white uppercase tracking-wider whitespace-nowrap">VOICESHIELD</span>
-            <span className="text-slate-600">·</span>
-            <span className="uppercase tracking-widest whitespace-nowrap">SMART INDIA HACKATHON 2026</span>
+      {/* ── High-Tech Cyber Enterprise Footer ── */}
+      <footer className="border-t border-slate-800/80 bg-[#02050e] pt-16 pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs relative overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          {/* Top Grid: Brand & Link Columns with Generous Gaps */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12">
+            
+            {/* Col 1 & 2: Platform Identity */}
+            <div className="lg:col-span-2 space-y-5">
+              <Link href="/" className="inline-flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-md group-hover:border-emerald-400 transition-all">
+                  <Shield className="w-5 h-5 stroke-[2.2]" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
+                    VOICESHIELD
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-emerald-950 text-emerald-400 border border-emerald-500/40 uppercase">
+                    SIH26104
+                  </span>
+                </div>
+              </Link>
+
+              <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
+                Real-time telephony middleware mitigating AI synthetic voice clones and conversational deepfake fraud within 269ms.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[10px] text-emerald-400 uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  SUB-300MS RTT
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
+                  DPDP ACT 2023
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-300">
+                  G.711 / AMR
+                </span>
+              </div>
+            </div>
+
+            {/* Col 3: Core Modules */}
+            <div className="space-y-4">
+              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                CORE MODULES
+              </div>
+              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+                <li>
+                  <Link href="/" className="hover:text-emerald-400 uppercase transition-colors">
+                    OVERVIEW
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/demo" className="hover:text-emerald-400 uppercase transition-colors flex items-center gap-1.5">
+                    <span>LIVE DEMO</span>
+                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">MIC</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard" className="hover:text-emerald-400 uppercase transition-colors">
+                    SOC DASHBOARD
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/architecture" className="hover:text-emerald-400 uppercase transition-colors">
+                    ARCHITECTURE
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 4: Intelligence & Docs */}
+            <div className="space-y-4">
+              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                DOCUMENTATION
+              </div>
+              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+                <li>
+                  <Link href="/docs" className="hover:text-emerald-400 uppercase transition-colors">
+                    DEVELOPER API
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="hover:text-emerald-400 uppercase transition-colors">
+                    JUDGE BRIEF
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/docs#websocket" className="hover:text-emerald-400 uppercase transition-colors">
+                    WEBSOCKET WSS
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/docs#forensics" className="hover:text-emerald-400 uppercase transition-colors">
+                    FORENSIC FIR PDF
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 5: Legal & Statutory */}
+            <div className="space-y-4">
+              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                COMPLIANCE &amp; LEGAL
+              </div>
+              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+                <li>
+                  <Link href="/privacy" className="hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                    PRIVACY POLICY
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                    TERMS OF SERVICE
+                  </Link>
+                </li>
+                <li>
+                  <span className="text-[11px] text-slate-500 uppercase block">
+                    DPDP ACT (INDIA) 2023
+                  </span>
+                </li>
+                <li>
+                  <span className="text-[11px] text-slate-500 uppercase block">
+                    CERT-IN DIRECTIVES
+                  </span>
+                </li>
+              </ul>
+            </div>
+
           </div>
-          <div className="text-[11px] text-slate-500 tracking-wider uppercase">
-            AICTE CYBER SECURITY CELL · PROBLEM STATEMENT SIH26104
+
+          {/* Bottom Bar: Copyright & AICTE Recognition */}
+          <div className="pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left font-mono text-[11px] text-slate-500 uppercase tracking-wider">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span className="text-slate-300 font-bold">VOICESHIELD</span>
+              <span>·</span>
+              <span>SMART INDIA HACKATHON 2026</span>
+            </div>
+            <div>
+              AICTE CYBER SECURITY CELL · PROBLEM STATEMENT SIH26104
+            </div>
+            <div className="text-emerald-400/90 font-semibold">
+              ZERO RAW AUDIO DISK STORAGE · EPHEMERAL RAM ONLY
+            </div>
           </div>
-          <div className="text-[10px] text-emerald-400/80 tracking-widest uppercase">
-            DPDP ACT 2023 COMPLIANT · ZERO DISK PERSISTENCE
-          </div>
+
         </div>
       </footer>
     </div>
