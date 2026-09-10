@@ -49,6 +49,24 @@ Configure under Vercel Project Settings → Environment Variables:
 | `DEVICE` | `cpu` |
 | `AUDIO_CHUNK_MS` | `333` |
 
+### Backend Deployment (Railway)
+
+Create a separate Railway service from this repository. Configure the service with:
+
+- **Root Directory:** `apps/api`
+- **Builder:** Dockerfile
+- **Dockerfile Path:** `Dockerfile`
+- **Healthcheck Path:** `/health`
+
+Do not set the Dockerfile path to `apps/api` when the root directory is already
+`apps/api`; that makes Railway search for `apps/api/apps/api`.
+
+Add `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `NEXT_PUBLIC_SITE_URL` as
+service variables. Railway supplies `PORT` automatically. After deployment,
+verify `https://YOUR-BACKEND-DOMAIN/health` returns HTTP 200, then set the
+frontend `NEXT_PUBLIC_FASTAPI_HTTP_URL` and `NEXT_PUBLIC_FASTAPI_WS_URL`
+variables to the generated backend domain.
+
 ---
 
 ## 3. GPU Backend Deployment (Hugging Face Spaces)
