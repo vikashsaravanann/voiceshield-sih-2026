@@ -312,7 +312,7 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
       {/* Challenge Phrase Box */}
       <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-slate-950 p-5 text-center shadow-inner">
         <div className="text-base sm:text-lg font-bold text-amber-200 tracking-wide font-sans">
-          "{phrase}"
+          &quot;{phrase}&quot;
         </div>
 
         {/* Live Audio Level Meter during recording */}
@@ -335,7 +335,7 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
       {transcribedText && (
         <div className="rounded-lg border border-slate-800 bg-slate-950/80 p-3 text-xs font-mono">
           <div className="text-[10px] text-slate-400 uppercase mb-1">REAL-TIME SPEECH TRANSCRIBED:</div>
-          <div className="text-slate-200 font-medium">"{transcribedText}"</div>
+          <div className="text-slate-200 font-medium">&quot;{transcribedText}&quot;</div>
         </div>
       )}
 

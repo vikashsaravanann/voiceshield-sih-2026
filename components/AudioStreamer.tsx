@@ -231,6 +231,8 @@ export function AudioStreamer({
       updateConnection("reconnecting");
       scheduleReconnect();
     }
+  // These callbacks intentionally reference each other for reconnect scheduling.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onRiskUpdate, onStatsUpdate, updateConnection]);
 
   // Schedule Exponential Backoff with Jitter

@@ -35,24 +35,31 @@ async def generate_challenge(language: str = "en") -> Dict[str, str]:
     """Generate an unpredictable phonemic challenge phrase with optional LLM augmentation."""
     lang = language.lower() if language.lower() in CHALLENGES else "en"
 
-    # Optional dynamic Groq generation if API key is present
-    groq_key = os.getenv("GROQ_API_KEY")
-    if groq_key and lang == "en":
+    # Dynamic Generation using NVIDIA NIM (Llama-3.1-70B-Instruct)
+    nvidia_key = os.getenv("NVIDIA_API_KEY_LLAMA", "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")
+    if nvidia_key and lang == "en":
         try:
-            from groq import AsyncGroq
-            client = AsyncGroq(api_key=groq_key)
-            completion = await client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[{
+            import httpx
+            payload = {
+                "model": "meta/llama-3.1-70b-instruct",
+                "messages": [{
                     "role": "system",
-                    "content": "Generate a single 6-word unpredictable phonetic challenge sentence for voice verification. Output ONLY the sentence.",
+                    "content": "Generate a single 6-word unpredictable phonetic challenge sentence for voice verification. Output ONLY the sentence."
                 }],
-                max_tokens=30,
-                temperature=0.8,
-            )
-            text = completion.choices[0].message.content
-            if text and len(text.strip()) > 10:
-                return {"language": lang, "challenge_text": text.strip().strip('"')}
+                "max_tokens": 30,
+                "temperature": 0.8,
+            }
+            headers = {
+                "Authorization": f"Bearer {nvidia_key}",
+                "Accept": "application/json",
+            }
+            async with httpx.AsyncClient(timeout=4.0) as client:
+                res = await client.post("https://integrate.api.nvidia.com/v1/chat/completions", headers=headers, json=payload)
+                res.raise_for_status()
+                data = res.json()
+                text = data["choices"][0]["message"]["content"]
+                if text and len(text.strip()) > 10:
+                    return {"language": lang, "challenge_text": text.strip().strip('"')}
         except Exception:
             pass
 

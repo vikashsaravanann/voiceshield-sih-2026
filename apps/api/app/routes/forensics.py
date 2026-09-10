@@ -234,14 +234,14 @@ async def analyze_audio_file(
       else "low"
   )
   
-  # Generate XAI summary using Groq
-  from services.groq_service import generate_xai_summary
+  # Generate XAI summary using NVIDIA Nemotron-4
+  from services.nvidia_service import generate_nvidia_xai_summary
   avg_markers = {
       "high_frequency_anomaly": round(sum(s.markers.high_frequency_anomaly for s in slices) / len(slices), 3) if slices else 0,
       "phase_discontinuity": round(sum(s.markers.phase_discontinuity for s in slices) / len(slices), 3) if slices else 0,
       "prosody_irregularity": round(sum(s.markers.prosody_irregularity for s in slices) / len(slices), 3) if slices else 0,
   }
-  xai_summary = await generate_xai_summary(avg_markers, overall_risk, max_risk)
+  xai_summary = await generate_nvidia_xai_summary(avg_markers, overall_risk, max_risk)
 
   return ForensicAnalysisResponse(
       file_name=file.filename or "uploaded_audio.wav",
