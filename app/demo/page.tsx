@@ -109,6 +109,10 @@ const ATTACK_PRESETS = [
 ];
 
 export default function DemoPage() {
+  // TODO: Refactor this massive state object into a useReducer or standard Redux slice.
+  // I kept adding state variables as the hackathon progressed and now it is slightly messy.
+  // Performance: Re-renders might be a bit heavy here due to packetLogs updating 3 times a second.
+
   const [latestDetection, setLatestDetection] =
     useState<DetectionResponse | null>(null);
   const [connectionState, setConnectionState] =

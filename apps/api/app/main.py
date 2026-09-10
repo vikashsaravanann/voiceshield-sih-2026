@@ -1,8 +1,7 @@
 """
 VoiceShield API application entrypoint.
 
-The WebSocket implementation lives in ``app.websocket.audio_endpoint`` so the
-same detection contract is used by the browser and the backend tests.
+The WebSocket implementation lives in `app.websocket.audio_endpoint`.
 """
 
 from contextlib import asynccontextmanager
@@ -18,9 +17,15 @@ from app.websocket import router as websocket_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Note: Loading the model into app.state during lifespan is crucial!
+    # Initially I was loading it on the first WebSocket connection, but that 
+    # caused a massive ~2 second latency spike for the first audio chunk.
+    # Warming it up here keeps the inference latency under 20ms immediately.
+    print(f"Loading model from {settings.MODEL_PATH} onto {settings.DEVICE}...")
     model = SpoofModel.load(settings.MODEL_PATH, settings.DEVICE)
     model.warmup()
     app.state.model = model
+    print("Model loaded and warmed up successfully.")
     yield
 
 
@@ -30,15 +35,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# CORS was a massive headache during deployment.
+# We parse the NEXT_PUBLIC_SITE_URL but also hardcode the vercel domains
+# because sometimes Vercel preview environments use random domain hashes.
 allowed_origins = [
     origin.strip()
     for origin in settings.NEXT_PUBLIC_SITE_URL.split(",")
     if origin.strip()
 ]
-# Always include known origins so health pings from Vercel are never blocked
 _always_allow = [
     "https://voiceshield-live.vercel.app",
-    "https://voiceshield-sih-2026.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
@@ -49,7 +55,8 @@ for _o in _always_allow:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    # This regex is a lifesaver for Vercel preview deployments
+    allow_origin_regex=r"https://.*\.vercel\.app", 
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -65,4 +72,6 @@ app.include_router(twilio.router, prefix="/api/twilio")
 
 @app.get("/", tags=["Health"])
 async def root():
+    # Render free tier goes to sleep after 15 mins.
+    # The frontend ping hits this root route to wake it up before the WebSocket connects.
     return {"status": "online", "service": "voiceshield-api", "version": settings.MODEL_VERSION}

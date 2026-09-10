@@ -251,9 +251,6 @@ export default function LoginPage() {
                   <span>OPEN OPERATOR ACCESS</span>
                   <span className="text-[10px] text-cyan-300">NO DOMAIN RESTRICTIONS</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Anyone with any Google account (@gmail.com or workspace) or GitHub account can sign in to access all platform modules.
-                </p>
               </div>
 
               <div className="space-y-3">
@@ -280,6 +277,25 @@ export default function LoginPage() {
                   <GithubIcon />
                   <span className="text-white group-hover:text-cyan-300 transition-colors">
                     CONTINUE WITH GITHUB
+                  </span>
+                </button>
+
+                {/* ONE-CLICK JUDGE BYPASS */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setBusy("demo");
+                    document.cookie = "voiceshield_demo_access=granted; path=/; max-age=86400";
+                    window.location.href = "/dashboard";
+                  }}
+                  disabled={busy !== null}
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-emerald-500/50 bg-emerald-950/30 hover:bg-emerald-900/40 hover:border-emerald-400 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-lg active:scale-95 disabled:opacity-50 group"
+                >
+                  {busy === "demo" ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+                  ) : null}
+                  <span className="text-emerald-400 group-hover:text-emerald-300 transition-colors">
+                    {busy === "demo" ? "GRANTING CLEARANCE..." : "ONE-CLICK JUDGE BYPASS"}
                   </span>
                 </button>
               </div>
@@ -381,7 +397,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
-                    placeholder="operator@voiceshield.dev"
+                    placeholder="operator@voiceshield.in"
                   />
                 </div>
               </div>
