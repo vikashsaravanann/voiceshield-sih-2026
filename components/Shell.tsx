@@ -52,24 +52,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans">
-      {/* ── Top Micro Banner (SIH Government Identity) ── */}
-      <div className="w-full bg-gradient-to-r from-slate-950 via-[#061814] to-slate-950 border-b border-emerald-500/20 py-1.5 px-4 text-center">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-[10px] sm:text-[11px] font-mono tracking-wider">
-          <div className="flex items-center gap-2 text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold uppercase">SMART INDIA HACKATHON 2026</span>
-            <span className="hidden sm:inline text-slate-600">|</span>
-            <span className="hidden sm:inline text-slate-400">AICTE CYBER SECURITY CELL</span>
-          </div>
-          <div className="flex items-center gap-3 text-slate-400">
-            <span className="font-mono text-emerald-300/80 uppercase font-semibold">PS: SIH26104</span>
-            <span className="hidden md:inline px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-[9px] uppercase font-bold">
-              SUB-300MS DSP + ML
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* ── Primary Enterprise Cyber Header ── */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/90 border-b border-slate-800/80 shadow-2xl transition-all duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -188,7 +170,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
       {/* ── Mobile Full-Featured Cyber Navigation Drawer ── */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[105px] bottom-0 z-40 bg-[#030712]/98 backdrop-blur-2xl border-b border-slate-800 p-4 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-[#030712]/98 backdrop-blur-2xl border-b border-slate-800 p-4 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="flex flex-col space-y-2 max-w-md mx-auto pt-2">
             <div className="px-3 py-2 text-[10px] font-mono font-semibold tracking-widest text-slate-500 uppercase">
               NAVIGATION MODULES
