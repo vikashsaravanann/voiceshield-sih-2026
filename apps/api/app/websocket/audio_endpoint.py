@@ -71,8 +71,6 @@ async def audio_websocket(websocket: WebSocket):
         last_processed_chunk_index = int(init_payload.get("last_processed_chunk_index", -1))
         chunk_index = last_processed_chunk_index + 1 if resumed else 0
             
-        logger.info("ws_connected", session_id=session_id, client_ip=client_ip)
-        await log_connection_event(session_id, "connected", {"client_ip": client_ip})
         if not resumed:
             await create_session(
                 session_id=session_id,
@@ -84,6 +82,9 @@ async def audio_websocket(websocket: WebSocket):
                     "chunk_ms": init_payload.get("chunk_ms"),
                 },
             )
+            
+        logger.info("ws_connected", session_id=session_id, client_ip=client_ip)
+        await log_connection_event(session_id, "connected", {"client_ip": client_ip})
         
         await websocket.send_json({
             "type": "session.ack",
