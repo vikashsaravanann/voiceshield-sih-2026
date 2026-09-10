@@ -19,6 +19,20 @@ import {
 export const metadata = {
   title: "TERMS OF SERVICE & TELEPHONY ACCEPTABLE USE | VOICESHIELD",
   description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+  icons: { icon: "/logo.png", apple: "/logo.png" },
+  openGraph: {
+    type: "website",
+    siteName: "VoiceShield",
+    title: "Terms of Service | VoiceShield",
+    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+    images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service | VoiceShield",
+    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+    images: ["/banner.png"],
+  },
 };
 
 export default function TermsOfServicePage() {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -10,10 +11,29 @@ import {
   Sparkles,
 } from "lucide-react";
 
+export const metadata: Metadata = {
+  title: "VoiceShield | AI Anti-Spoofing for Telephony",
+  description:
+    "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+  icons: { icon: "/logo.png", apple: "/logo.png" },
+  openGraph: {
+    type: "website",
+    siteName: "VoiceShield",
+    title: "VoiceShield | AI Anti-Spoofing for Telephony",
+    description:
+      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+    images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VoiceShield | AI Anti-Spoofing for Telephony",
+    description:
+      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+    images: ["/banner.png"],
+  },
+};
+
 export default function HomePage() {
-  // TODO: Add proper SEO metadata tags before final SIH submission
-  // Note: I tried using a massive video background here initially but it 
-  // destroyed performance on mobile devices, so I stuck with the gradient.
   // Performance: Keep this page static to ensure instant LCP times.
 
   return (
