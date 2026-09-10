@@ -60,6 +60,9 @@ export default function LoginPage() {
 
   const isReset = mode === "reset";
   const isSignUp = mode === "up";
+  const appOrigin =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    (typeof window !== "undefined" ? window.location.origin : "");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -90,13 +93,13 @@ export default function LoginPage() {
 
     const result = isReset
       ? await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          redirectTo: `${appOrigin}/auth/callback?next=/dashboard`,
         })
       : isSignUp
         ? await supabase.auth.signUp({
             email,
             password,
-            options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+            options: { emailRedirectTo: `${appOrigin}/auth/callback` },
           })
         : await supabase.auth.signInWithPassword({ email, password });
 
@@ -119,7 +122,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${appOrigin}/auth/callback?next=/dashboard`,
       },
     });
     if (error) {
@@ -158,7 +161,7 @@ export default function LoginPage() {
       <main className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-2">
         
         {/* Left Column: Security Narrative & Identity */}
-        <div className="lg:col-span-6 space-y-4">
+        <div className="hidden lg:block lg:col-span-6 space-y-4">
           
           {/* Brand Header */}
           <div className="space-y-3">
