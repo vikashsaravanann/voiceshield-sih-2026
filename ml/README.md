@@ -1,4 +1,4 @@
-# ML
+# VoiceShield ML assets
 
 SIH default path (after export):
 
@@ -15,4 +15,4 @@ python3 ml/export_spoof_head.py
 
 This writes a ~36 KB TorchScript head. Input is 48-d float32 (40 LFCC + 8 scalars). Output is spoof probability in `[0, 1]`.
 
-This is **not** a published AASIST / RawNet2 weight file. Do not commit ASVspoof datasets. Swap the `.pt` after a real fine-tune.
+The generated head is a development asset, not a published AASIST or RawNet2 weight file. Do not commit ASVspoof datasets or credentials. Any replacement model must document its license, training data, calibration set, and evaluation protocol in `ml/model_cards/`.

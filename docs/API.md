@@ -1,4 +1,4 @@
-# VoiceShield API & Protocol Specification
+# VoiceShield API and streaming protocol
 
 **SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
 *AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
@@ -8,7 +8,7 @@
 ## 1. WebSocket Interface (`/ws/audio`)
 
 ### Connection Handshake
-Client establishes a WebSocket connection to `ws://localhost:8000/ws/audio` (or `wss://api.voiceshield.ai/ws/audio`).
+Client establishes a WebSocket connection to `ws://localhost:8000/ws/audio` locally or `wss://voiceshield-sih-2026-production.up.railway.app/ws/audio` in production.
 
 ---
 
@@ -87,7 +87,7 @@ Emitted by backend for each evaluated audio chunk.
 
 ---
 
-## 2. REST Endpoints
+## 2. HTTP endpoints
 
 ### `GET /health`
 Returns service readiness and loaded model metadata.

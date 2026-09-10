@@ -1,39 +1,77 @@
-# VoiceShield - SIH 2026 🛡️
+# VoiceShield
 
-**Problem Statement:** SIH26104 (AICTE Cyber Security Cell)  
-**Developer:** Vikash
+> **Detect the clone. Protect the conversation.**
 
-I built VoiceShield to tackle the growing and terrifying problem of AI voice cloning fraud. The idea really hit home when I kept reading about elderly people being scammed by deepfakes of their own grandchildren over the phone. I realized we needed a practical, real-time detection system that doesn't just analyze audio after the fact, but stops the call *while* it's happening.
+VoiceShield is a real-time voice-cloning detection and response console built for **Smart India Hackathon 2026 — SIH26104, AICTE Cyber Security Cell**. It streams short PCM audio windows to an inference service, scores synthetic-voice risk, surfaces interpretable markers, and keeps an operator focused on the decision that matters: trust, challenge, or escalate.
 
-This repository contains the complete codebase for my Smart India Hackathon submission.
+## Live system
 
-## 🔗 Live Links
-- **Frontend (Vercel):** https://voiceshield-live.vercel.app
-- **Backend API (Render):** https://voiceshield-sih-2026.onrender.com
+| Surface | URL | Purpose |
+| --- | --- | --- |
+| Web console | [voiceshield-live.vercel.app](https://voiceshield-live.vercel.app) | Landing page, live demo, reports, documentation, and authenticated dashboard |
+| Inference API | [voiceshield-sih-2026-production.up.railway.app](https://voiceshield-sih-2026-production.up.railway.app) | FastAPI health, WebSocket inference, session, audit, challenge, and telephony routes |
+| API health | [`/health`](https://voiceshield-sih-2026-production.up.railway.app/health) | Deployment and model readiness probe |
 
-## 💡 What I Learned
+The production API currently reports the AASIST model, CPU runtime, version `0.1.0`, and `STORE_RAW_AUDIO=false`. Treat model metrics as evaluation targets until they are reproduced on the target telephony distribution.
 
-Building this was a massive learning curve. Some key takeaways:
-- **Web Audio API is wild:** Getting raw PCM16 audio out of the browser and into a WebSocket reliably across different browsers took a lot of trial and error. (Safari is particularly annoying).
-- **Latency is everything:** Initially, I was using 500ms chunks, but it felt too sluggish. I spent a whole weekend dialing it down to ~330ms chunks to get that real-time "instant" feel without overwhelming the backend.
-- **Supabase Realtime is magic:** I struggled with polling the database at first, but switching to PostgreSQL subscriptions made the dashboard feel incredibly alive.
+## What the project demonstrates
 
-## 🚧 Challenges Faced
+- **Live analysis:** 16 kHz mono PCM16 audio, streamed in 333 ms windows over WebSocket.
+- **Detection context:** LFCC, Mel-spectrogram, phase inconsistency, and prosody markers are combined with the anti-spoofing model score.
+- **Operator workflow:** risk meter, spectrogram, session feed, challenge-response controls, forensic report, and audit trail.
+- **Authentication:** Supabase Auth with email/password, Google, and GitHub providers.
+- **Privacy boundary:** raw audio is processed in memory and is not written to disk by default.
+- **Resilience:** reconnect handling, session resume, a four-second ring buffer, and bounded telemetry batching.
 
-The hardest part was definitely the Twilio WhatsApp integration. Getting the webhook payloads right, dealing with trial account restrictions (which required using a specific approved `ContentSid`), and making sure the API didn't crash if an environment variable was missing was incredibly frustrating but rewarding when it finally clicked.
+VoiceShield is a detection and decision-support prototype. It does not replace human review, telecom controls, banking controls, or an incident-response process.
 
-Also, fighting Next.js 15 SSR caching when trying to read Supabase cookies was a headache. (See the comments in my `middleware.ts` for how I eventually solved it).
+## Technology
 
-## 🚀 Getting Started (Local Dev)
+| Layer | Technology |
+| --- | --- |
+| Web | Next.js App Router, React, TypeScript, Tailwind CSS, Lucide |
+| Auth and persistence | Supabase Auth, PostgreSQL, Row Level Security |
+| Inference service | FastAPI, Python, PyTorch/TorchScript, NumPy/SciPy |
+| Streaming | Web Audio API, PCM16, WebSocket |
+| Deployment | Vercel (web), Railway (API), Docker |
 
-### 1. Frontend (Next.js)
+## Local setup
+
+### Prerequisites
+
+- Node.js 20+
+- npm
+- Python 3.10+
+- Supabase project for authenticated and persisted flows
+
+### Web console
+
 ```bash
-# I use npm, but yarn/pnpm should work too
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-### 2. Backend (FastAPI)
+Open [http://localhost:3000](http://localhost:3000).
+
+Required browser variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable-or-anon-key>
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_FASTAPI_HTTP_URL=http://localhost:8000
+NEXT_PUBLIC_FASTAPI_WS_URL=ws://localhost:8000/ws/audio
+```
+
+For OAuth, add `http://localhost:3000/auth/callback` to Supabase Auth URL Configuration. Google and GitHub use the Supabase provider callback:
+
+```text
+https://<project-ref>.supabase.co/auth/v1/callback
+```
+
+### Inference API
+
 ```bash
 cd apps/api
 python3 -m venv .venv
@@ -42,13 +80,54 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-*Note: You need API keys for Groq and Supabase for this to run locally. See `.env.example`.*
+Verify readiness:
 
-## 🔮 Future Improvements
-- [ ] Add telephony/SIP integration directly (right now it's WebRTC in browser)
-- [ ] Implement a proper Challenge-Response system (asking the caller to repeat a random phrase)
-- [ ] Move the LFCC extraction strictly to C++ or Rust for even better latency
-- [ ] Clean up some of the messy CSS in the dashboard (sorry, hackathon code!)
+```bash
+curl http://localhost:8000/health
+```
 
----
-*Built with ❤️ for SIH 2026. DPDP Act 2023 Compliant.*
+The API can run without persistence for local UI work, but production Supabase variables are required for sessions, audit records, and authenticated data access.
+
+## Important routes
+
+| Route | Description |
+| --- | --- |
+| `/` | Product overview |
+| `/login` | Email, Google, GitHub, registration, and password recovery |
+| `/demo` | Live browser microphone demonstration |
+| `/dashboard` | Authenticated monitoring and session vault |
+| `/report` | Forensic report workflow |
+| `/docs` | In-product technical documentation |
+| `/auth/callback` | Supabase OAuth code exchange |
+
+See [`docs/API.md`](docs/API.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), and [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for implementation contracts.
+
+## Validation
+
+```bash
+npm run build
+npm run typecheck
+cd apps/api && pytest
+```
+
+The repository uses GitHub Actions for CI. Run checks sequentially when validating locally because Next.js and TypeScript both write to `.next`.
+
+## Responsible use
+
+Voice biometrics and synthetic-speech detection can affect real people. Use VoiceShield with consent, explainability, human review, and an appeal path. Do not use a single model score as the sole basis for denying service, making a legal finding, or taking an irreversible action.
+
+## Project documents
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [API and WebSocket protocol](docs/API.md)
+- [Deployment](docs/DEPLOYMENT.md)
+- [Security model](docs/SECURITY.md)
+- [ML pipeline](docs/ML_PIPELINE.md)
+- [Judge demo script](docs/DEMO_SCRIPT.md)
+- [SIH pitch](docs/SIH_PITCH.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security reporting](SECURITY.md)
+
+## License
+
+MIT. See [`LICENSE`](LICENSE). Third-party model architectures and datasets remain subject to their own licenses and terms.

@@ -21,15 +21,15 @@ Configure under Vercel Project Settings → Environment Variables:
 | `NEXT_PUBLIC_SITE_URL` | `https://voiceshield-live.vercel.app` |
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT_REF.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `YOUR_SUPABASE_ANON_KEY` |
-| `NEXT_PUBLIC_FASTAPI_HTTP_URL` | `https://voiceshield-api.onrender.com` |
-| `NEXT_PUBLIC_FASTAPI_WS_URL` | `wss://voiceshield-api.onrender.com/ws/audio` |
+| `NEXT_PUBLIC_FASTAPI_HTTP_URL` | `https://voiceshield-sih-2026-production.up.railway.app` |
+| `NEXT_PUBLIC_FASTAPI_WS_URL` | `wss://voiceshield-sih-2026-production.up.railway.app/ws/audio` |
 | `NEXT_PUBLIC_ENABLE_LIVE_DEMO` | `true` |
 | `NEXT_PUBLIC_ENABLE_CHALLENGE_RESPONSE` | `true` |
 | `NEXT_PUBLIC_ENABLE_FALLBACK_MODE` | `true` |
 
 ---
 
-## 2. Backend Deployment (Render)
+## 2. Inference API Deployment (Railway)
 
 ### Configuration
 - **Service Type:** Web Service (Docker)
