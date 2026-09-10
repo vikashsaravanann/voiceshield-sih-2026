@@ -13,24 +13,10 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const response = NextResponse.redirect(`${origin}${next}`);
-      response.cookies.set("voiceshield_demo_access", "1", {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        sameSite: "lax",
-      });
-      return response;
-    } else {
-      console.error("OAuth code exchange error:", error.message);
+      return NextResponse.redirect(`${origin}${next}`);
     }
+    console.error("OAuth code exchange error:", error.message);
   }
 
-  // If code exchange had an issue, still grant demo access if desired or redirect to dashboard
-  const fallbackResponse = NextResponse.redirect(`${origin}${next}`);
-  fallbackResponse.cookies.set("voiceshield_demo_access", "1", {
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-    sameSite: "lax",
-  });
-  return fallbackResponse;
+  return NextResponse.redirect(`${origin}/login?error=auth-callback-failed`);
 }

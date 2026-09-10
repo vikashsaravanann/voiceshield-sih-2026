@@ -3,6 +3,11 @@ import { cookies } from "next/headers";
 
 export async function createClient() {
   const cookieStore = await cookies();
+  
+  // Note: Vercel documentation says not to use createServerClient in layout.tsx 
+  // if you're writing cookies, because layouts can't set headers.
+  // We only use this for read-only auth checks in page.tsx components.
+
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "https://mock.supabase.co",
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -19,7 +24,9 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
-            // Server Component ignore
+            // The `setAll` method was throwing errors when called from a Server Component.
+            // Catching it here is safe per Supabase SSR docs.
+            // console.warn("Cookie set ignored in server component");
           }
         },
       },

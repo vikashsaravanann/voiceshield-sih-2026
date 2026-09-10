@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  Zap,
   Radio,
   Cpu,
   Fingerprint,
@@ -22,7 +21,6 @@ import {
   KeyRound,
   ExternalLink,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
 
@@ -100,9 +98,6 @@ export default function LoginPage() {
   async function signInWithProvider(provider: "google" | "github") {
     setBusy(provider);
     setMessage(null);
-    if (typeof document !== "undefined") {
-      document.cookie = "voiceshield_demo_access=1; path=/; max-age=2592000; SameSite=Lax";
-    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -113,19 +108,6 @@ export default function LoginPage() {
       setMessage({ type: "error", text: error.message });
       setBusy(null);
     }
-  }
-
-  // Instant demo access for Judges & evaluators
-  function handleDemoAccess() {
-    setBusy("demo");
-    setMessage({ type: "success", text: "Authorized Operator clearance granted. Initializing SOC..." });
-    if (typeof document !== "undefined") {
-      document.cookie = "voiceshield_demo_access=1; path=/; max-age=2592000; SameSite=Lax";
-    }
-    setTimeout(() => {
-      router.push("/dashboard");
-      router.refresh();
-    }, 400);
   }
 
   return (
@@ -311,42 +293,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Quick Demo Access for Judges (Instant Bypass Option) */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-950 to-teal-950/40 border border-emerald-500/30 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-mono font-bold text-emerald-300 uppercase tracking-wider">
-                    EVALUATION CLEARANCE
-                  </span>
-                </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 uppercase">
-                  INSTANT ACCESS
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Evaluating without an account? Enter the SOC threat portal instantly with one click.
-              </p>
-              <button
-                type="button"
-                onClick={handleDemoAccess}
-                disabled={busy !== null}
-                className="w-full py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-black text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-95"
-              >
-                {busy === "demo" ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>AUTHORIZING SOC SESSION...</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-4 h-4 fill-current" />
-                    <span>ONE-CLICK JUDGE BYPASS (SOC ACCESS)</span>
-                  </>
-                )}
-              </button>
-            </div>
-
             {/* Divider */}
             <div className="relative py-1">
               <div className="absolute inset-0 flex items-center">
@@ -417,6 +363,12 @@ export default function LoginPage() {
             {callbackError && !message && (
               <div className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                <span>We could not complete sign-in. Please try again.</span>
+              </div>
+
+            )}
+
+            <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
                   Operator Email
@@ -434,6 +386,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
+                {!isReset && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
                     <label className="font-bold text-slate-300 uppercase tracking-wider">PASSWORD</label>

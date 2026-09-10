@@ -33,14 +33,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const hasDemoAccess = request.cookies.get("voiceshield_demo_access")?.value === "1";
-
-  // Protect /dashboard route: allowed if user is authenticated (Google, GitHub, Email) OR has demo clearance
-  if (
-    !user &&
-    !hasDemoAccess &&
-    request.nextUrl.pathname.startsWith("/dashboard")
-  ) {
+  if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

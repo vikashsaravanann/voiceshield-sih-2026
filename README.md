@@ -1,66 +1,54 @@
-# V-SHIELD: AI-Powered Real-Time Voice Cloning Detection & Prevention
-**Smart India Hackathon 2026 | Problem Statement ID: SIH26104**  
-**Category:** Software | **Theme:** Blockchain & Cybersecurity  
-**Organization:** All India Council for Technical Education (AICTE – Cyber Security Cell)
+# VoiceShield - SIH 2026 🛡️
 
-![Build Passing](https://img.shields.io/badge/build-passing-brightgreen)
-![Deploy Status](https://img.shields.io/badge/deployment-success-blue)
-![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)
-![License MIT](https://img.shields.io/badge/license-MIT-green.svg)
+**Problem Statement:** SIH26104 (AICTE Cyber Security Cell)  
+**Developer:** Vikash
 
----
+I built VoiceShield to tackle the growing and terrifying problem of AI voice cloning fraud. The idea really hit home when I kept reading about elderly people being scammed by deepfakes of their own grandchildren over the phone. I realized we needed a practical, real-time detection system that doesn't just analyze audio after the fact, but stops the call *while* it's happening.
 
-## 🎥 Live Demo
+This repository contains the complete codebase for my Smart India Hackathon submission.
 
-*(Insert 1-minute demo video or GIF showing the real-time detection dashboard here)*
+## 🔗 Live Links
+- **Frontend (Vercel):** https://voiceshield-live.vercel.app
+- **Backend API (Render):** https://voiceshield-sih-2026.onrender.com
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x450.png?text=V-SHIELD+Real-Time+Dashboard+Demo" alt="V-SHIELD Demo Placeholder"/>
-</p>
+## 💡 What I Learned
 
-## 📌 Executive Summary
-V-SHIELD is a real-time security framework designed to intercept telephonic, VoIP, and WebRTC audio streams to identify AI-generated voice cloning attacks within 280ms. Combining local digital signal processing (LFCC + phase anomaly analysis) with Groq LPU inference, V-SHIELD detects synthetic speech and executes proactive challenge-response verification before fraudulent transactions take place.
+Building this was a massive learning curve. Some key takeaways:
+- **Web Audio API is wild:** Getting raw PCM16 audio out of the browser and into a WebSocket reliably across different browsers took a lot of trial and error. (Safari is particularly annoying).
+- **Latency is everything:** Initially, I was using 500ms chunks, but it felt too sluggish. I spent a whole weekend dialing it down to ~330ms chunks to get that real-time "instant" feel without overwhelming the backend.
+- **Supabase Realtime is magic:** I struggled with polling the database at first, but switching to PostgreSQL subscriptions made the dashboard feel incredibly alive.
 
-## 🚀 Key Features
-- **Sub-300ms Streaming Latency:** Evaluates 250ms sliding audio frames via lightweight quantized models.
-- **Telephony Codec Adaptation:** Robust against 8 kHz narrowband compression (G.711 / AMR).
-- **Multi-Modal Threat Correlation:** Combines acoustic vocoder detection with Groq Whisper transcription and Llama 3 semantic fraud intent tagging.
-- **Active Interactive Mitigation:** Generates dynamic phonemic challenges when audio enters suspicious risk thresholds.
-- **Zero-Knowledge Privacy:** Compliant with India's DPDP Act 2023 using ephemeral in-memory processing.
+## 🚧 Challenges Faced
 
-## 🛠️ Architecture Pipeline
+The hardest part was definitely the Twilio WhatsApp integration. Getting the webhook payloads right, dealing with trial account restrictions (which required using a specific approved `ContentSid`), and making sure the API didn't crash if an environment variable was missing was incredibly frustrating but rewarding when it finally clicked.
 
-```mermaid
-graph TD
-    A[Caller Audio Stream] -->|WebRTC/SIP WebSocket| B(FastAPI Backend)
-    B --> C{Feature Extraction}
-    C -->|LFCC & Phase Anomaly| D[1D-CNN Inference Model]
-    C -->|Audio Buffer| E[Groq LPU]
-    E -->|Whisper| F(Transcription)
-    E -->|Llama 3| G(Fraud Intent Analysis)
-    D -->|Acoustic Confidence| H{Threat Correlation Engine}
-    G -->|Semantic Confidence| H
-    H -->|High Risk| I[Challenge-Response Mitigation]
-    H -->|Safe| J[Allow Call]
-    I --> K[Frontend Next.js Dashboard Alert]
-    J --> K
+Also, fighting Next.js 15 SSR caching when trying to read Supabase cookies was a headache. (See the comments in my `middleware.ts` for how I eventually solved it).
+
+## 🚀 Getting Started (Local Dev)
+
+### 1. Frontend (Next.js)
+```bash
+# I use npm, but yarn/pnpm should work too
+npm install
+npm run dev
 ```
 
-## 💻 Quick Start
-
-### 1. Backend Setup
+### 2. Backend (FastAPI)
 ```bash
 cd apps/api
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-# Add your GROQ_API_KEY to apps/api/.env
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 2. Frontend Setup
-```bash
-npm install
-npm run dev
-# Add your NEXT_PUBLIC_SUPABASE_URL and KEY to .env.local
-```
+*Note: You need API keys for Groq and Supabase for this to run locally. See `.env.example`.*
+
+## 🔮 Future Improvements
+- [ ] Add telephony/SIP integration directly (right now it's WebRTC in browser)
+- [ ] Implement a proper Challenge-Response system (asking the caller to repeat a random phrase)
+- [ ] Move the LFCC extraction strictly to C++ or Rust for even better latency
+- [ ] Clean up some of the messy CSS in the dashboard (sorry, hackathon code!)
+
+---
+*Built with ❤️ for SIH 2026. DPDP Act 2023 Compliant.*

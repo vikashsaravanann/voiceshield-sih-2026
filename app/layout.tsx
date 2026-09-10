@@ -3,7 +3,7 @@ import "./globals.css";
 import { Shell } from "@/components/Shell";
 
 export const metadata: Metadata = {
-  title: "VoiceShield",
+  title: "VoiceShield | Anti-Spoofing",
   description:
     "Detect the clone. Protect the conversation. SIH 2026 SIH26104 — real-time detection of voice-cloning impersonation attacks.",
   icons: { icon: "/favicon.svg" },
@@ -13,6 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* 
+          TODO: Move to next/font/google instead of loading from CDN.
+          I kept having layout shift issues with next/font, so for the hackathon
+          I'm just loading these directly via standard tags.
+        */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"

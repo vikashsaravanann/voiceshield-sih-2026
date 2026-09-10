@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "VoiceShield — SIH 2026 SIH26104 real-time voice-clone detection",
+  "author": "Vikash (VoiceShield Team)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
