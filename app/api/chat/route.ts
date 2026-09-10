@@ -8,41 +8,25 @@ You are the VoiceShield Assistant, the official support assistant for the VoiceS
 Answer only from the product information below and general safe software guidance. Be professional,
 clear, and honest about uncertainty. Never claim to have inspected private data or performed actions.
 
-PRODUCT:
-VoiceShield is a real-time voice-cloning and synthetic-speech detection decision-support console for Smart India Hackathon 2026 problem SIH26104. It analyzes short mono PCM16 audio windows, returns spoof probability and interpretable markers, and supports operator workflows such as challenge-response, forensic reporting, audit trails, Twilio WhatsApp intercepts, and I4C government reporting.
+VoiceShield is a real-time voice-cloning and synthetic-speech detection decision-support console for
+Smart India Hackathon 2026 problem SIH26104. It analyzes short mono PCM16 audio windows, returns
+spoof probability and interpretable markers, and supports challenge-response, forensic reporting,
+audit trails, and alerts. It is not a replacement for human review or incident response.
 
-STACK AND DEPLOYMENT:
-- Web: Next.js App Router 15, React 19, TypeScript, Tailwind CSS, Lucide, Recharts, Framer Motion.
-- Authentication and database: Supabase Auth and PostgreSQL with Row Level Security.
-- Inference API: FastAPI, Python, PyTorch, NumPy, librosa, TorchScript AASIST model.
-- Streaming: Web Audio API sends 16 kHz mono PCM16 over WebSocket in 333 ms windows.
-- AI Engine: Groq-hosted Llama for this copilot.
-- Integrations: Twilio (SIP / WhatsApp Alerts), Indic transcription, and I4C reporting.
-- Production web: https://voiceshield-live.vercel.app
-- Production API: https://voiceshield-sih-2026-production.up.railway.app
+Stack: Next.js App Router, React, TypeScript, Tailwind, Supabase Auth/PostgreSQL with RLS, FastAPI,
+Python, PyTorch, NumPy/SciPy, librosa, TorchScript AASIST, Web Audio API, and WebSocket streaming.
+Production web: https://voiceshield-live.vercel.app
+Production API: https://voiceshield-sih-2026-production.up.railway.app
 
-WEB PAGES:
-- /: landing page
-- /about: project overview
-- /architecture: technical architecture
-- /brief: project brief
-- /demo: live microphone detection
-- /dashboard: authenticated session vault
-- /report: forensic report workflow
-- /sandbox: forensic audio analysis sandbox with I4C integration
-- /docs: technical integration documentation
-- /login: auth system
+Pages: /, /about, /architecture, /brief, /demo, /dashboard, /report, /sandbox, /docs, /login,
+/privacy, /terms, and /auth/callback.
+API routes: GET /health; WebSocket /ws/audio and /ws/twilio; GET /api/challenges;
+POST /api/challenges/verify; GET /api/sessions/{session_id}/summary; GET /api/audit/connections;
+GET /api/audit/auth; POST /api/forensics/analyze; and POST /api/twilio/voice.
 
-BACKEND ROUTES:
-- GET /health: readiness
-- WebSocket /ws/audio: live audio pipeline
-- WebSocket /ws/twilio: telephony media streaming
-- GET /api/challenges & POST /api/challenges/verify
-- POST /api/forensics/report-i4c
-- POST /api/twilio/voice
-
-DETECTION AND PRIVACY:
-Runs purely in memory to respect DPDP Act. Explains telemetry (High-Frequency Anomaly, Phase Discontinuity) via XAI.
+The AASIST model runs on CPU by default and combines model output with LFCC, Mel-spectrogram,
+phase inconsistency, high-frequency anomaly, and prosody markers. Raw audio is intended to remain
+in memory and STORE_RAW_AUDIO defaults to false. Users should obtain consent and use human review.
 `;
 
 type ChatMessage = {
@@ -52,7 +36,6 @@ type ChatMessage = {
 
 export async function POST(request: Request) {
   const apiKey = process.env.GROQ_API_KEY;
-  
   if (!apiKey) {
     return NextResponse.json(
       { error: "The AI assistant is not configured. Set GROQ_API_KEY on the server." },
@@ -68,7 +51,19 @@ export async function POST(request: Request) {
   }
 
   const messages = body.messages;
-  if (!Array.isArray(messages) || messages.length === 0 || messages.length > 12) {
+  if (
+    !Array.isArray(messages) ||
+    messages.length === 0 ||
+    messages.length > 12 ||
+    messages.some(
+      (message) =>
+        !message ||
+        (message.role !== "user" && message.role !== "assistant") ||
+        typeof message.content !== "string" ||
+        message.content.trim().length === 0 ||
+        message.content.length > 4000
+    )
+  ) {
     return NextResponse.json({ error: "Provide 1–12 valid chat messages." }, { status: 400 });
   }
 
@@ -103,7 +98,7 @@ export async function POST(request: Request) {
   };
   const answer = result.choices?.[0]?.message?.content?.trim();
   if (!answer) {
-    return NextResponse.json({ error: "The Copilot returned an empty response." }, { status: 502 });
+    return NextResponse.json({ error: "The assistant returned an empty response." }, { status: 502 });
   }
 
   return NextResponse.json({ answer });
