@@ -72,7 +72,7 @@ async def audio_websocket(websocket: WebSocket):
         chunk_index = last_processed_chunk_index + 1 if resumed else 0
             
         logger.info("ws_connected", session_id=session_id, client_ip=client_ip)
-        await log_connection_event(session_id, "connected", client_ip)
+        await log_connection_event(session_id, "connected", {"client_ip": client_ip})
         if not resumed:
             await create_session(
                 session_id=session_id,
@@ -194,7 +194,7 @@ async def audio_websocket(websocket: WebSocket):
             
         duration = int(time.time() - start_time)
         if session_id:
-            await log_connection_event(session_id, "disconnected", client_ip)
+            await log_connection_event(session_id, "disconnected", {"client_ip": client_ip})
             await finalize_session(
                 session_id,
                 chunk_index,

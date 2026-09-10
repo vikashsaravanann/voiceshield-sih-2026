@@ -557,13 +557,24 @@ export default function DemoPage() {
               : "✅ BIOMETRIC INTEGRITY VERIFIED: Spectral envelopes, glottal pulses, and higher-order bispectrum phase continuity lie within natural biological human bounds. Continuous passive monitoring maintained across media stream."}
           </p>
 
-          <div className="pt-4 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-4 text-xs font-mono opacity-80">
-            <div className="flex items-center gap-2">
+          <div className="pt-4 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2 text-slate-400">
               <Lock className="w-3.5 h-3.5 text-emerald-400" />
               <span>TELEPHONY PROTOCOL: SIP BYE / SIP 603 / INLINE RTP PROMPT</span>
             </div>
-            <div>
-              COURT-ADMISSIBLE FIR CERTIFICATE: SECTION 65B READY
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => setChallengeActive((prev) => !prev)}
+                className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold uppercase transition-all"
+              >
+                {challengeActive ? "DISMISS CHALLENGE" : "ARM PHONEMIC CHALLENGE"}
+              </button>
+              <Link
+                href="/sandbox"
+                className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold uppercase transition-all"
+              >
+                FORENSIC LAB &amp; SPLICING →
+              </Link>
             </div>
           </div>
         </div>

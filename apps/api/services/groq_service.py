@@ -70,3 +70,28 @@ async def generate_phonemic_challenge() -> str:
         return response.choices[0].message.content.strip()
     except Exception:
         return "The blue quartz globe rolled through the red velvet track."
+
+async def generate_xai_summary(markers: dict, risk_level: str, max_risk: float) -> str:
+    """Uses Groq to generate a human-readable forensic explanation from ML markers."""
+    if not client:
+        return f"System detected {risk_level} risk with a maximum confidence of {max_risk*100:.1f}%. High frequency anomaly: {markers.get('high_frequency_anomaly', 0)}."
+    
+    prompt = f"""You are a Voice Security AI Forensic Analyst.
+Given the following audio analysis markers, write a concise 2-sentence explanation of WHY this audio was flagged.
+Use a professional, technical cybersecurity tone. Do not give generic advice. Be direct.
+
+Risk Level: {risk_level.upper()}
+Max Spoof Confidence: {max_risk*100:.1f}%
+Phase Discontinuity (indicates neural vocoder artifact): {markers.get('phase_discontinuity', 0)} / 1.0
+High Frequency Anomaly (indicates missing acoustic detail): {markers.get('high_frequency_anomaly', 0)} / 1.0
+Prosody Irregularity (indicates robotic pitch shifting): {markers.get('prosody_irregularity', 0)} / 1.0
+
+Analysis:"""
+    try:
+        response = await client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"Forensic analysis concluded a {risk_level} risk of synthetic voice injection."

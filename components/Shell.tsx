@@ -16,11 +16,13 @@ import {
   X,
   ChevronRight,
   Zap,
+  Layers,
 } from "lucide-react";
 
 const NAV = [
   { href: "/", label: "OVERVIEW", icon: Activity },
   { href: "/demo", label: "LIVE DEMO", icon: Radio },
+  { href: "/sandbox", label: "FORENSIC LAB", icon: Layers },
   { href: "/dashboard", label: "SOC DASHBOARD", icon: LayoutDashboard },
   { href: "/architecture", label: "ARCHITECTURE", icon: Cpu },
   { href: "/docs", label: "DOCS", icon: BookOpen },
@@ -88,7 +90,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={`
-                    inline-flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-lg text-[11px] font-mono font-bold tracking-[0.08em] xl:tracking-[0.12em] uppercase transition-all duration-200 whitespace-nowrap shrink-0
+                    inline-flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold tracking-[0.05em] xl:tracking-[0.1em] uppercase transition-all duration-200 whitespace-nowrap shrink-0
                     ${active
                       ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-500/20"
                       : "text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent"

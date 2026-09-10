@@ -15,7 +15,7 @@ class ChallengeVerification(BaseModel):
 
 @router.get("")
 async def create_challenge(language: Literal["en", "hi", "ta"] = "en"):
-    return generate_challenge(language)
+    return await generate_challenge(language)
 
 
 @router.post("/verify")
