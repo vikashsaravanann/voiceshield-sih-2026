@@ -60,6 +60,7 @@ export interface ForensicReportData {
   spliceRegions: SpliceRegion[];
   analyzedAt: string;
   engineVersion: string;
+  xai_summary?: string;
 }
 
 /**

@@ -258,3 +258,23 @@ async def analyze_audio_file(
       slices=slices,
       xai_summary=xai_summary
   )
+
+class I4CReportRequest(BaseModel):
+    file_sha256: str
+    overall_risk_level: str
+    xai_summary: str
+
+@router.post("/report-i4c")
+async def report_to_i4c(report: I4CReportRequest):
+    """
+    Mock endpoint that pushes the forensic payload to the National Cybercrime Reporting Portal (I4C).
+    """
+    import asyncio
+    # Simulate network delay to govt API
+    await asyncio.sleep(1.5)
+    logger.info("i4c.report_filed", sha256=report.file_sha256, risk=report.overall_risk_level)
+    return {
+        "status": "success",
+        "message": "Forensic evidence successfully submitted to Indian Cyber Crime Coordination Centre.",
+        "acknowledgement_number": f"I4C-2026-{report.file_sha256[:8].upper()}"
+    }

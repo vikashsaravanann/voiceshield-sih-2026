@@ -259,11 +259,18 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
   return (
     <div className="bg-slate-900/90 border border-amber-500/40 rounded-2xl p-6 shadow-2xl backdrop-blur-md space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-          <h4 className="text-sm font-black uppercase tracking-wider text-amber-300">
-            ACTIVE PHONEMIC CHALLENGE-RESPONSE GATE
-          </h4>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+            <h4 className="text-sm font-black uppercase tracking-wider text-amber-300">
+              ACTIVE PHONEMIC CHALLENGE-RESPONSE GATE
+            </h4>
+          </div>
+          <div className="flex items-center gap-2 ml-4">
+            <span className="text-[10px] font-mono uppercase bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-slate-400">
+              {lang === "en" ? "LLM: NVIDIA Llama-3.1" : "ASR: Bhashini Indic Native"}
+            </span>
+          </div>
         </div>
 
         {/* Language Selector */}

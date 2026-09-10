@@ -368,7 +368,31 @@ export default function ForensicSandboxPage() {
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-bold text-xs uppercase shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
                 >
                   <FileCheck2 className="w-4 h-4" />
-                  <span>EXPORT SECTION 65B CERTIFICATE (PDF)</span>
+                  <span>EXPORT SECTION 65B CERTIFICATE</span>
+                </button>
+
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch("https://voiceshield-sih-2026-production.up.railway.app/api/forensics/report-i4c", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          file_sha256: report.fileSha256,
+                          overall_risk_level: report.overallRiskLevel,
+                          xai_summary: report.xai_summary || "Synthetic Audio Detected"
+                        })
+                      });
+                      const data = await res.json();
+                      alert(`✅ ${data.message}\nAck Number: ${data.acknowledgement_number}`);
+                    } catch (e) {
+                      alert("⚠️ Failed to report to I4C portal.");
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-mono font-bold text-xs uppercase shadow-lg shadow-rose-500/20 active:scale-95 transition-all"
+                >
+                  <ShieldAlert className="w-4 h-4" />
+                  <span>REPORT TO I4C (NATIONAL CYBERCRIME)</span>
                 </button>
               </div>
             </div>
