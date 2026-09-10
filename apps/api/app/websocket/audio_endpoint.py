@@ -48,6 +48,7 @@ async def audio_websocket(websocket: WebSocket):
     start_time = time.time()
     
     events_buffer = []
+    event_write_tasks: list[asyncio.Task[None]] = []
     chunk_index = 0
     risk_sum = 0.0
     max_risk = 0.0
@@ -173,8 +174,10 @@ async def audio_websocket(websocket: WebSocket):
             # Flush to Supabase in batches of 5 to avoid killing the DB
             # We don't want to do 1 insert per 300ms chunk
             if len(events_buffer) >= 5:
-                # Fire and forget database insert
-                asyncio.create_task(batch_insert_events(list(events_buffer)))
+                # Keep the task so finalization can wait for persistence to finish.
+                event_write_tasks.append(
+                    asyncio.create_task(batch_insert_events(list(events_buffer)))
+                )
                 events_buffer.clear()
 
     except WebSocketDisconnect:
@@ -182,6 +185,9 @@ async def audio_websocket(websocket: WebSocket):
     except Exception as e:
         logger.error("ws_error", error=str(e), session_id=session_id)
     finally:
+        if event_write_tasks:
+            await asyncio.gather(*event_write_tasks)
+
         # Catch any leftover events
         if events_buffer and session_id:
             await batch_insert_events(list(events_buffer))
