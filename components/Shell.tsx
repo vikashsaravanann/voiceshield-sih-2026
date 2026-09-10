@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, BookOpen, Cpu, LayoutDashboard, Radio, Shield } from "lucide-react";
+import { Activity, FileText, LayoutDashboard, Radio, Shield } from "lucide-react";
 
 const NAV = [
-  { href: "/", label: "Overview", icon: Activity },
-  { href: "/demo", label: "Live demo", icon: Radio },
-  { href: "/dashboard", label: "Vault", icon: LayoutDashboard },
-  { href: "/architecture", label: "Architecture", icon: Cpu },
-  { href: "/docs", label: "SIH pack", icon: BookOpen },
+  { href: "/", label: "OVERVIEW", icon: Activity },
+  { href: "/demo", label: "LIVE DEMO", icon: Radio },
+  { href: "/dashboard", label: "VAULT", icon: LayoutDashboard },
+  { href: "/brief", label: "BRIEF", icon: FileText },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -39,8 +38,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <Link href="/login" className="btn btn-primary" style={{ minHeight: 36, padding: "0.4rem 0.9rem" }}>
-            Sign in
+          <Link href="/login" className="btn btn-primary" style={{ minHeight: 36, padding: "0.4rem 0.9rem", letterSpacing: "0.14em", fontSize: 11, fontWeight: 700 }}>
+            SIGN IN
           </Link>
         </div>
         <div className="mnav">
