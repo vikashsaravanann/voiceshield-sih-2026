@@ -129,7 +129,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col justify-between p-4 sm:p-8 lg:p-14 font-sans selection:bg-emerald-500 selection:text-slate-950 relative overflow-x-hidden">
+    <div className="h-screen w-screen overflow-hidden bg-[#030712] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950 relative">
       
       {/* ── Background Cyber Ambient Gradients ── */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-emerald-950/25 via-slate-950/60 to-[#030712] -z-10" />
@@ -155,13 +155,13 @@ export default function LoginPage() {
       </header>
 
       {/* ── Main Two-Column Layout with Wide Gaps & Strong Hierarchy ── */}
-      <main className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center my-auto py-6 sm:py-12">
+      <main className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-2">
         
         {/* Left Column: Security Narrative & Identity */}
-        <div className="lg:col-span-6 space-y-10">
+        <div className="lg:col-span-6 space-y-4">
           
           {/* Brand Header */}
-          <div className="space-y-6">
+          <div className="space-y-3">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-xl shadow-emerald-500/15 group-hover:border-emerald-400 transition-all duration-300">
                 <Shield className="w-6 h-6 stroke-[2.2]" />
@@ -257,7 +257,7 @@ export default function LoginPage() {
 
         {/* Right Column: High-Grade Authentication Card */}
         <div className="lg:col-span-6 w-full max-w-lg mx-auto">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-10 backdrop-blur-2xl shadow-2xl shadow-emerald-950/20 space-y-8 relative">
+          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-10 backdrop-blur-2xl shadow-2xl shadow-emerald-950/20 space-y-4 relative">
             
             {/* Glowing Top Edge Accent */}
             <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
@@ -280,7 +280,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => signInWithProvider("google")}
                   disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-3.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-emerald-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-emerald-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
                 >
                   <GoogleIcon />
                   <span className="text-white group-hover:text-emerald-300 transition-colors">
@@ -293,7 +293,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => signInWithProvider("github")}
                   disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-cyan-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                  className="w-full flex items-center justify-center gap-3 py-2 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-cyan-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
                 >
                   <GithubIcon />
                   <span className="text-white group-hover:text-cyan-300 transition-colors">
@@ -331,7 +331,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleDemoAccess}
                 disabled={busy !== null}
-                className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-black text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-95"
+                className="w-full py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-black text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-95"
               >
                 {busy === "demo" ? (
                   <>
@@ -417,31 +417,23 @@ export default function LoginPage() {
             {callbackError && !message && (
               <div className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>OAuth callback authentication failed. Please try again.</span>
-              </div>
-            )}
-
-            {/* Email & Password Form with Generous Line-Height & Gaps */}
-            <form onSubmit={onSubmit} className="space-y-5">
-              
-              <div className="space-y-2">
-                <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
-                  OFFICIAL WORK EMAIL
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                  Operator Email
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
                   <input
-                    type="email"
                     required
+                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="operator@security-cell.gov.in"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                    placeholder="operator@voiceshield.dev"
                   />
                 </div>
               </div>
 
-              {!isReset && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
                     <label className="font-bold text-slate-300 uppercase tracking-wider">PASSWORD</label>
@@ -462,7 +454,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     />
                     <button
                       type="button"
@@ -479,7 +471,7 @@ export default function LoginPage() {
                 type="submit"
                 disabled={busy !== null}
                 className="
-                  w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500
+                  w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500
                   hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black
                   text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20
                   active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 mt-2
@@ -524,7 +516,7 @@ export default function LoginPage() {
       </main>
 
       {/* ── Footer Bar with Generous Spacing ── */}
-      <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-8 pb-4 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
+      <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
         <div>VOICESHIELD SIH26104 · AICTE CYBER SECURITY CELL · FIPS 140-2 ENCRYPTED</div>
         <div className="text-slate-500">MUMBAI SOVEREIGN HOSTING (AP-SOUTH-1) · ZERO RAW AUDIO DISK RETENTION</div>
       </footer>
