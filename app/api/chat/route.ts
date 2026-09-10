@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions";
-const DEFAULT_MODEL = "meta/llama-3.1-70b-instruct";
+const DEFAULT_MODEL = "nvidia/nemotron-4-340b-instruct";
 
 const REPOSITORY_CONTEXT = `
 You are the VoiceShield Multi-Agent Copilot, the official enterprise assistant for the VoiceShield SIH26104 project.
@@ -55,8 +55,8 @@ type ChatMessage = {
 };
 
 export async function POST(request: Request) {
-  // Use user's NVIDIA Llama API key
-  const apiKey = process.env.NVIDIA_API_KEY_LLAMA || "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";
+  // Use user's NVIDIA Nemotron API key provided earlier
+  const apiKey = process.env.NVIDIA_API_KEY_NEMOTRON || "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";
   
   if (!apiKey) {
     return NextResponse.json(
@@ -98,6 +98,15 @@ export async function POST(request: Request) {
   if (!response.ok) {
     const detail = await response.text();
     console.error("NVIDIA chatbot request failed:", response.status, detail.slice(0, 500));
+    
+    // Check if it's an account authorization or EOL error
+    if (response.status === 404 || response.status === 410) {
+       return NextResponse.json(
+        { error: "NVIDIA API Error: The selected model is EOL or your Nvidia account needs to accept the EULA on the NGC dashboard for Nemotron/Llama." },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json(
       { error: "The Copilot could not complete that response. Please try again." },
       { status: 502 }

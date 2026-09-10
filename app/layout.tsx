@@ -7,7 +7,14 @@ export const metadata: Metadata = {
   title: "VoiceShield | Anti-Spoofing",
   description:
     "Detect the clone. Protect the conversation. SIH 2026 SIH26104 — real-time detection of voice-cloning impersonation attacks.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/logo.png", apple: "/logo.png" },
+  openGraph: {
+    images: [{ url: "/banner.png" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/banner.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

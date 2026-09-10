@@ -61,8 +61,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           {/* Brand Logo & Identification in 1 single horizontal line */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group shrink-0 whitespace-nowrap">
             <div className="relative shrink-0">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-cyan-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 transition-all duration-300 group-hover:scale-105">
-                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border border-emerald-500/40 flex items-center justify-center shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 transition-all duration-300 group-hover:scale-105 overflow-hidden bg-slate-950">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
               </div>
               <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -231,8 +231,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {/* Col 1 & 2: Platform Identity */}
             <div className="lg:col-span-2 space-y-5">
               <Link href="/" className="inline-flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-md group-hover:border-emerald-400 transition-all">
-                  <Shield className="w-5 h-5 stroke-[2.2]" />
+                <div className="w-10 h-10 rounded-xl border border-emerald-500/40 flex items-center justify-center shadow-md group-hover:border-emerald-400 transition-all overflow-hidden bg-slate-950">
+                  <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
@@ -353,17 +353,17 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Bottom Bar: Copyright & AICTE Recognition */}
-          <div className="pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left font-mono text-[11px] text-slate-500 uppercase tracking-wider">
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="pt-8 border-t border-slate-800/80 flex flex-col xl:flex-row items-center justify-between gap-4 sm:gap-6 text-center xl:text-left font-mono text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-wider w-full">
+            <div className="flex flex-wrap items-center justify-center xl:justify-start gap-1.5 sm:gap-2">
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
               <span className="text-slate-300 font-bold">VOICESHIELD</span>
-              <span>·</span>
-              <span>SMART INDIA HACKATHON 2026</span>
+              <span className="hidden sm:inline">·</span>
+              <span className="w-full sm:w-auto mt-1 sm:mt-0">SMART INDIA HACKATHON 2026</span>
             </div>
-            <div>
-              AICTE CYBER SECURITY CELL · PROBLEM STATEMENT SIH26104
+            <div className="px-2">
+              AICTE CYBER SECURITY CELL · <span className="whitespace-nowrap">PROBLEM STATEMENT SIH26104</span>
             </div>
-            <div className="text-emerald-400/90 font-semibold">
+            <div className="text-emerald-400/90 font-semibold px-2">
               ZERO RAW AUDIO DISK STORAGE · EPHEMERAL RAM ONLY
             </div>
           </div>

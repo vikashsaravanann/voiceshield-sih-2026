@@ -50,23 +50,23 @@ export function VoiceShieldAssistant() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {open && (
-        <section className="mb-4 flex h-[min(650px,calc(100vh-120px))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-indigo-500/30 bg-[#0A0F1C]/95 backdrop-blur-xl shadow-2xl shadow-indigo-900/50">
-          <header className="flex items-center justify-between border-b border-indigo-500/20 bg-indigo-950/40 px-5 py-4">
+        <section className="mb-4 flex h-[min(650px,calc(100vh-120px))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0A0F1C]/95 backdrop-blur-xl shadow-2xl shadow-emerald-900/50">
+          <header className="flex items-center justify-between border-b border-emerald-500/20 bg-emerald-950/40 px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
-                <Bot className="text-white" size={20} />
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 border border-emerald-500/40 shadow-lg shadow-emerald-500/20 overflow-hidden">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
                 <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-[#0A0F1C] bg-emerald-400 animate-pulse" />
               </div>
               <div>
                 <h2 className="text-sm font-black tracking-wide text-white">VOICESHIELD COPILOT</h2>
-                <div className="flex items-center gap-2 mt-0.5 text-[9px] font-bold uppercase tracking-wider text-indigo-300">
+                <div className="flex items-center gap-2 mt-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-300">
                   <Activity size={10} /> Forensic
                   <Scale size={10} /> Legal
                   <Network size={10} /> SecOps
                 </div>
               </div>
             </div>
-            <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="rounded-md p-1.5 text-indigo-400 hover:bg-indigo-500/10 hover:text-white transition">
+            <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="rounded-md p-1.5 text-emerald-400 hover:bg-emerald-500/10 hover:text-white transition">
               <X size={18} />
             </button>
           </header>
@@ -76,7 +76,7 @@ export function VoiceShieldAssistant() {
               <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[90%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   message.role === "user" 
-                    ? "rounded-br-sm bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/20" 
+                    ? "rounded-br-sm bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/20" 
                     : "rounded-bl-sm border border-slate-700/50 bg-slate-800/80 text-slate-200"
                 }`}>
                   {message.content}
@@ -85,7 +85,7 @@ export function VoiceShieldAssistant() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm border border-indigo-500/20 bg-indigo-500/5 px-4 py-3 text-xs font-mono text-indigo-400">
+                <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-xs font-mono text-emerald-400">
                   <Loader2 size={14} className="animate-spin" /> Sub-agents processing...
                 </div>
               </div>
@@ -97,8 +97,8 @@ export function VoiceShieldAssistant() {
             )}
           </div>
 
-          <form onSubmit={sendMessage} className="border-t border-indigo-500/20 bg-slate-900/50 p-4">
-            <div className="flex items-end gap-2 rounded-xl border border-slate-700 bg-slate-950 p-2 focus-within:border-indigo-400/60 focus-within:ring-1 focus-within:ring-indigo-400/30 transition-all">
+          <form onSubmit={sendMessage} className="border-t border-emerald-500/20 bg-slate-900/50 p-4">
+            <div className="flex items-end gap-2 rounded-xl border border-slate-700 bg-slate-950 p-2 focus-within:border-emerald-400/60 focus-within:ring-1 focus-within:ring-emerald-400/30 transition-all">
               <textarea 
                 value={input} 
                 onChange={(event) => setInput(event.target.value)} 
@@ -112,13 +112,13 @@ export function VoiceShieldAssistant() {
                 type="submit" 
                 disabled={loading || !input.trim()} 
                 aria-label="Send" 
-                className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 p-2.5 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg shadow-indigo-500/20"
+                className="rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 p-2.5 text-slate-950 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 shadow-lg shadow-emerald-500/20"
               >
                 <Send size={16} />
               </button>
             </div>
             <div className="mt-3 flex items-center justify-between px-1">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by NVIDIA Llama-3.1</p>
+              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by Llama-3 API</p>
               <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Secure Comm Link</p>
             </div>
           </form>
@@ -128,11 +128,11 @@ export function VoiceShieldAssistant() {
         <button 
           type="button" 
           onClick={() => setOpen(true)} 
-          className="group relative flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 shadow-xl shadow-indigo-600/30 transition-all hover:scale-105 active:scale-95"
+          className="group relative flex items-center justify-center h-14 w-14 rounded-full border-2 border-emerald-500/50 bg-slate-950 shadow-xl shadow-emerald-600/30 transition-all hover:scale-105 hover:border-emerald-400 active:scale-95 overflow-hidden"
         >
-          <div className="absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-10" />
-          <MessageSquareText size={24} className="text-white" />
-          <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-rose-500">
+          <div className="absolute inset-0 rounded-full bg-emerald-500/10 opacity-0 transition-opacity group-hover:opacity-100" />
+          <img src="/logo.png" alt="Chat" className="w-9 h-9 object-cover z-10" />
+          <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-rose-500 z-20">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
           </div>
         </button>
