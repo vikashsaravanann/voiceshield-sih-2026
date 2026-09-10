@@ -298,6 +298,22 @@ export default function LoginPage() {
                   </span>
                 </button>
 
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBusy("demo");
+                    document.cookie = "voiceshield_judge_demo=1; path=/; max-age=3600; SameSite=Lax";
+                    window.location.assign("/dashboard");
+                  }}
+                  disabled={busy !== null}
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-amber-500/40 bg-amber-950/20 hover:bg-amber-900/30 hover:border-amber-400 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50"
+                >
+                  {busy === "demo" && <Loader2 className="w-4 h-4 animate-spin text-amber-300" />}
+                  <span className="text-amber-300">
+                    {busy === "demo" ? "OPENING JUDGE DEMO..." : "ENTER JUDGE DEMO — NO LOGIN"}
+                  </span>
+                </button>
+
               </div>
 
               {/* Clearance Guarantee Banner */}
@@ -305,6 +321,8 @@ export default function LoginPage() {
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
                   All authenticated Google &amp; GitHub accounts receive instantaneous clearance to the SOC Dashboard, Live Voice Streamer, Forensic FIR Reports, and Telephony Controls.
+                  <br />
+                  <span className="text-amber-300">Judge Demo is read-only and uses sample data.</span>
                 </span>
               </div>
             </div>

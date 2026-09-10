@@ -9,6 +9,7 @@ export default function UserMenu() {
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [judgeDemo, setJudgeDemo] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -17,8 +18,9 @@ export default function UserMenu() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setEmail(user.email ?? (user.user_metadata?.email || "operator@voiceshield.internal"));
-      } else if (typeof document !== "undefined" && document.cookie.includes("voiceshield_demo_access=1")) {
-        setEmail("operator@sih2026.gov.in");
+      } else if (document.cookie.includes("voiceshield_judge_demo=1")) {
+        setEmail("judge.demo@voiceshield.local");
+        setJudgeDemo(true);
       }
       setLoading(false);
     };
@@ -26,11 +28,9 @@ export default function UserMenu() {
   }, [supabase]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    if (typeof document !== "undefined") {
-      document.cookie = "voiceshield_demo_access=; path=/; max-age=0";
-    }
-    router.push("/login");
+  await supabase.auth.signOut();
+    document.cookie = "voiceshield_judge_demo=; path=/; max-age=0; SameSite=Lax";
+  router.push("/login");
     router.refresh();
   };
 
@@ -53,6 +53,7 @@ export default function UserMenu() {
           <div className="p-4 border-b border-slate-800/80">
             <p className="text-xs text-slate-400 font-mono tracking-wider mb-1">SIGNED IN AS</p>
             <p className="text-sm font-medium text-slate-200 truncate" title={email}>{email}</p>
+            {judgeDemo && <p className="mt-1 text-[10px] uppercase tracking-wider text-amber-300">Read-only judge demo</p>}
           </div>
           <div className="p-2">
             <button
