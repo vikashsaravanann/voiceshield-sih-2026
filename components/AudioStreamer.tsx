@@ -137,6 +137,7 @@ export function AudioStreamer({
         updateConnection("connected");
 
         if (sessionEstablishedRef.current) {
+          if (ws.readyState !== WebSocket.OPEN || wsRef.current !== ws) return;
           ws.send(
             JSON.stringify({
               type: "session.resume",
@@ -145,11 +146,15 @@ export function AudioStreamer({
             })
           );
         } else {
+          const userId = await getCurrentUserId();
+          if (ws.readyState !== WebSocket.OPEN || wsRef.current !== ws || !streamingRef.current) {
+            return;
+          }
           ws.send(
             JSON.stringify({
               type: "session.start",
               session_id: sessionIdRef.current,
-              user_id: await getCurrentUserId(),
+              user_id: userId,
               sample_rate: AUDIO_CONFIG.sampleRate,
               channels: AUDIO_CONFIG.channels,
               chunk_ms: AUDIO_CONFIG.chunkMs,
