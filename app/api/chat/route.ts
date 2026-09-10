@@ -40,7 +40,7 @@ VoiceShield is a real-time, AI-driven console that detects synthetic-voice (voic
 - **Auditability**: Every detection event is immutable-logged for forensic and regulatory purposes.
 
 Conclude your answers by offering deeper technical details (e.g., API usage, demo walkthrough, or forensic report generation) if the user wishes to explore further.
-\`;
+`;
 
 type ChatMessage = {
   role: "user" | "assistant";
