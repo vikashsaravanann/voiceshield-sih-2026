@@ -257,105 +257,107 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="w-full max-w-5xl mx-auto h-[1px] bg-slate-800/60" />
+          <div className="w-full max-w-6xl mx-auto h-[1px] bg-slate-800/60" />
 
           {/* Middle Section: Navigation Links */}
-          <div className="w-full max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8 pt-4">
+          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row justify-center gap-12 lg:gap-32 pt-6">
             {/* Col 1: Core Modules */}
-            <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
+            <div className="flex flex-col min-w-[200px]">
+              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
                 CORE MODULES
               </h3>
-              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
+              <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    OVERVIEW
+                  <Link href="/" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">OVERVIEW</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demo" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    LIVE DEMO
-                    <span className="ml-2 px-1.5 py-0.5 rounded bg-[#022c22]/80 text-emerald-400 text-[9px] font-bold tracking-wider border border-emerald-500/20 leading-none">MIC</span>
+                  <Link href="/demo" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300 flex items-center">
+                      LIVE DEMO
+                      <span className="ml-3 px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 text-[10px] font-bold tracking-wider border border-emerald-500/30 leading-none shadow-sm shadow-emerald-500/20">MIC</span>
+                    </span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    SOC DASHBOARD
+                  <Link href="/dashboard" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">SOC DASHBOARD</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/architecture" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    ARCHITECTURE
+                  <Link href="/architecture" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">ARCHITECTURE</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
             {/* Col 2: Documentation */}
-            <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
+            <div className="flex flex-col min-w-[200px]">
+              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
                 DOCUMENTATION
               </h3>
-              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
+              <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/docs" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    DEVELOPER API
+                  <Link href="/docs" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">DEVELOPER API</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/brief" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    JUDGE BRIEF
+                  <Link href="/brief" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">JUDGE BRIEF</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#websocket" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    WEBSOCKET WSS
+                  <Link href="/docs#websocket" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">WEBSOCKET WSS</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#forensics" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    FORENSIC FIR PDF
+                  <Link href="/docs#forensics" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">FORENSIC FIR PDF</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
             {/* Col 3: Legal */}
-            <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
+            <div className="flex flex-col min-w-[200px]">
+              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
                 COMPLIANCE &amp; LEGAL
               </h3>
-              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
+              <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/privacy" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    PRIVACY POLICY
+                  <Link href="/privacy" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRIVACY POLICY</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
-                    TERMS OF SERVICE
+                  <Link href="/terms" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">TERMS OF SERVICE</span>
                   </Link>
                 </li>
                 <li>
-                  <span className="flex items-center text-slate-500/80 uppercase">
-                    <span className="text-slate-600/80 w-4 text-xs">+</span>
-                    DPDP ACT (INDIA) 2023
+                  <span className="flex items-center px-3 py-2.5 -mx-3 text-slate-500/80 uppercase">
+                    <span className="text-slate-600/80 w-5 text-sm font-bold">+</span>
+                    <span>DPDP ACT (INDIA) 2023</span>
                   </span>
                 </li>
                 <li>
-                  <span className="flex items-center text-slate-500/80 uppercase">
-                    <span className="text-slate-600/80 w-4 text-xs">+</span>
-                    CERT-IN DIRECTIVES
+                  <span className="flex items-center px-3 py-2.5 -mx-3 text-slate-500/80 uppercase">
+                    <span className="text-slate-600/80 w-5 text-sm font-bold">+</span>
+                    <span>CERT-IN DIRECTIVES</span>
                   </span>
                 </li>
               </ul>
