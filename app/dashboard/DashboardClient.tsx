@@ -108,8 +108,16 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                 </div>
 
                 <div className="h-[240px] w-full sm:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  {chartData.length === 0 ? (
+                    <div className="grid h-full place-items-center rounded-xl border border-dashed border-slate-800 bg-slate-950/30 px-6 text-center">
+                      <div>
+                        <p className="font-mono text-sm text-slate-400">No voice sessions recorded yet</p>
+                        <p className="mt-2 text-xs text-slate-600">Start the live demo to populate real threat telemetry.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
@@ -124,8 +132,9 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                         itemStyle={{ color: '#ef4444' }}
                       />
                       <Area type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  )}
                 </div>
               </div>
 

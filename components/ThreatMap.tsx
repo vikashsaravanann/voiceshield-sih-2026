@@ -87,7 +87,10 @@ export function ThreatMap({ sessions }: { sessions: any[] }) {
         </AnimatePresence>
         {threats.length === 0 ? (
           <div className="absolute inset-0 grid place-items-center text-center text-xs text-slate-500">
-            Location telemetry is unavailable for the recorded sessions.
+            <span>
+              <strong className="block font-medium text-slate-400">No regional telemetry yet</strong>
+              <span className="mt-1 block">Locations appear after live sessions report telemetry.</span>
+            </span>
           </div>
         ) : null}
         

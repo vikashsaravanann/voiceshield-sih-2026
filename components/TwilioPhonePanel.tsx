@@ -28,10 +28,20 @@ export function TwilioPhonePanel() {
   }, []);
 
   const handleTestCall = async () => {
+    if (!status?.configured) {
+      setTestMessage("Twilio is not configured. Add TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER to the API environment first.");
+      return;
+    }
     setTesting(true);
     setTestMessage(null);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL || "http://localhost:8000";
+      const configuredUrl = process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL;
+      const apiUrl =
+        typeof window !== "undefined" && window.location.protocol === "https:"
+          ? configuredUrl?.startsWith("https://") && !configuredUrl.includes("localhost")
+            ? configuredUrl
+            : "https://voiceshield-sih-2026-production.up.railway.app"
+          : configuredUrl || "http://localhost:8000";
       const response = await fetch(`${apiUrl}/api/twilio/voice`, {
         method: "POST",
         headers: { Accept: "application/xml" },
@@ -129,11 +139,11 @@ export function TwilioPhonePanel() {
           <div className="mt-4">
             <button 
               onClick={handleTestCall}
-              disabled={testing}
+              disabled={testing || !status?.configured}
               className="w-full flex justify-center items-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50"
             >
               <PhoneCall className="w-4 h-4" />
-              {testing ? "Verifying Webhook..." : "Verify Twilio Webhook"}
+              {testing ? "Verifying Webhook..." : status?.configured ? "Verify Twilio Webhook" : "Configure Twilio First"}
             </button>
             {testMessage && (
               <p className={`mt-2 text-xs ${testMessage.startsWith("Webhook verified") ? "text-emerald-400" : "text-rose-400"}`}>
