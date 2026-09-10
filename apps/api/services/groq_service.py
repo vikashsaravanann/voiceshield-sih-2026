@@ -44,7 +44,7 @@ Respond strictly with a JSON object:
 
     try:
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="groq/compound",
             messages=[{"role": "user", "content": prompt}],
             response_format={"type": "json_object"}
         )
@@ -65,7 +65,7 @@ async def generate_phonemic_challenge() -> str:
     )
     try:
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="groq/compound",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content.strip()
@@ -90,7 +90,7 @@ Prosody Irregularity (indicates robotic pitch shifting): {markers.get('prosody_i
 Analysis:"""
     try:
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="groq/compound",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content.strip()
