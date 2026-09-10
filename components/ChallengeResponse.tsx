@@ -22,11 +22,17 @@ const PHRASES: Record<string, string[]> = {
   ],
 };
 
-const apiUrl = () =>
-  process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL ||
-  (typeof window !== "undefined" && window.location.protocol === "https:"
-    ? "https://voiceshield-sih-2026-production.up.railway.app"
-    : "http://localhost:8000");
+const apiUrl = () => {
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+  const envUrl = process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL;
+  if (isHttps) {
+    if (envUrl && envUrl.startsWith("https://") && !envUrl.includes("localhost")) {
+      return envUrl;
+    }
+    return "https://voiceshield-sih-2026-production.up.railway.app";
+  }
+  return envUrl || "http://localhost:8000";
+};
 
 export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08 }: ChallengeResponseProps) {
   const [lang, setLang] = useState<"en" | "hi" | "ta">("hi");

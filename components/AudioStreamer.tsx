@@ -89,15 +89,19 @@ export function AudioStreamer({
 
   // Connect WebSocket
   const connectWebSocket = useCallback(() => {
-    const configuredWsUrl =
-      typeof process !== "undefined"
-        ? process.env?.NEXT_PUBLIC_FASTAPI_WS_URL || process.env?.NEXT_PUBLIC_API_WS_URL
-        : undefined;
-    const wsUrl =
-      configuredWsUrl ||
-      (typeof window !== "undefined" && window.location.protocol === "https:"
-        ? "wss://voiceshield-sih-2026-production.up.railway.app/ws/audio"
-        : "ws://localhost:8000/ws/audio");
+    let wsUrl = "ws://localhost:8000/ws/audio";
+    const envWs = process.env.NEXT_PUBLIC_FASTAPI_WS_URL || process.env.NEXT_PUBLIC_API_WS_URL;
+    const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+
+    if (isHttps) {
+      if (envWs && envWs.startsWith("wss://") && !envWs.includes("localhost")) {
+        wsUrl = envWs;
+      } else {
+        wsUrl = "wss://voiceshield-sih-2026-production.up.railway.app/ws/audio";
+      }
+    } else {
+      wsUrl = envWs || "ws://localhost:8000/ws/audio";
+    }
 
     try {
       const ws = new WebSocket(wsUrl);

@@ -22,12 +22,15 @@ type Health = {
 };
 
 function apiBaseUrl() {
-  if (process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL)
-    return process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL;
-  if (typeof window !== "undefined" && window.location.protocol === "https:") {
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+  const envUrl = process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL;
+  if (isHttps) {
+    if (envUrl && envUrl.startsWith("https://") && !envUrl.includes("localhost")) {
+      return envUrl;
+    }
     return "https://voiceshield-sih-2026-production.up.railway.app";
   }
-  return "http://localhost:8000";
+  return envUrl || "http://localhost:8000";
 }
 
 interface BackendHealthProps {
