@@ -22,4 +22,9 @@ jobs:
         run: npm install
       
       - name: Build Next.js
+        env:
+          # Public client configuration is required while Next.js prerenders
+          # the login and dashboard bundles. Production values stay in Vercel.
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-publishable-key
         run: npm run build
