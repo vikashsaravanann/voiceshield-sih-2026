@@ -60,8 +60,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           {/* Brand Logo & Identification in 1 single horizontal line */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group shrink-0 whitespace-nowrap">
             <div className="relative shrink-0">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border border-emerald-500/40 flex items-center justify-center shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 transition-all duration-300 group-hover:scale-105 overflow-hidden bg-slate-950">
-                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border-2 border-emerald-500/60 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:border-emerald-400 group-hover:shadow-emerald-400/30 transition-all duration-300 group-hover:scale-105 overflow-hidden bg-slate-950 ring-1 ring-emerald-500/20 ring-offset-1 ring-offset-slate-950">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover rounded-full" />
               </div>
               <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -227,8 +227,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           {/* Brand Identity Block */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3 group">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-emerald-500/40 flex items-center justify-center shadow-md group-hover:border-emerald-400 transition-all overflow-hidden bg-slate-950 shrink-0">
-                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-emerald-500/60 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:border-emerald-400 group-hover:shadow-emerald-400/30 transition-all overflow-hidden bg-slate-950 shrink-0 ring-1 ring-emerald-500/20 ring-offset-1 ring-offset-[#02050e]">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span className="text-base sm:text-xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
