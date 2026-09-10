@@ -225,32 +225,32 @@ export default function DemoPage() {
         {/* ══════════════════════════════════════════════════════════
             MAIN OPERATOR CONSOLE HERO CARD
         ══════════════════════════════════════════════════════════ */}
-        <div className="border border-slate-800/90 rounded-3xl bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-10 shadow-2xl space-y-8 relative overflow-hidden">
+        <div className="border border-slate-800/90 rounded-2xl sm:rounded-3xl bg-slate-900/70 backdrop-blur-2xl p-4 sm:p-10 shadow-2xl space-y-6 sm:space-y-8 relative overflow-hidden">
           
           {/* Subtle top edge glowing accent */}
           <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
             
             {/* Left: Headline & Telephony Narrative */}
-            <div className="space-y-4 max-w-2xl">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold tracking-widest uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
+            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-mono font-bold tracking-widest uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
                   SIH26104 · AICTE CYBER CELL
                 </span>
-                <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold tracking-widest uppercase bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-mono font-bold tracking-widest uppercase bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
                   REAL-TIME TELEPHONY MITIGATION
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.15] uppercase">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.15] uppercase">
                 LIVE VOICE CLONE
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
                   {" "}DETECTION &amp; MITIGATION
                 </span>
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-base text-slate-300 leading-relaxed font-normal">
                 Continuous 333ms raw PCM16 audio frame inspection via dual-stream LFCC feature projection and higher-order bispectral phase analysis. Evaluates and mitigates synthetic impersonation in <strong className="text-white font-semibold">sub-269ms</strong> over live WebSockets.
               </p>
             </div>
@@ -285,31 +285,31 @@ export default function DemoPage() {
                   />
 
                   {/* Primary Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                     {!isStreaming ? (
                       <>
                         <button
                           onClick={start}
                           className="
-                            inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl
+                            inline-flex justify-center items-center gap-2 sm:gap-2.5 px-4 py-3 sm:px-6 sm:py-3.5 rounded-xl
                             bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400
                             hover:from-emerald-400 hover:to-teal-300
-                            text-slate-950 font-mono font-black text-xs tracking-widest uppercase
+                            text-slate-950 font-mono font-black text-[10px] sm:text-xs tracking-widest uppercase
                             transition-all duration-200 shadow-xl shadow-emerald-500/25
-                            active:scale-95
+                            active:scale-95 w-full sm:w-auto
                           "
                         >
-                          <Mic className="w-4 h-4" />
+                          <Mic className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                           <span>START LIVE MIC STREAM</span>
                         </button>
 
                         <label className="
-                          inline-flex items-center gap-2.5 px-5 py-3.5 rounded-xl
+                          inline-flex justify-center items-center gap-2 sm:gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl
                           border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-slate-600
-                          text-slate-300 font-mono font-bold text-xs tracking-widest uppercase
-                          transition-all duration-200 cursor-pointer active:scale-95 shadow-lg
+                          text-slate-300 font-mono font-bold text-[10px] sm:text-xs tracking-widest uppercase
+                          transition-all duration-200 cursor-pointer active:scale-95 shadow-lg w-full sm:w-auto
                         ">
-                          <Upload className="w-4 h-4 text-cyan-400" />
+                          <Upload className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 shrink-0" />
                           <span>UPLOAD AUDIO FILE</span>
                           <input
                             type="file"
@@ -327,41 +327,41 @@ export default function DemoPage() {
                         <button
                           onClick={stop}
                           className="
-                            inline-flex items-center gap-2 px-5 py-3 rounded-xl
+                            inline-flex justify-center items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl
                             bg-rose-600 hover:bg-rose-500 border border-rose-500/40
-                            text-white font-mono font-black text-xs tracking-widest uppercase
-                            transition-all duration-200 active:scale-95 shadow-lg shadow-rose-500/25
+                            text-white font-mono font-black text-[10px] sm:text-xs tracking-widest uppercase
+                            transition-all duration-200 active:scale-95 shadow-lg shadow-rose-500/25 w-full sm:w-auto
                           "
                         >
-                          <MicOff className="w-4 h-4" />
+                          <MicOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                           <span>STOP STREAM</span>
                         </button>
 
                         <button
                           onClick={toggleCloneSimulation}
                           className={`
-                            inline-flex items-center gap-2 px-5 py-3 rounded-xl border font-mono
-                            text-xs font-black tracking-widest uppercase transition-all duration-200 active:scale-95
+                            inline-flex justify-center items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border font-mono
+                            text-[10px] sm:text-xs font-black tracking-widest uppercase transition-all duration-200 active:scale-95 w-full sm:w-auto
                             ${isSimulatingClone
                               ? "bg-rose-950 text-rose-300 border-rose-500 shadow-lg shadow-rose-500/30 animate-pulse"
                               : "bg-slate-950 text-slate-300 border-slate-700 hover:border-rose-500/50 hover:text-rose-300"
                             }
                           `}
                         >
-                          <Volume2 className="w-4 h-4" />
-                          <span>{isSimulatingClone ? "CLONED AUDIO INJECTED" : "INJECT CLONED AUDIO"}</span>
+                          <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                          <span className="truncate">{isSimulatingClone ? "CLONED AUDIO INJECTED" : "INJECT CLONED AUDIO"}</span>
                         </button>
 
                         <button
                           onClick={simulateDisconnect}
                           className="
-                            inline-flex items-center gap-2 px-4 py-3 rounded-xl
+                            inline-flex justify-center items-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl
                             border border-amber-500/30 bg-amber-950/20 hover:bg-amber-950/40
-                            text-amber-300 text-xs font-mono font-bold tracking-wider uppercase
-                            transition-all duration-200 active:scale-95
+                            text-amber-300 text-[10px] sm:text-xs font-mono font-bold tracking-wider uppercase
+                            transition-all duration-200 active:scale-95 w-full sm:w-auto
                           "
                         >
-                          <WifiOff className="w-4 h-4" />
+                          <WifiOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                           <span>DROP TEST</span>
                         </button>
                       </>
@@ -369,8 +369,8 @@ export default function DemoPage() {
                   </div>
 
                   {/* Volatile Ring-Buffer Note */}
-                  <div className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="text-[9px] sm:text-[10px] font-mono text-slate-400 flex items-center gap-1 sm:gap-1.5 text-center sm:text-left mt-2 sm:mt-0">
+                    <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 shrink-0" />
                     <span>VOLATILE RAM BUFFER: 2,000MS MAX CAPACITY · ZERO SSD WRITE</span>
                   </div>
 

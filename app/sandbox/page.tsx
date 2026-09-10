@@ -201,34 +201,34 @@ export default function ForensicSandboxPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 relative z-10">
         {/* Main Hero Card */}
-        <div className="rounded-3xl border border-slate-800/90 bg-slate-900/75 p-6 sm:p-8 backdrop-blur-2xl shadow-2xl space-y-5">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="rounded-2xl sm:rounded-3xl border border-slate-800/90 bg-slate-900/75 p-4 sm:p-8 backdrop-blur-2xl shadow-2xl space-y-4 sm:space-y-5">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
             <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-1 rounded-md text-[9px] font-mono font-bold tracking-widest bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 uppercase">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[9px] font-mono font-bold tracking-widest bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 uppercase">
                   POST-INCIDENT FORENSICS
                 </span>
-                <span className="px-2.5 py-1 rounded-md text-[9px] font-mono font-bold tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 uppercase">
-                  ZERO DISK FOOTPRINT (DPDP 2023)
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[9px] font-mono font-bold tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 uppercase">
+                  ZERO DISK FOOTPRINT (DPDP)
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">
+              <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">
                 FORENSIC SPLICING &amp;{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
                   VOICEPRINT LAB
                 </span>
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              <p className="text-[11px] sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
                 Inspect recorded WhatsApp voice notes, voicemails, and wire-fraud calls. Identify exact
                 millisecond splicing transitions and cross-reference 1:1 speaker voiceprints.
               </p>
             </div>
 
             {/* Mode Selector Tabs */}
-            <div className="flex items-center p-1 rounded-xl bg-slate-950 border border-slate-800 shrink-0">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center p-1 rounded-xl bg-slate-950 border border-slate-800 shrink-0 gap-1">
               <button
                 onClick={() => setActiveTab("splicing")}
-                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase transition-all flex items-center gap-2 ${
+                className={`flex-1 justify-center px-3 py-2 rounded-lg text-[10px] sm:text-xs font-mono font-bold uppercase transition-all flex items-center gap-2 ${
                   activeTab === "splicing"
                     ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm"
                     : "text-slate-400 hover:text-white"
@@ -239,7 +239,7 @@ export default function ForensicSandboxPage() {
               </button>
               <button
                 onClick={() => setActiveTab("dual_axis")}
-                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase transition-all flex items-center gap-2 ${
+                className={`flex-1 justify-center px-3 py-2 rounded-lg text-[10px] sm:text-xs font-mono font-bold uppercase transition-all flex items-center gap-2 ${
                   activeTab === "dual_axis"
                     ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
                     : "text-slate-400 hover:text-white"

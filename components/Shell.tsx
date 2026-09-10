@@ -56,25 +56,25 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen w-full flex flex-col bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans overflow-x-hidden">
       {/* ── Primary Enterprise Cyber Header (Single Clean Line) ── */}
       <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#030712]/90 border-b border-slate-800/80 shadow-2xl transition-all duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
           
           {/* Brand Logo & Identification in 1 single horizontal line */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0 whitespace-nowrap">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group shrink-0 whitespace-nowrap">
             <div className="relative shrink-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-cyan-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 transition-all duration-300 group-hover:scale-105">
-                <Shield className="w-4 h-4 stroke-[2.2]" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-cyan-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 transition-all duration-300 group-hover:scale-105">
+                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
               </div>
-              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+              <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500" />
               </span>
             </div>
 
-            <div className="flex items-center gap-2 whitespace-nowrap">
-              <span className="text-base font-black tracking-[0.12em] text-white uppercase group-hover:text-emerald-300 transition-colors whitespace-nowrap">
+            <div className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+              <span className="text-xs sm:text-base font-black tracking-[0.12em] text-white uppercase group-hover:text-emerald-300 transition-colors whitespace-nowrap">
                 VOICESHIELD
               </span>
-              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 uppercase whitespace-nowrap">
+              <span className="px-1 py-0.5 sm:px-1.5 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono font-bold tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 uppercase whitespace-nowrap hidden min-[360px]:inline-block">
                 SIH26104
               </span>
             </div>
@@ -105,7 +105,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Right Action: Live Ping & Sign In in 1 Line */}
-          <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap">
             {/* Live Telemetry Ping */}
             <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-300 whitespace-nowrap shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
@@ -116,23 +116,23 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <Link
               href="/login"
               className="
-                inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl
+                inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl
                 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400
-                text-slate-950 font-mono font-bold text-xs tracking-wider uppercase
+                text-slate-950 font-mono font-bold text-[10px] sm:text-xs tracking-wider uppercase
                 transition-all duration-200 shadow-md shadow-emerald-500/20 active:scale-95 whitespace-nowrap shrink-0
               "
             >
-              <Lock className="w-3.5 h-3.5 stroke-[2.5] shrink-0" />
+              <Lock className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5] shrink-0" />
               <span className="whitespace-nowrap">SIGN IN</span>
             </Link>
 
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-colors shrink-0"
+              className="lg:hidden p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-colors shrink-0"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 shrink-0" /> : <Menu className="w-5 h-5 shrink-0" />}
+              {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />}
             </button>
           </div>
         </div>
