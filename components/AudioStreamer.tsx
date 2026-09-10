@@ -74,6 +74,7 @@ export function AudioStreamer({
   const sessionEstablishedRef = useRef(false);
   const reconnectAttemptRef = useRef(0);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fileEndedRef = useRef(false);
 
   // Running stats
   const statsRef = useRef<SessionStats>({
@@ -158,7 +159,7 @@ export function AudioStreamer({
             setReconnectAttempt(0);
             setReconnectDelayMs(0);
 
-            if (data.resumed && wsRef.current === ws) {
+            if (wsRef.current === ws) {
               const replayChunks = ringBufferRef.current.getReplayChunks(
                 lastAckedChunkRef.current
               );
@@ -167,6 +168,9 @@ export function AudioStreamer({
                 ws.send(chunk.pcm.buffer as ArrayBuffer);
               }
               setBufferedCount(0);
+              if (fileEndedRef.current) {
+                stop();
+              }
             }
             return;
           }
@@ -252,6 +256,7 @@ export function AudioStreamer({
       lastAckedChunkRef.current = -1;
       sessionEstablishedRef.current = false;
       reconnectAttemptRef.current = 0;
+      fileEndedRef.current = false;
       ringBufferRef.current.clear();
       statsRef.current = {
         totalChunks: 0,
@@ -356,6 +361,7 @@ export function AudioStreamer({
       lastAckedChunkRef.current = -1;
       sessionEstablishedRef.current = false;
       reconnectAttemptRef.current = 0;
+      fileEndedRef.current = false;
       ringBufferRef.current.clear();
       statsRef.current = {
         totalChunks: 0,
@@ -427,7 +433,10 @@ export function AudioStreamer({
       source.start(0);
 
       source.onended = () => {
-         stop();
+        fileEndedRef.current = true;
+        if (sessionEstablishedRef.current && wsRef.current?.readyState === WebSocket.OPEN) {
+          stop();
+        }
       };
 
       streamingRef.current = true;
@@ -445,6 +454,7 @@ export function AudioStreamer({
   const stop = () => {
     streamingRef.current = false;
     setIsStreaming(false);
+    fileEndedRef.current = false;
     reconnectAttemptRef.current = 0;
     sessionEstablishedRef.current = false;
     if (reconnectTimeoutRef.current) {
