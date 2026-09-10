@@ -25,6 +25,7 @@ import {
   Lock,
   Zap,
   Radio,
+  Upload,
 } from "lucide-react";
 
 // ─── Step pipeline ──────────────────────────────────────────────────────────
@@ -143,6 +144,7 @@ export default function DemoPage() {
                 reconnectDelayMs,
                 bufferedCount,
                 start,
+                startFromFile,
                 stop,
                 simulateDisconnect,
                 toggleCloneSimulation,
@@ -160,20 +162,41 @@ export default function DemoPage() {
                   {/* Action Buttons */}
                   <div className="flex flex-wrap items-center gap-2.5 justify-end">
                     {!isStreaming ? (
-                      <button
-                        onClick={start}
-                        className="
-                          inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-                          bg-gradient-to-r from-emerald-500 to-teal-500
-                          hover:from-emerald-400 hover:to-teal-400
-                          text-slate-950 font-bold text-xs tracking-widest uppercase
-                          transition-all duration-200 shadow-lg shadow-emerald-500/25
-                          active:scale-95
-                        "
-                      >
-                        <Mic className="w-4 h-4" />
-                        Start Live Audio
-                      </button>
+                      <>
+                        <button
+                          onClick={start}
+                          className="
+                            inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
+                            bg-gradient-to-r from-emerald-500 to-teal-500
+                            hover:from-emerald-400 hover:to-teal-400
+                            text-slate-950 font-bold text-xs tracking-widest uppercase
+                            transition-all duration-200 shadow-lg shadow-emerald-500/25
+                            active:scale-95
+                          "
+                        >
+                          <Mic className="w-4 h-4" />
+                          Start Live Audio
+                        </button>
+
+                        <label className="
+                          inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                          border border-slate-700 bg-slate-900/90 hover:bg-slate-800
+                          text-slate-300 font-bold text-xs tracking-widest uppercase
+                          transition-all duration-200 cursor-pointer active:scale-95 shadow-md
+                        ">
+                          <Upload className="w-4 h-4 text-cyan-400" />
+                          <span>Upload Audio</span>
+                          <input
+                            type="file"
+                            accept="audio/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) startFromFile(f);
+                            }}
+                          />
+                        </label>
+                      </>
                     ) : (
                       <>
                         <button

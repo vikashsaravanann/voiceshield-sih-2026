@@ -49,6 +49,13 @@ class Settings(BaseSettings):
     ENABLE_AUDIT_LOGGING: bool = True
     STORE_RAW_AUDIO: bool = False
 
+    # Twilio / Alerts
+    TWILIO_ACCOUNT_SID: str = ""
+    TWILIO_AUTH_TOKEN: str = ""
+    TWILIO_WHATSAPP_FROM: str = "whatsapp:+14155238886"
+    TWILIO_SMS_FROM: str = ""
+    ALERT_PHONE_NUMBER: str = ""
+
     class Config:
         env_file = ".env"
         extra = "ignore"

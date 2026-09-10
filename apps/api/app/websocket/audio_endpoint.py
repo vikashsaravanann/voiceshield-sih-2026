@@ -17,6 +17,7 @@ from app.ml.feature_extractor import extract_features
 from app.services.decision_engine import classify_risk
 from app.services.audit_service import log_connection_event
 from app.services.session_service import create_session, finalize_session, batch_insert_events
+from app.services import alert_service
 from app.schemas.websocket import DetectionResponse
 
 logger = structlog.get_logger()
@@ -54,6 +55,7 @@ async def audio_websocket(websocket: WebSocket):
     chunk_index: int = 0
     pending_events: List[Dict[str, Any]] = []
     risk_values: List[float] = []
+    alert_sent: bool = False
 
     try:
         # ── Step 1: Handshake and Session Registration ────────────────
@@ -134,6 +136,17 @@ async def audio_websocket(websocket: WebSocket):
 
             risk_level, suggested_action = classify_risk(spoof_prob)
             latency_ms = round((time.perf_counter() - t_start) * 1000, 2)
+            
+            if risk_level == 'high' and not alert_sent:
+                alert_sent = True
+                asyncio.create_task(
+                    alert_service.send_threat_alert(
+                        session_id=session_id or "anon",
+                        risk_score=round(spoof_prob * 100, 2),
+                        transcript="<Audio Chunk>",
+                        origin_location="Unknown/PSTN"
+                    )
+                )
 
             response = DetectionResponse(
                 type="detection.result",
