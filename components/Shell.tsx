@@ -257,38 +257,38 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="w-full h-[1px] bg-gradient-to-r from-slate-800/80 via-slate-800/40 to-transparent" />
+          <div className="w-full max-w-5xl mx-auto h-[1px] bg-slate-800/60" />
 
           {/* Middle Section: Navigation Links */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16">
+          <div className="w-full max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8 pt-4">
             {/* Col 1: Core Modules */}
             <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
                 CORE MODULES
               </h3>
-              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400">
+              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
                 <li>
                   <Link href="/" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     OVERVIEW
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demo" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">
-                    <span className="text-slate-600 mr-1 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                  <Link href="/demo" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     LIVE DEMO
-                    <span className="px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 text-[9px] font-bold tracking-wider border border-emerald-500/20">MIC</span>
+                    <span className="ml-2 px-1.5 py-0.5 rounded bg-[#022c22]/80 text-emerald-400 text-[9px] font-bold tracking-wider border border-emerald-500/20 leading-none">MIC</span>
                   </Link>
                 </li>
                 <li>
                   <Link href="/dashboard" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     SOC DASHBOARD
                   </Link>
                 </li>
                 <li>
                   <Link href="/architecture" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     ARCHITECTURE
                   </Link>
                 </li>
@@ -297,31 +297,31 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
             {/* Col 2: Documentation */}
             <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
                 DOCUMENTATION
               </h3>
-              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400">
+              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
                 <li>
                   <Link href="/docs" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     DEVELOPER API
                   </Link>
                 </li>
                 <li>
                   <Link href="/brief" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     JUDGE BRIEF
                   </Link>
                 </li>
                 <li>
                   <Link href="/docs#websocket" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     WEBSOCKET WSS
                   </Link>
                 </li>
                 <li>
                   <Link href="/docs#forensics" className="hover:text-emerald-400 transition-colors flex items-center group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     FORENSIC FIR PDF
                   </Link>
                 </li>
@@ -330,31 +330,31 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
             {/* Col 3: Legal */}
             <div className="space-y-6">
-              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-500 pl-3 flex items-center h-4">
+              <h3 className="text-xs font-mono font-bold text-white uppercase tracking-widest border-l-2 border-emerald-400 pl-3 leading-none py-0.5">
                 COMPLIANCE &amp; LEGAL
               </h3>
-              <ul className="space-y-3.5 font-mono text-[11px] text-slate-400 font-medium">
+              <ul className="space-y-4 font-mono text-[11px] text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/privacy" className="hover:text-emerald-400 transition-colors flex items-center text-slate-300 group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                  <Link href="/privacy" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     PRIVACY POLICY
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-emerald-400 transition-colors flex items-center text-slate-300 group">
-                    <span className="text-slate-600 mr-3 group-hover:text-emerald-400 transition-colors text-xs">+</span>
+                  <Link href="/terms" className="hover:text-emerald-400 transition-colors flex items-center group">
+                    <span className="text-slate-600/80 w-4 group-hover:text-emerald-400 transition-colors text-xs">+</span>
                     TERMS OF SERVICE
                   </Link>
                 </li>
                 <li>
-                  <span className="flex items-center text-slate-500 uppercase">
-                    <span className="text-slate-600 mr-3 text-xs">+</span>
+                  <span className="flex items-center text-slate-500/80 uppercase">
+                    <span className="text-slate-600/80 w-4 text-xs">+</span>
                     DPDP ACT (INDIA) 2023
                   </span>
                 </li>
                 <li>
-                  <span className="flex items-center text-slate-500 uppercase">
-                    <span className="text-slate-600 mr-3 text-xs">+</span>
+                  <span className="flex items-center text-slate-500/80 uppercase">
+                    <span className="text-slate-600/80 w-4 text-xs">+</span>
                     CERT-IN DIRECTIVES
                   </span>
                 </li>
