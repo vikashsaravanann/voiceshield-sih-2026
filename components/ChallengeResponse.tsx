@@ -25,7 +25,7 @@ const PHRASES: Record<string, string[]> = {
 const apiUrl = () =>
   process.env.NEXT_PUBLIC_FASTAPI_HTTP_URL ||
   (typeof window !== "undefined" && window.location.protocol === "https:"
-    ? "https://voiceshield-api.onrender.com"
+    ? "https://voiceshield-sih-2026-production.up.railway.app"
     : "http://localhost:8000");
 
 export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08 }: ChallengeResponseProps) {

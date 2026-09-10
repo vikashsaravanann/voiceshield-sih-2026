@@ -96,7 +96,7 @@ export function AudioStreamer({
     const wsUrl =
       configuredWsUrl ||
       (typeof window !== "undefined" && window.location.protocol === "https:"
-        ? "wss://voiceshield-api.onrender.com/ws/audio"
+        ? "wss://voiceshield-sih-2026-production.up.railway.app/ws/audio"
         : "ws://localhost:8000/ws/audio");
 
     try {
