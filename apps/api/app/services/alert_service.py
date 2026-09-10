@@ -46,30 +46,18 @@ async def send_threat_alert(session_id: str, risk_score: float, transcript: str,
 
     def _send():
         try:
-            # Try WhatsApp first
+            # Twilio trial accounts require pre-approved templates or ContentSids
             logger.info("alert_service.sending_whatsapp", to=phone_to_alert)
-            message = client.messages.create(
-                body=message_body,
+            msg = client.messages.create(
                 from_=settings.TWILIO_WHATSAPP_FROM,
-                to=f"whatsapp:{phone_to_alert}"
+                to=f"whatsapp:{phone_to_alert}",
+                content_sid="HXb131895de71a093156d1062e878de57c",
+                # content_variables=json.dumps({"1": session_id}) # If template takes vars
             )
-            logger.info("alert_service.whatsapp_sent", sid=message.sid)
+            logger.info("alert_service.whatsapp_sent", sid=msg.sid)
             return True
-        except TwilioRestException as e:
+        except Exception as e:
             logger.warning("alert_service.whatsapp_failed", error=str(e))
-            # Fallback to SMS
-            if settings.TWILIO_SMS_FROM:
-                try:
-                    logger.info("alert_service.sending_sms_fallback", to=phone_to_alert)
-                    message = client.messages.create(
-                        body=message_body,
-                        from_=settings.TWILIO_SMS_FROM,
-                        to=phone_to_alert
-                    )
-                    logger.info("alert_service.sms_sent", sid=message.sid)
-                    return True
-                except TwilioRestException as ex:
-                    logger.error("alert_service.sms_failed", error=str(ex))
             return False
 
     return await asyncio.to_thread(_send)
