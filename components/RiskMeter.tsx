@@ -37,7 +37,7 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
   const StatusIcon = isHigh ? ShieldAlert : isMed ? AlertTriangle : ShieldCheck;
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800/90 rounded-2xl p-6 shadow-2xl backdrop-blur-xl space-y-6">
+    <div className="bg-slate-900/90 border border-slate-800/90 rounded-2xl p-4 sm:p-6 shadow-2xl backdrop-blur-xl space-y-6">
       
       {/* Header Row */}
       <div className="flex items-center justify-between">
@@ -49,7 +49,7 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
             </span>
           </div>
           <div className="flex items-center gap-3 pt-1">
-            <span className="text-4xl font-mono font-black tracking-tight text-white">
+            <span className="text-3xl sm:text-4xl font-mono font-black tracking-tight text-white">
               {percentage}%
             </span>
             <span
@@ -79,7 +79,7 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
 
       {/* Multi-Zone Gauge Progress Bar with Explicit Thresholds */}
       <div className="space-y-2">
-        <div className="relative w-full h-5 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 p-0.5">
+        <div className="relative w-full h-4 sm:h-5 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 p-0.5">
           {/* Using ease-out for smoother jumps when probability spikes instantly */}
           <div
             className={`h-full rounded-lg transition-all duration-300 ease-out ${barColor}`}

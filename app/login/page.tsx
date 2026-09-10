@@ -129,7 +129,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#030712] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950 relative">
+    <div className="min-h-screen sm:h-screen w-screen overflow-y-auto sm:overflow-hidden bg-[#030712] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950 relative">
       
       {/* ── Background Cyber Ambient Gradients ── */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-emerald-950/25 via-slate-950/60 to-[#030712] -z-10" />

@@ -189,7 +189,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <Link
                   href="/privacy"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="hover:text-emerald-400 transition-colors"
+                  className="block py-2 md:py-0 hover:text-emerald-400 transition-colors"
                 >
                   PRIVACY POLICY
                 </Link>
@@ -197,7 +197,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <Link
                   href="/terms"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="hover:text-emerald-400 transition-colors"
+                  className="block py-2 md:py-0 hover:text-emerald-400 transition-colors"
                 >
                   TERMS OF SERVICE
                 </Link>
@@ -267,23 +267,23 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </div>
               <ul className="space-y-2.5 font-mono text-xs text-slate-400">
                 <li>
-                  <Link href="/" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     OVERVIEW
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demo" className="hover:text-emerald-400 uppercase transition-colors flex items-center gap-1.5">
+                  <Link href="/demo" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors flex items-center gap-1.5">
                     <span>LIVE DEMO</span>
                     <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">MIC</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/dashboard" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     SOC DASHBOARD
                   </Link>
                 </li>
                 <li>
-                  <Link href="/architecture" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/architecture" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     ARCHITECTURE
                   </Link>
                 </li>
@@ -297,22 +297,22 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </div>
               <ul className="space-y-2.5 font-mono text-xs text-slate-400">
                 <li>
-                  <Link href="/docs" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     DEVELOPER API
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/about" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     JUDGE BRIEF
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#websocket" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs#websocket" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     WEBSOCKET WSS
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#forensics" className="hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs#forensics" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
                     FORENSIC FIR PDF
                   </Link>
                 </li>
@@ -326,12 +326,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </div>
               <ul className="space-y-2.5 font-mono text-xs text-slate-400">
                 <li>
-                  <Link href="/privacy" className="hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                  <Link href="/privacy" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
                     PRIVACY POLICY
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                  <Link href="/terms" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
                     TERMS OF SERVICE
                   </Link>
                 </li>
