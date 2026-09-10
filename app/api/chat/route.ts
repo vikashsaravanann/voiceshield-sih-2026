@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions";
-const DEFAULT_MODEL = "nvidia/nemotron-4-340b-instruct";
+const DEFAULT_MODEL = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning";
 
 const REPOSITORY_CONTEXT = `
 You are the VoiceShield Multi-Agent Copilot, the official enterprise assistant for the VoiceShield SIH26104 project.
@@ -20,7 +20,7 @@ STACK AND DEPLOYMENT:
 - Authentication and database: Supabase Auth and PostgreSQL with Row Level Security.
 - Inference API: FastAPI, Python, PyTorch, NumPy, librosa, TorchScript AASIST model.
 - Streaming: Web Audio API sends 16 kHz mono PCM16 over WebSocket in 333 ms windows.
-- AI Engine: NVIDIA NIM (Nemotron-4-340B for XAI, Llama-3.1-70B for active verification challenges and this copilot).
+- AI Engine: NVIDIA NIM (Nemotron Nano 30B for reasoning and this copilot).
 - Integrations: Twilio (SIP / WhatsApp Alerts), Bhashini (Indic ASR), I4C (Mock Portal).
 - Production web: https://voiceshield-live.vercel.app
 - Production API: https://voiceshield-sih-2026-production.up.railway.app
@@ -55,8 +55,8 @@ type ChatMessage = {
 };
 
 export async function POST(request: Request) {
-  // Use user's NVIDIA Nemotron API key provided earlier
-  const apiKey = process.env.NVIDIA_API_KEY_NEMOTRON || "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";
+  // Use user's new NVIDIA NIM API key (NVIDIABuild-Autogen-45)
+  const apiKey = process.env.NVIDIA_API_KEY || "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";
   
   if (!apiKey) {
     return NextResponse.json(
@@ -86,8 +86,9 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       model: DEFAULT_MODEL,
-      temperature: 0.3,
-      max_tokens: 800,
+      temperature: 0.6,
+      top_p: 0.95,
+      max_tokens: 1024,
       messages: [
         { role: "system", content: REPOSITORY_CONTEXT },
         ...messages.map(({ role, content }) => ({ role, content: content.trim() })),
@@ -98,15 +99,6 @@ export async function POST(request: Request) {
   if (!response.ok) {
     const detail = await response.text();
     console.error("NVIDIA chatbot request failed:", response.status, detail.slice(0, 500));
-    
-    // Check if it's an account authorization or EOL error
-    if (response.status === 404 || response.status === 410) {
-       return NextResponse.json(
-        { error: "NVIDIA API Error: The selected model is EOL or your Nvidia account needs to accept the EULA on the NGC dashboard for Nemotron/Llama." },
-        { status: 502 }
-      );
-    }
-
     return NextResponse.json(
       { error: "The Copilot could not complete that response. Please try again." },
       { status: 502 }

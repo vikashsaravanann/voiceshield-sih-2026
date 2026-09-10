@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Shield,
   Activity,
   Radio,
   LayoutDashboard,
@@ -222,128 +221,128 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
       {/* ── High-Tech Cyber Enterprise Footer ── */}
-      <footer className="w-full border-t border-slate-800/80 bg-[#02050e] pt-16 pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs relative overflow-hidden">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <footer className="w-full border-t border-slate-800/80 bg-[#02050e] pt-10 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs relative overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
-          {/* Top Grid: Brand & Link Columns with Generous Gaps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12">
-            
-            {/* Col 1 & 2: Platform Identity */}
-            <div className="lg:col-span-2 space-y-5">
-              <Link href="/" className="inline-flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl border border-emerald-500/40 flex items-center justify-center shadow-md group-hover:border-emerald-400 transition-all overflow-hidden bg-slate-950">
-                  <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
-                    VOICESHIELD
-                  </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-emerald-950 text-emerald-400 border border-emerald-500/40 uppercase">
-                    SIH26104
-                  </span>
-                </div>
-              </Link>
-
-              <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-                Real-time telephony middleware mitigating AI synthetic voice clones and conversational deepfake fraud within 269ms.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[10px] text-emerald-400 uppercase tracking-wider">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  SUB-300MS RTT
+          {/* Brand Identity Block */}
+          <div className="space-y-4">
+            <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3 group">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-emerald-500/40 flex items-center justify-center shadow-md group-hover:border-emerald-400 transition-all overflow-hidden bg-slate-950 shrink-0">
+                <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="text-base sm:text-xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
+                  VOICESHIELD
                 </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
-                  DPDP ACT 2023
-                </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-300">
-                  G.711 / AMR
+                <span className="px-1.5 py-0.5 sm:px-2 rounded text-[8px] sm:text-[10px] font-mono font-bold tracking-widest bg-emerald-950 text-emerald-400 border border-emerald-500/40 uppercase">
+                  SIH26104
                 </span>
               </div>
-            </div>
+            </Link>
 
-            {/* Col 3: Core Modules */}
-            <div className="space-y-4">
-              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+            <p className="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+              Real-time telephony middleware mitigating AI synthetic voice clones and conversational deepfake fraud within 269ms.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1 font-mono text-[9px] sm:text-[10px] text-emerald-400 uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-emerald-950/60 border border-emerald-500/30">
+                <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                SUB-300MS RTT
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
+                DPDP ACT 2023
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-300">
+                G.711 / AMR
+              </span>
+            </div>
+          </div>
+
+          {/* Link Columns: 2-col on mobile, 3-col on md+ */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-10">
+
+            {/* Col 1: Core Modules */}
+            <div className="space-y-3">
+              <div className="text-[10px] sm:text-xs font-mono font-bold text-white uppercase tracking-wider">
                 CORE MODULES
               </div>
-              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+              <ul className="space-y-1.5 sm:space-y-2.5 font-mono text-[10px] sm:text-xs text-slate-400">
                 <li>
-                  <Link href="/" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     OVERVIEW
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demo" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors flex items-center gap-1.5">
+                  <Link href="/demo" className="py-1 hover:text-emerald-400 uppercase transition-colors flex items-center gap-1.5">
                     <span>LIVE DEMO</span>
-                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">MIC</span>
+                    <span className="px-1 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[8px] font-bold leading-none">MIC</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/dashboard" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     SOC DASHBOARD
                   </Link>
                 </li>
                 <li>
-                  <Link href="/architecture" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/architecture" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     ARCHITECTURE
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Col 4: Intelligence & Docs */}
-            <div className="space-y-4">
-              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+            {/* Col 2: Documentation */}
+            <div className="space-y-3">
+              <div className="text-[10px] sm:text-xs font-mono font-bold text-white uppercase tracking-wider">
                 DOCUMENTATION
               </div>
-              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+              <ul className="space-y-1.5 sm:space-y-2.5 font-mono text-[10px] sm:text-xs text-slate-400">
                 <li>
-                  <Link href="/docs" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     DEVELOPER API
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/about" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     JUDGE BRIEF
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#websocket" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs#websocket" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     WEBSOCKET WSS
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#forensics" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors">
+                  <Link href="/docs#forensics" className="block py-1 hover:text-emerald-400 uppercase transition-colors">
                     FORENSIC FIR PDF
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Col 5: Legal & Statutory */}
-            <div className="space-y-4">
-              <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+            {/* Col 3: Legal — spans full width on very small, normal on sm+ */}
+            <div className="space-y-3 col-span-2 sm:col-span-1">
+              <div className="text-[10px] sm:text-xs font-mono font-bold text-white uppercase tracking-wider">
                 COMPLIANCE &amp; LEGAL
               </div>
-              <ul className="space-y-2.5 font-mono text-xs text-slate-400">
+              <ul className="grid grid-cols-2 sm:grid-cols-1 gap-1.5 sm:gap-2.5 font-mono text-[10px] sm:text-xs text-slate-400">
                 <li>
-                  <Link href="/privacy" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                  <Link href="/privacy" className="block py-1 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
                     PRIVACY POLICY
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="block py-2 md:py-0 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
+                  <Link href="/terms" className="block py-1 hover:text-emerald-400 uppercase transition-colors font-semibold text-slate-300">
                     TERMS OF SERVICE
                   </Link>
                 </li>
                 <li>
-                  <span className="text-[11px] text-slate-500 uppercase block">
+                  <span className="text-[10px] sm:text-[11px] text-slate-500 uppercase block py-1">
                     DPDP ACT (INDIA) 2023
                   </span>
                 </li>
                 <li>
-                  <span className="text-[11px] text-slate-500 uppercase block">
+                  <span className="text-[10px] sm:text-[11px] text-slate-500 uppercase block py-1">
                     CERT-IN DIRECTIVES
                   </span>
                 </li>
@@ -353,17 +352,17 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Bottom Bar: Copyright & AICTE Recognition */}
-          <div className="pt-8 border-t border-slate-800/80 flex flex-col xl:flex-row items-center justify-between gap-4 sm:gap-6 text-center xl:text-left font-mono text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-wider w-full">
-            <div className="flex flex-wrap items-center justify-center xl:justify-start gap-1.5 sm:gap-2">
-              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+          <div className="pt-6 sm:pt-8 border-t border-slate-800/80 flex flex-col items-center gap-3 sm:gap-4 text-center font-mono text-[9px] sm:text-[11px] text-slate-500 uppercase tracking-wider">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
               <span className="text-slate-300 font-bold">VOICESHIELD</span>
-              <span className="hidden sm:inline">·</span>
-              <span className="w-full sm:w-auto mt-1 sm:mt-0">SMART INDIA HACKATHON 2026</span>
+              <span>·</span>
+              <span>SMART INDIA HACKATHON 2026</span>
             </div>
-            <div className="px-2">
-              AICTE CYBER SECURITY CELL · <span className="whitespace-nowrap">PROBLEM STATEMENT SIH26104</span>
+            <div>
+              AICTE CYBER SECURITY CELL · PROBLEM STATEMENT SIH26104
             </div>
-            <div className="text-emerald-400/90 font-semibold px-2">
+            <div className="text-emerald-400/90 font-semibold">
               ZERO RAW AUDIO DISK STORAGE · EPHEMERAL RAM ONLY
             </div>
           </div>

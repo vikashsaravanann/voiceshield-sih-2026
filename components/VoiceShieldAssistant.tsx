@@ -1,14 +1,14 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Bot, Loader2, MessageSquareText, Send, X, Network, Scale, Activity } from "lucide-react";
+import { Loader2, Send, X, Network, Scale, Activity } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const welcome: Message = {
   role: "assistant",
   content:
-    "System initialized. I am the VoiceShield Multi-Agent Copilot, powered by NVIDIA Llama-3.1.\n\nMy sub-agents (Forensics, Legal, Network) are online. How can we assist you with SIH26104?",
+    "System initialized. I am the VoiceShield Multi-Agent Copilot, powered by NVIDIA Nemotron Nano.\n\nMy sub-agents (Forensics, Legal, SecOps) are online. How can we assist you with SIH26104?",
 };
 
 export function VoiceShieldAssistant() {
@@ -48,14 +48,17 @@ export function VoiceShieldAssistant() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-5 right-5 z-50">
       {open && (
-        <section className="mb-4 flex h-[min(650px,calc(100vh-120px))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0A0F1C]/95 backdrop-blur-xl shadow-2xl shadow-emerald-900/50">
-          <header className="flex items-center justify-between border-b border-emerald-500/20 bg-emerald-950/40 px-5 py-4">
+        <section className="relative mb-4 flex h-[min(650px,calc(100vh-120px))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[2rem] border border-emerald-500/30 bg-[#071019]/95 shadow-2xl shadow-emerald-950/60 backdrop-blur-xl">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full border border-emerald-400/10" />
+          <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full border border-cyan-400/10" />
+          <header className="relative flex items-center justify-between border-b border-emerald-500/20 bg-emerald-950/35 px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 border border-emerald-500/40 shadow-lg shadow-emerald-500/20 overflow-hidden">
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-emerald-400/70 bg-[#06111a] p-1 shadow-[0_0_22px_rgba(16,185,129,0.25)]">
+                <span className="absolute inset-1 rounded-full border border-cyan-300/30" />
                 <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover" />
-                <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-[#0A0F1C] bg-emerald-400 animate-pulse" />
+                <div className="absolute -right-0.5 top-0.5 h-3 w-3 rounded-full border-2 border-[#071019] bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
               </div>
               <div>
                 <h2 className="text-sm font-black tracking-wide text-white">VOICESHIELD COPILOT</h2>
@@ -118,22 +121,25 @@ export function VoiceShieldAssistant() {
               </button>
             </div>
             <div className="mt-3 flex items-center justify-between px-1">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by Llama-3 API</p>
+              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by NVIDIA Nemotron</p>
               <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Secure Comm Link</p>
             </div>
           </form>
         </section>
       )}
       {!open && (
-        <button 
+        <button
           type="button" 
           onClick={() => setOpen(true)} 
-          className="group relative flex items-center justify-center h-14 w-14 rounded-full border-2 border-emerald-500/50 bg-slate-950 shadow-xl shadow-emerald-600/30 transition-all hover:scale-105 hover:border-emerald-400 active:scale-95 overflow-hidden"
+          aria-label="Open VoiceShield AI assistant"
+          className="group relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border border-emerald-400/80 bg-[#06111a] p-1.5 shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-200 hover:scale-105 hover:border-emerald-300 hover:shadow-[0_0_38px_rgba(16,185,129,0.48)] active:scale-95 overflow-hidden"
         >
-          <div className="absolute inset-0 rounded-full bg-emerald-500/10 opacity-0 transition-opacity group-hover:opacity-100" />
-          <img src="/logo.png" alt="Chat" className="w-9 h-9 object-cover z-10" />
-          <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-rose-500 z-20">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+          <span className="absolute inset-1 rounded-full border border-cyan-300/35 transition-transform duration-300 group-hover:scale-105" />
+          <span className="absolute inset-2 rounded-full border border-emerald-400/20" />
+          <span className="absolute inset-0 rounded-full bg-emerald-400/10 opacity-0 transition-opacity group-hover:opacity-100" />
+          <img src="/logo.png" alt="" className="relative z-10 h-full w-full rounded-full object-cover" />
+          <div className="absolute right-0.5 top-0.5 z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#06111a] bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-60" />
           </div>
         </button>
       )}
