@@ -115,19 +115,18 @@ export default function DemoPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                 </span>
-                <span className="text-[11px] font-mono font-semibold tracking-[0.2em] text-emerald-400 uppercase">
-                  SIH26104 · Operator Console
+                <span className="text-[11px] font-mono font-bold tracking-[0.2em] text-emerald-400 uppercase">
+                  SIH26104 · OPERATOR CONSOLE
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Live Voice Clone
+              <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight uppercase">
+                LIVE VOICE CLONE
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
-                  {" "}Detection Path
+                  {" "}DETECTION PATH
                 </span>
               </h1>
               <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-                333 ms raw PCM16 audio hops inspected via hybrid LFCC &amp; deep neural representations.
-                Designed for sub-300 ms decision latency on an available inference service.
+                333ms raw PCM16 audio hops inspected via hybrid LFCC &amp; deep neural representations. Sub-300ms decision latency on live streaming WebSockets.
               </p>
             </div>
 

@@ -53,41 +53,41 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                   <EvidenceCard title="Privacy posture" value="0 BYTES STORED" detail="PCM remains in volatile memory only" />
                   <EvidenceCard title="Telephony target" value="< 250 MS" detail="Designed for real-time G.711 call paths" />
                 </div>
-                <h1 className="text-3xl font-extrabold text-white tracking-tight mt-6">Security Operations Dashboard</h1>
-                <p className="text-slate-400 mt-1">Real-time threat analytics and voice cloning mitigation</p>
+                <h1 className="text-3xl font-black text-white tracking-tight mt-6 uppercase">SECURITY OPERATIONS DASHBOARD</h1>
+                <p className="text-slate-400 mt-1 uppercase text-xs font-mono">REAL-TIME THREAT ANALYTICS AND VOICE CLONING MITIGATION</p>
               </div>
               <div className="flex items-center gap-3 bg-slate-900/80 border border-slate-800 rounded-lg p-2 px-4 shadow-lg">
                 <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
-                <span className="text-sm font-mono text-emerald-100">System Healthy • 24ms Latency</span>
+                <span className="text-xs font-mono text-emerald-100 uppercase font-bold">SYSTEM HEALTHY • 24MS LATENCY</span>
               </div>
             </div>
 
             <LiveStatsBar />
 
             {/* Stats Row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               <StatCard
-                title="Total Calls Analyzed"
+                title="TOTAL CALLS ANALYZED"
                 value={stats.total}
                 icon={<Users className="w-6 h-6 text-blue-400" />}
                 trend="+12%"
               />
               <StatCard
-                title="Threats Blocked"
+                title="THREATS BLOCKED"
                 value={stats.blocked}
                 icon={<ShieldAlert className="w-6 h-6 text-rose-500" />}
                 trend="High Risk"
                 trendColor="text-rose-400"
               />
               <StatCard
-                title="Average Latency"
+                title="AVERAGE LATENCY"
                 value="Live"
                 icon={<Clock className="w-6 h-6 text-emerald-400" />}
                 trend="WebSocket telemetry"
                 trendColor="text-emerald-400"
               />
               <StatCard
-                title="Avg Confidence Score"
+                title="AVG CONFIDENCE SCORE"
                 value={stats.total ? `${Math.round((1 - stats.averageRisk) * 100)}%` : "—"}
                 icon={<ShieldCheck className="w-6 h-6 text-teal-400" />}
                 trend="Optimal"
@@ -99,11 +99,11 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               {/* Main Chart */}
               <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
                 <div className="mb-6">
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h3 className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-wide">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
-                    24-Hour Threat Trajectory
+                    24-HOUR THREAT TRAJECTORY
                   </h3>
-                  <p className="text-sm text-slate-400">Maximum detected risk probability across voice sessions</p>
+                  <p className="text-xs text-slate-400 font-mono uppercase">MAXIMUM DETECTED RISK PROBABILITY ACROSS VOICE SESSIONS</p>
                 </div>
 
                 <div className="h-[300px] w-full">

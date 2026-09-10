@@ -42,16 +42,16 @@ export default function HomePage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/demo"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm tracking-wider uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group active:scale-95"
           >
-            <span>Start Live Demo</span>
+            <span>START LIVE DEMO</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
             href="/dashboard"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 font-semibold text-sm transition-all"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 font-mono font-bold text-xs tracking-widest uppercase transition-all active:scale-95"
           >
-            Operator Dashboard
+            SOC DASHBOARD
           </Link>
         </div>
       </section>
@@ -63,32 +63,32 @@ export default function HomePage() {
             <span className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 block mb-1">
               &lt; 250 ms
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
-              End-to-End Latency
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
+              END-TO-END LATENCY
             </span>
           </div>
           <div className="p-4">
             <span className="text-3xl sm:text-4xl font-extrabold font-mono text-teal-300 block mb-1">
-              &lt; 5.0%
+              &lt; 5.4%
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
-              Telephony EER (G.711)
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
+              TELEPHONY EER (G.711)
             </span>
           </div>
           <div className="p-4">
             <span className="text-3xl sm:text-4xl font-extrabold font-mono text-cyan-400 block mb-1">
-              0 bytes
+              0 BYTES
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
-              Audio Stored on Disk (DPDP)
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
+              AUDIO ON DISK (DPDP)
             </span>
           </div>
           <div className="p-4">
             <span className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 block mb-1">
               100%
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
-              RLS Audit Trail
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
+              RLS AUDIT LOGGED
             </span>
           </div>
         </div>
@@ -97,10 +97,10 @@ export default function HomePage() {
       {/* Features Grid */}
       <section className="px-6 py-20 max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 block mb-2">
-            Defense Architecture
+          <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400 block mb-2">
+            DEFENSE ARCHITECTURE
           </span>
-          <h2 className="text-3xl font-bold text-white">Engineered for Indian Voice Security</h2>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tight">ENGINEERED FOR INDIAN VOICE SECURITY</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -108,7 +108,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
               <Zap className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Streaming WebSocket Inference</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">STREAMING WEBSOCKET INFERENCE</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               333ms raw PCM audio hops evaluated via hybrid DSP and deep attention heads in volatile RAM without blocking.
             </p>
@@ -118,7 +118,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-4">
               <Activity className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Explainable AI Spectrogram</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">EXPLAINABLE AI SPECTROGRAM</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               Waterfall spectral heatmaps surface plain-English anomaly markers like unnatural high-frequency energy and phase variance.
             </p>
@@ -128,7 +128,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4">
               <Languages className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Multilingual Challenge-Response</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">MULTILINGUAL CHALLENGE-RESPONSE</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               Unpredictable phonemic phrases in Hindi, Tamil, and English that commercial voice clones cannot articulate in real time.
             </p>
@@ -138,7 +138,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-4">
               <WifiOff className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Resilient Jittered Fallback</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">RESILIENT JITTERED FALLBACK</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               4-second circular ring buffer prevents packet loss during network severance, resuming seamlessly with monotonic chunk tracking.
             </p>
@@ -148,7 +148,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
               <Lock className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Append-Only RLS Audit Trail</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">APPEND-ONLY RLS AUDIT TRAIL</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               Every detection event, connection drop, and auth challenge logged to Supabase Postgres protected by strict Row-Level Security.
             </p>
@@ -158,19 +158,13 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Zero Raw Audio Persistence</h3>
+            <h3 className="text-lg font-bold text-white mb-2 uppercase">ZERO RAW AUDIO PERSISTENCE</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               Strict compliance with Digital Personal Data Protection (DPDP) Act. All feature tensors processed in ephemeral RAM.
             </p>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-800 py-8 px-6 text-center text-xs text-slate-500 font-mono">
-        <p>VoiceShield · Smart India Hackathon 2026 · Problem ID: SIH26104</p>
-        <p className="mt-1">Developed for AICTE Cyber Security Cell · Licensed under MIT</p>
-      </footer>
     </div>
   );
 }
