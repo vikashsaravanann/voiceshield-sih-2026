@@ -16,7 +16,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.config import settings
 from app.ml.feature_extractor import extract_features
 from app.services.decision_engine import classify_risk
-from app.services.session_service import create_session, finalize_session
+from app.services.session_service import create_session, finalize_session, batch_insert_events
 
 logger = structlog.get_logger()
 router = APIRouter()
@@ -30,6 +30,7 @@ async def twilio_websocket(websocket: WebSocket):
     stream_sid: Optional[str] = None
     chunk_index: int = 0
     risk_values = []
+    events_buffer = []
     
     # State for audioop rate conversion
     rate_state = None
@@ -80,6 +81,22 @@ async def twilio_websocket(websocket: WebSocket):
 
                 risk_level, suggested_action = classify_risk(spoof_prob)
                 risk_values.append(spoof_prob)
+                latency_ms = int((time.perf_counter() - t_start) * 1000)
+                events_buffer.append({
+                    "session_id": session_id,
+                    "chunk_index": chunk_index,
+                    "spoof_probability": float(spoof_prob),
+                    "risk_level": risk_level,
+                    "features_snapshot": {
+                        "latency_ms": latency_ms,
+                        "transport": "twilio_media_stream",
+                    },
+                    "explainability_markers": markers,
+                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S+00:00", time.gmtime()),
+                })
+                if len(events_buffer) >= 5:
+                    await batch_insert_events(list(events_buffer))
+                    events_buffer.clear()
                 
                 # We could send a websocket message back, but Twilio expects TwiML/Commands.
                 # Since we don't have bidirectional audio mitigation yet, we just log the detection.
@@ -106,6 +123,8 @@ async def twilio_websocket(websocket: WebSocket):
 
     finally:
         if session_id:
+            if events_buffer:
+                await batch_insert_events(list(events_buffer))
             await finalize_session(
                 session_id,
                 chunk_index,
