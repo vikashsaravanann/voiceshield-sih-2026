@@ -228,7 +228,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto flex flex-col space-y-16">
           
           {/* Top Section: Brand & Mission */}
-          <div className="space-y-6 max-w-xl">
+          <div className="flex flex-col items-center justify-center text-center w-full max-w-3xl mx-auto space-y-4">
             <Link href="/" className="inline-flex items-center gap-4 group">
               <div className="w-10 h-10 rounded-full border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:shadow-emerald-500/20 transition-all bg-slate-950 shrink-0 p-0.5">
                 <img src="/logo.png" alt="VoiceShield Logo" className="w-full h-full object-cover rounded-full" />
@@ -239,11 +239,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </Link>
             
             <p className="text-[13px] sm:text-sm text-slate-300 leading-relaxed font-medium">
-              Real-time telephony middleware mitigating AI synthetic voice<br className="hidden sm:block" />
-              clones and conversational deepfake fraud within 269ms.
+              Real-time telephony middleware mitigating AI synthetic voice clones<br className="hidden sm:block" />
+              and conversational deepfake fraud within 269ms.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2 font-mono text-[10px] font-bold uppercase tracking-widest">
+            <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-[10px] font-bold uppercase tracking-widest">
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 shadow-sm transition-colors hover:border-emerald-500/40 cursor-default">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
                 SUB-300MS RTT
