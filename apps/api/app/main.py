@@ -35,9 +35,21 @@ allowed_origins = [
     for origin in settings.NEXT_PUBLIC_SITE_URL.split(",")
     if origin.strip()
 ]
+# Always include known origins so health pings from Vercel are never blocked
+_always_allow = [
+    "https://voiceshield-live.vercel.app",
+    "https://voiceshield-sih-2026.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+for _o in _always_allow:
+    if _o not in allowed_origins:
+        allowed_origins.append(_o)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins or ["http://localhost:3000"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],

@@ -22,6 +22,22 @@ from app.schemas.websocket import DetectionResponse
 logger = structlog.get_logger()
 router = APIRouter()
 
+import uuid as _uuid_mod
+
+def _ensure_uuid(raw: Optional[str]) -> str:
+    """
+    Guarantee the returned value is a valid UUID string.
+    If the caller sent a non-UUID session_id (e.g. "sess_1234"), generate a
+    fresh UUID so Supabase foreign-key constraints are never violated.
+    """
+    if not raw:
+        return str(_uuid_mod.uuid4())
+    try:
+        _uuid_mod.UUID(raw)
+        return raw
+    except (ValueError, AttributeError):
+        return str(_uuid_mod.uuid4())
+
 
 @router.websocket("/ws/audio")
 async def audio_websocket(websocket: WebSocket):
@@ -47,16 +63,17 @@ async def audio_websocket(websocket: WebSocket):
             msg_type = raw_init.get("type", "session.start")
 
             if msg_type in ("session.start", "start"):
-                session_id = raw_init.get("session_id", f"sess_{int(time.time())}")
+                session_id = _ensure_uuid(raw_init.get("session_id"))
                 user_id = raw_init.get("user_id")
+                chunk_index = 0
                 await create_session(session_id, user_id, raw_init.get("client", {}))
                 await log_connection_event(session_id, "connected", {"client": raw_init.get("client", {})})
                 await websocket.send_json({"type": "session.ack", "session_id": session_id})
                 logger.info("ws.session_start", session_id=session_id)
 
             elif msg_type == "session.resume":
-                session_id = raw_init.get("session_id", f"sess_{int(time.time())}")
-                last_idx = int(raw_init.get("last_processed_chunk_index", 0))
+                session_id = _ensure_uuid(raw_init.get("session_id"))
+                last_idx = int(raw_init.get("last_processed_chunk_index", 0) or 0)
                 chunk_index = last_idx + 1
                 await log_connection_event(session_id, "reconnected", {"resumed_at_chunk": chunk_index})
                 await websocket.send_json({"type": "resume.ack", "resumed_at_chunk": chunk_index})
