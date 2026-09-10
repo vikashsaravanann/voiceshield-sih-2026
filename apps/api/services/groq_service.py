@@ -77,17 +77,17 @@ async def generate_xai_summary(markers: dict, risk_level: str, max_risk: float) 
     if not client:
         return f"System detected {risk_level} risk with a maximum confidence of {max_risk*100:.1f}%. High frequency anomaly: {markers.get('high_frequency_anomaly', 0)}."
     
-    prompt = f"""You are a Voice Security AI Forensic Analyst.
-Given the following audio analysis markers, write a concise 2-sentence explanation of WHY this audio was flagged.
-Use a professional, technical cybersecurity tone. Do not give generic advice. Be direct.
+    prompt = f"""You are an elite Voice Security AI Forensic Analyst for a Tier-1 Indian Telecom/BFSI provider.
+Given the following audio analysis markers, write a highly professional, authoritative, and concise forensic explanation (3-4 sentences) of WHY this audio was flagged.
+Use a formal cybersecurity tone suitable for a legal audit or C-suite executive briefing. Highlight the specific markers that contributed to the decision and conclude with a definitive assessment. Do not give generic advice.
 
 Risk Level: {risk_level.upper()}
 Max Spoof Confidence: {max_risk*100:.1f}%
-Phase Discontinuity (indicates neural vocoder artifact): {markers.get('phase_discontinuity', 0)} / 1.0
-High Frequency Anomaly (indicates missing acoustic detail): {markers.get('high_frequency_anomaly', 0)} / 1.0
-Prosody Irregularity (indicates robotic pitch shifting): {markers.get('prosody_irregularity', 0)} / 1.0
+Phase Discontinuity (neural vocoder artifact): {markers.get('phase_discontinuity', 0)} / 1.0
+High Frequency Anomaly (missing acoustic detail): {markers.get('high_frequency_anomaly', 0)} / 1.0
+Prosody Irregularity (robotic pitch shifting): {markers.get('prosody_irregularity', 0)} / 1.0
 
-Analysis:"""
+Forensic Analysis Report:"""
     try:
         response = await client.chat.completions.create(
             model="groq/compound",
