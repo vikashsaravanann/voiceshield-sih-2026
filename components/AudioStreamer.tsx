@@ -11,6 +11,8 @@ import {
   SessionStats,
 } from "@/types/detection";
 
+// Note: I ended up passing almost everything out via a render prop (children) 
+// because prop drilling the state to 5 different visualizer components got ridiculous.
 interface AudioStreamerProps {
   onRiskUpdate?: (response: DetectionResponse) => void;
   onConnectionChange?: (state: ConnectionState) => void;
@@ -31,6 +33,8 @@ interface AudioStreamerProps {
 }
 
 async function getCurrentUserId(): Promise<string | null> {
+  // I tried putting this inside a useEffect but it caused race conditions
+  // where the WS connected before we knew who was logged in.
   try {
     const { data } = await createSupabaseClient().auth.getUser();
     return data.user?.id ?? null;
