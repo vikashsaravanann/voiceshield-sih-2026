@@ -1,6 +1,8 @@
 import numpy as np
 from fastapi.testclient import TestClient
+
 from app.main import app
+
 
 def test_websocket_audio_flow():
     with TestClient(app) as client:

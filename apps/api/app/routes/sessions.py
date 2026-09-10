@@ -4,6 +4,7 @@ SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
 from fastapi import APIRouter, HTTPException
+
 from app.db.supabase_client import get_supabase
 
 router = APIRouter(tags=["Sessions"])

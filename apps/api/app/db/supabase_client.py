@@ -5,7 +5,9 @@ Async-safe, fail-soft for offline testing and development.
 """
 
 from typing import Any
+
 import structlog
+
 from app.config import settings
 
 logger = structlog.get_logger()

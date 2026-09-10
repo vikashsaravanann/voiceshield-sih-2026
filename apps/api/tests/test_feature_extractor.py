@@ -1,6 +1,7 @@
 import numpy as np
-from app.ml.feature_extractor import extract_features
+
 from app.ml.explainability import compute_explainability_markers
+from app.ml.feature_extractor import extract_features
 
 
 def test_extract_features():

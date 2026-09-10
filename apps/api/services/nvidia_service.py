@@ -1,14 +1,14 @@
+import os
+
 import httpx
 import structlog
-import os
-from typing import Dict
 
 logger = structlog.get_logger()
 
 NVIDIA_INVOKE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "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")
 
-async def generate_nvidia_xai_summary(markers: Dict[str, float], risk_level: str, max_risk: float) -> str:
+async def generate_nvidia_xai_summary(markers: dict[str, float], risk_level: str, max_risk: float) -> str:
     if risk_level == "low":
         return "Acoustic telemetry aligns with natural biological human vocal tract constraints. No neural vocoder artifacts or phase anomalies detected."
 

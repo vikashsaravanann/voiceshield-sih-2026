@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.signal
 
+
 def extract_acoustic_features(audio_buffer: np.ndarray, sample_rate: int = 16000) -> dict:
     """
     Extracts high-frequency spectral roll-off, zero-crossing rate,

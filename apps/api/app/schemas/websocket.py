@@ -3,8 +3,9 @@ VoiceShield — WebSocket Message Schemas
 SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
+from typing import Any
+
 from pydantic import BaseModel, Field
-from typing import Any, Dict
 
 
 class InitMessage(BaseModel):
@@ -14,7 +15,7 @@ class InitMessage(BaseModel):
     sample_rate: int = 16000
     channels: int = 1
     chunk_ms: int = 333
-    client: Dict[str, Any] = Field(default_factory=dict)
+    client: dict[str, Any] = Field(default_factory=dict)
 
 
 class ResumeMessage(BaseModel):
@@ -31,5 +32,5 @@ class DetectionResponse(BaseModel):
     risk_level: str
     suggested_action: str
     latency_ms: float
-    explainability_markers: Dict[str, float]
-    model: Dict[str, str]
+    explainability_markers: dict[str, float]
+    model: dict[str, str]

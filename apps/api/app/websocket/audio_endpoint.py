@@ -3,28 +3,32 @@ VoiceShield — Real-Time WebSocket Audio Endpoint
 Handles streaming audio chunks, spoof detection, and session management.
 """
 
-import time
 import asyncio
 import json
-import structlog
+import time
 from datetime import datetime, timezone
-from typing import List, Dict, Any, Optional
 
+import structlog
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from app.config import settings
+
 from app.ml.feature_extractor import extract_features
-from app.services.decision_engine import classify_risk
-from app.services.audit_service import log_connection_event
-from app.services.session_service import create_session, finalize_session, batch_insert_events
-from app.services import alert_service
 from app.schemas.websocket import DetectionResponse
+from app.services import alert_service
+from app.services.audit_service import log_connection_event
+from app.services.decision_engine import classify_risk
+from app.services.session_service import (
+    batch_insert_events,
+    create_session,
+    finalize_session,
+)
 
 logger = structlog.get_logger()
 router = APIRouter()
 
 import uuid as _uuid_mod
 
-def _ensure_uuid(raw: Optional[str]) -> str:
+
+def _ensure_uuid(raw: str | None) -> str:
     # Took me hours to debug why Supabase inserts were failing silently.
     # Turns out, the frontend was passing `sess_123` as the ID, but the DB
     # strictly enforces UUIDs for the primary key. This function intercepts
@@ -43,7 +47,7 @@ def _ensure_uuid(raw: Optional[str]) -> str:
 async def audio_websocket(websocket: WebSocket):
     await websocket.accept()
     
-    session_id: Optional[str] = None
+    session_id: str | None = None
     client_ip = websocket.client.host if websocket.client else "unknown"
     start_time = time.time()
     

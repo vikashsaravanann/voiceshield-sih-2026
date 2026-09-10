@@ -1,4 +1,4 @@
 """VoiceShield Schema Package."""
-from app.schemas.websocket import InitMessage, ResumeMessage, DetectionResponse
+from app.schemas.websocket import DetectionResponse, InitMessage, ResumeMessage
 
-__all__ = ["InitMessage", "ResumeMessage", "DetectionResponse"]
+__all__ = ["DetectionResponse", "InitMessage", "ResumeMessage"]

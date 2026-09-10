@@ -3,7 +3,6 @@ VoiceShield — Application Configuration
 Loaded from environment variables via pydantic-settings
 """
 
-import os
 from pydantic_settings import BaseSettings
 
 

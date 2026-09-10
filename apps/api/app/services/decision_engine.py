@@ -4,7 +4,6 @@ Maps spoof probability to risk levels and suggested actions.
 SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
-from typing import Tuple
 
 THRESHOLDS = {
     "medium": 0.3,
@@ -18,7 +17,7 @@ ACTIONS = {
 }
 
 
-def classify_risk(spoof_probability: float) -> Tuple[str, str]:
+def classify_risk(spoof_probability: float) -> tuple[str, str]:
     """
     Classify spoof probability into a risk level and suggested action.
 

@@ -1,7 +1,9 @@
-import torch
-import torch.nn as nn
-import os
 import argparse
+import os
+
+import torch
+from torch import nn
+
 
 class DummySpoofModel(nn.Module):
     def __init__(self):

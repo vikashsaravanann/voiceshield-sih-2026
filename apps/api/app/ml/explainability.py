@@ -3,11 +3,12 @@ VoiceShield — Explainability Marker Synthesizer
 Computes interpretable markers from spectral and phase anomalies.
 """
 
-from typing import Any, Dict
+from typing import Any
+
 import numpy as np
 
 
-def compute_explainability_markers(features: Dict[str, Any]) -> Dict[str, float]:
+def compute_explainability_markers(features: dict[str, Any]) -> dict[str, float]:
     """
     Compute plain-English explainable markers from extracted features.
 

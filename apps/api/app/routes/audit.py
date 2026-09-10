@@ -3,15 +3,16 @@ VoiceShield — Audit Query Routes
 SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
-from typing import Optional
+
 from fastapi import APIRouter
+
 from app.db.supabase_client import get_supabase
 
 router = APIRouter(tags=["Audit"])
 
 
 @router.get("/connections")
-async def get_connection_logs(session_id: Optional[str] = None):
+async def get_connection_logs(session_id: str | None = None):
     """Query connection lifecycle logs."""
     supabase = get_supabase()
     if not supabase:
@@ -28,7 +29,7 @@ async def get_connection_logs(session_id: Optional[str] = None):
 
 
 @router.get("/auth")
-async def get_auth_logs(user_id: Optional[str] = None):
+async def get_auth_logs(user_id: str | None = None):
     """Query authentication audit logs."""
     supabase = get_supabase()
     if not supabase:

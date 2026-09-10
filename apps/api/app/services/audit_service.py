@@ -5,8 +5,10 @@ SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
 from datetime import datetime, timezone
-from typing import Any, Dict
+from typing import Any
+
 import structlog
+
 from app.db.supabase_client import get_supabase
 
 logger = structlog.get_logger()
@@ -15,7 +17,7 @@ logger = structlog.get_logger()
 async def log_connection_event(
     session_id: str,
     event_type: str,
-    details: Dict[str, Any],
+    details: dict[str, Any],
     ip_hash: str = "",
     user_agent: str = "",
 ) -> None:
@@ -39,7 +41,7 @@ async def log_connection_event(
 async def log_auth_event(
     user_id: str,
     event_type: str,
-    details: Dict[str, Any],
+    details: dict[str, Any],
     session_id: str = "",
     ip_hash: str = "",
     user_agent: str = "",

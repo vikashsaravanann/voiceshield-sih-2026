@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Shell } from "@/components/Shell";
+import { VoiceShieldAssistant } from "@/components/VoiceShieldAssistant";
 
 export const metadata: Metadata = {
   title: "VoiceShield | Anti-Spoofing",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Shell>{children}</Shell>
+        <VoiceShieldAssistant />
       </body>
     </html>
   );

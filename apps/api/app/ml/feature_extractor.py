@@ -3,11 +3,12 @@ VoiceShield — Audio Feature Extraction
 Extracts LFCC, mel-spectrogram, and phase inconsistency from PCM16 chunks.
 """
 
-from typing import Any, Dict
+from typing import Any
+
 import numpy as np
 
 
-def extract_features(audio_bytes: bytes, sample_rate: int = 16000) -> Dict[str, Any]:
+def extract_features(audio_bytes: bytes, sample_rate: int = 16000) -> dict[str, Any]:
     """
     Extract anti-spoofing features from a raw PCM16 audio chunk.
 

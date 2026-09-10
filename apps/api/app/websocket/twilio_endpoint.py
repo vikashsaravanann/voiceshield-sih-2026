@@ -4,19 +4,23 @@ Handles incoming mu-law 8000Hz audio from Twilio, upsamples to 16000Hz PCM,
 and runs it through the detection pipeline.
 """
 
-import time
-import json
-import base64
 import audioop
-import structlog
+import base64
+import json
+import time
 import uuid
-from typing import Optional
 
+import structlog
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+
 from app.config import settings
 from app.ml.feature_extractor import extract_features
 from app.services.decision_engine import classify_risk
-from app.services.session_service import create_session, finalize_session, batch_insert_events
+from app.services.session_service import (
+    batch_insert_events,
+    create_session,
+    finalize_session,
+)
 
 logger = structlog.get_logger()
 router = APIRouter()
@@ -26,8 +30,8 @@ async def twilio_websocket(websocket: WebSocket):
     await websocket.accept()
     model = getattr(websocket.app.state, "model", None)
 
-    session_id: Optional[str] = None
-    stream_sid: Optional[str] = None
+    session_id: str | None = None
+    stream_sid: str | None = None
     chunk_index: int = 0
     risk_values = []
     events_buffer = []

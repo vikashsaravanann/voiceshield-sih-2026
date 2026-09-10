@@ -4,6 +4,7 @@ SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
 from fastapi import APIRouter, Request
+
 from app.config import settings
 
 router = APIRouter(tags=["Health"])

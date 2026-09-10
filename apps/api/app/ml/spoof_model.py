@@ -4,8 +4,10 @@ Wraps AASIST / RawNet2 / Wav2Vec2-AASIST for streaming inference.
 SIH26104 | voiceshield-team/voiceshield-sih-2026
 """
 
-from typing import Any, Dict
+from typing import Any
+
 import structlog
+
 from app.ml.explainability import compute_explainability_markers
 
 logger = structlog.get_logger()
@@ -50,7 +52,7 @@ class SpoofModel:
         except Exception as e:
             logger.debug("model.warmup_skipped", reason=str(e))
 
-    def predict(self, features: Dict[str, Any]) -> float:
+    def predict(self, features: dict[str, Any]) -> float:
         """
         Run spoof detection on extracted features.
 
@@ -74,14 +76,14 @@ class SpoofModel:
             logger.warning("model.inference_failed_using_heuristic", error=str(e))
             return self._heuristic_predict(features)
 
-    def explainability_markers(self, features: Dict[str, Any]) -> Dict[str, float]:
+    def explainability_markers(self, features: dict[str, Any]) -> dict[str, float]:
         """Compute interpretable risk markers."""
         return compute_explainability_markers(features)
 
     def _run_inference(self, tensor: Any) -> Any:
         return self.model(tensor)
 
-    def _heuristic_predict(self, features: Dict[str, Any]) -> float:
+    def _heuristic_predict(self, features: dict[str, Any]) -> float:
         """
         High-fidelity heuristic detector when deep weights are offline:
         Correlates high-frequency energy ratio and phase inconsistency.

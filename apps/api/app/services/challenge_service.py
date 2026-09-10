@@ -6,9 +6,8 @@ SIH26104 | AICTE Cyber Security Cell
 
 import os
 import random
-from typing import Dict
 
-CHALLENGES: Dict[str, list[str]] = {
+CHALLENGES: dict[str, list[str]] = {
     "en": [
         "Verify transaction code: Silver Falcon 8492 authorized immediately",
         "Repeat authentication sequence: Blue River 4739 confirmed",
@@ -31,7 +30,7 @@ CHALLENGES: Dict[str, list[str]] = {
 }
 
 
-async def generate_challenge(language: str = "en") -> Dict[str, str]:
+async def generate_challenge(language: str = "en") -> dict[str, str]:
     """Generate an unpredictable phonemic challenge phrase with optional LLM augmentation."""
     lang = language.lower() if language.lower() in CHALLENGES else "en"
 

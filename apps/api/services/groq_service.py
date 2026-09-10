@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 from groq import AsyncGroq
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
@@ -93,5 +94,5 @@ Analysis:"""
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content.strip()
-    except Exception as e:
+    except Exception:
         return f"Forensic analysis concluded a {risk_level} risk of synthetic voice injection."

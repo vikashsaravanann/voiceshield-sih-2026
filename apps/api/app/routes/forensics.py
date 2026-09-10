@@ -7,12 +7,12 @@ SIH26104 | AICTE Cyber Security Cell
 
 import hashlib
 import io
-from typing import Any, Dict, List, Literal
+from typing import Any, Literal
 
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 import numpy as np
-from pydantic import BaseModel, Field
 import structlog
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from pydantic import BaseModel, Field
 
 from app.ml.feature_extractor import extract_features
 
@@ -55,8 +55,8 @@ class ForensicAnalysisResponse(BaseModel):
   synthetic_duration_ms: int
   synthetic_ratio: float
   overall_risk_level: Literal["low", "medium", "high"]
-  splice_regions: List[SpliceRegionModel]
-  slices: List[ForensicSliceModel]
+  splice_regions: list[SpliceRegionModel]
+  slices: list[ForensicSliceModel]
   xai_summary: str | None = None
 
 
@@ -96,7 +96,7 @@ async def analyze_audio_file(
   duration_seconds = round(total_samples / sample_rate, 2)
   model = getattr(request.app.state, "model", None)
 
-  slices: List[ForensicSliceModel] = []
+  slices: list[ForensicSliceModel] = []
   total_risk = 0.0
   max_risk = 0.0
 
@@ -158,12 +158,11 @@ async def analyze_audio_file(
     )
 
     total_risk += spoof_prob
-    if spoof_prob > max_risk:
-      max_risk = spoof_prob
+    max_risk = max(max_risk, spoof_prob)
 
   # Compute contiguous splice regions
-  splice_regions: List[SpliceRegionModel] = []
-  curr_region: Dict[str, Any] | None = None
+  splice_regions: list[SpliceRegionModel] = []
+  curr_region: dict[str, Any] | None = None
 
   for idx, s in enumerate(slices):
     is_synth = s.spoof_probability >= 0.45
