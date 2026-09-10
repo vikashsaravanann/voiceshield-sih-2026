@@ -1,16 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { getSupabaseConfig } from "./config";
 
 export async function createClient() {
   const cookieStore = await cookies();
   
-  // Note: Vercel documentation says not to use createServerClient in layout.tsx 
-  // if you're writing cookies, because layouts can't set headers.
-  // We only use this for read-only auth checks in page.tsx components.
+  const { url, key } = getSupabaseConfig();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://mock.supabase.co",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "mock-key",
+    url,
+    key,
     {
       cookies: {
         getAll() {

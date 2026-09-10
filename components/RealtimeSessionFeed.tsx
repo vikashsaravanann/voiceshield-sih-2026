@@ -50,9 +50,12 @@ export function RealtimeSessionFeed() {
   }, [supabase]);
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-xl space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
-        <h3 className="text-lg font-bold text-white font-sans">Live Feed</h3>
+    <div className="flex h-full min-h-[360px] flex-col space-y-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-2xl backdrop-blur-xl sm:min-h-[420px] sm:space-y-6 sm:p-5">
+      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 sm:pb-4">
+        <div>
+          <h3 className="text-base font-bold text-white font-sans sm:text-lg">Live Feed</h3>
+          <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Realtime detection events</p>
+        </div>
         <div className="flex items-center gap-2">
           {isActive && (
             <span className="relative flex h-2.5 w-2.5">
@@ -67,14 +70,14 @@ export function RealtimeSessionFeed() {
       </div>
 
       <div className="flex-1 overflow-hidden relative">
-        <div className="absolute inset-0 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-slate-700">
+        <div className="absolute inset-0 space-y-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 sm:space-y-4 sm:pr-2">
           {events.length === 0 ? (
             <div className="text-center text-sm text-slate-500 py-10 font-mono">Waiting for events...</div>
           ) : (
             events.map((ev) => (
               <div
                 key={ev.id}
-                className="animate-in fade-in slide-in-from-top-4 duration-300 bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 flex flex-col gap-3"
+                className="animate-in fade-in slide-in-from-top-4 flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-800/50 p-3 duration-300 sm:p-4"
               >
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="text-slate-400">

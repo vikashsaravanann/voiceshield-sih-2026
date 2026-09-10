@@ -51,9 +51,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
   if (pathname === "/login") return <>{children}</>;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans">
+    <div className="min-h-screen w-full flex flex-col bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans overflow-x-hidden">
       {/* ── Primary Enterprise Cyber Header (Single Clean Line) ── */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/90 border-b border-slate-800/80 shadow-2xl transition-all duration-200">
+      <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#030712]/90 border-b border-slate-800/80 shadow-2xl transition-all duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
           
           {/* Brand Logo & Identification in 1 single horizontal line */}
@@ -220,7 +220,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
       {/* ── High-Tech Cyber Enterprise Footer ── */}
-      <footer className="border-t border-slate-800/80 bg-[#02050e] pt-16 pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs relative overflow-hidden">
+      <footer className="w-full border-t border-slate-800/80 bg-[#02050e] pt-16 pb-12 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans text-xs relative overflow-hidden">
         <div className="max-w-7xl mx-auto space-y-12">
           
           {/* Top Grid: Brand & Link Columns with Generous Gaps */}

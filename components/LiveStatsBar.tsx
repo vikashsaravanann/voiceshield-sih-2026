@@ -52,17 +52,17 @@ export function LiveStatsBar() {
   }, [supabase]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 shadow-sm backdrop-blur-xl">
-        <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2 font-mono">Total Sessions Today</p>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 font-mono">Total Sessions Today</p>
         <p className="text-3xl font-sans font-bold text-slate-100">{stats.totalSessions}</p>
       </div>
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 shadow-sm backdrop-blur-xl">
-        <p className="text-xs font-semibold uppercase tracking-widest text-rose-500/80 mb-2 font-mono">Threats Blocked</p>
+      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-rose-500/80 font-mono">Threats Blocked</p>
         <p className="text-3xl font-sans font-bold text-rose-400">{stats.threatsBlocked}</p>
       </div>
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 shadow-sm backdrop-blur-xl">
-        <p className="text-xs font-semibold uppercase tracking-widest text-cyan-500/80 mb-2 font-mono">Active Streams</p>
+      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-500/80 font-mono">Active Streams</p>
         <p className="text-3xl font-sans font-bold text-cyan-400 flex items-center gap-3">
           {stats.activeStreams > 0 && (
             <span className="relative flex h-3 w-3">

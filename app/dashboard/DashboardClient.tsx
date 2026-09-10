@@ -31,14 +31,14 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
   return (
     <>
       <LiveAlertToast />
-      <div className="min-h-screen bg-[#030712] text-slate-100 p-6 md:p-10 font-sans">
-        <div className="max-w-[100rem] mx-auto grid grid-cols-1 xl:grid-cols-4 gap-8">
+      <div className="min-h-screen bg-[#030712] px-3 pb-8 pt-20 text-slate-100 font-sans sm:px-5 sm:pb-10 sm:pt-24 lg:px-8 lg:pt-28">
+        <div className="mx-auto grid w-full grid-cols-1 gap-5 lg:gap-7 xl:grid-cols-[minmax(0,3fr)_minmax(300px,1fr)]">
           
-          <div className="xl:col-span-3 space-y-8">
+          <div className="min-w-0 space-y-5 sm:space-y-6 lg:space-y-7">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-emerald-400 mb-1">
+            <div className="grid gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/35 p-4 shadow-xl backdrop-blur-xl sm:p-5 lg:grid-cols-[1fr_auto] lg:items-start lg:p-6">
+              <div className="min-w-0">
+                <div className="mb-2 inline-flex items-center gap-2 text-[10px] font-mono font-medium uppercase tracking-[0.16em] text-emerald-400 sm:text-xs">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -46,31 +46,32 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                   <span>LIVE: TELEPHONY MONITORING CENTER</span>
                 </div>
 
-                <BackendHealth />
-
-                <div className="grid gap-4 md:grid-cols-3">
-                  <EvidenceCard title="SIH prevention loop" value="DETECT → CHALLENGE → BLOCK" detail="Active mitigation, not passive scoring" />
-                  <EvidenceCard title="Privacy posture" value="0 BYTES STORED" detail="PCM remains in volatile memory only" />
-                  <EvidenceCard title="Telephony target" value="< 250 MS" detail="Designed for real-time G.711 call paths" />
-                </div>
-                <h1 className="text-3xl font-black text-white tracking-tight mt-6 uppercase">SECURITY OPERATIONS DASHBOARD</h1>
-                <p className="text-slate-400 mt-1 uppercase text-xs font-mono">REAL-TIME THREAT ANALYTICS AND VOICE CLONING MITIGATION</p>
+                <h1 className="mt-1 max-w-3xl text-2xl font-black uppercase tracking-tight text-white sm:text-3xl lg:text-4xl">Security Operations Dashboard</h1>
+                <p className="mt-2 max-w-2xl text-[11px] uppercase tracking-[0.12em] text-slate-400 sm:text-xs">Real-time threat analytics and voice-cloning mitigation</p>
               </div>
-              <div className="flex items-center gap-3 bg-slate-900/80 border border-slate-800 rounded-lg p-2 px-4 shadow-lg">
+              <div className="flex w-fit items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-100 sm:justify-self-end sm:px-4 sm:text-xs">
                 <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
-                <span className="text-xs font-mono text-emerald-100 uppercase font-bold">SYSTEM HEALTHY • 24MS LATENCY</span>
+                <span>System healthy <span className="text-emerald-400">• live</span></span>
               </div>
+            </div>
+
+            <BackendHealth />
+
+            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+              <EvidenceCard title="SIH prevention loop" value="Detect → Challenge → Block" detail="Active mitigation, not passive scoring" />
+              <EvidenceCard title="Privacy posture" value="0 bytes stored" detail="PCM remains in volatile memory only" />
+              <EvidenceCard title="Telephony target" value="< 250 ms" detail="Designed for real-time G.711 call paths" />
             </div>
 
             <LiveStatsBar />
 
             {/* Stats Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
               <StatCard
                 title="TOTAL CALLS ANALYZED"
                 value={stats.total}
                 icon={<Users className="w-6 h-6 text-blue-400" />}
-                trend="+12%"
+                trend="Today"
               />
               <StatCard
                 title="THREATS BLOCKED"
@@ -95,18 +96,18 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-6">
               {/* Main Chart */}
-              <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
+              <div className="min-w-0 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-4 shadow-2xl backdrop-blur-xl sm:p-6 lg:col-span-2">
                 <div className="mb-6">
-                  <h3 className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-wide">
+                  <h3 className="flex items-center gap-2 text-sm font-black uppercase tracking-wide text-white sm:text-lg">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
                     24-HOUR THREAT TRAJECTORY
                   </h3>
-                  <p className="text-xs text-slate-400 font-mono uppercase">MAXIMUM DETECTED RISK PROBABILITY ACROSS VOICE SESSIONS</p>
+                  <p className="text-[10px] font-mono uppercase tracking-wide text-slate-400 sm:text-xs">Maximum detected risk probability across voice sessions</p>
                 </div>
 
-                <div className="h-[300px] w-full">
+                <div className="h-[240px] w-full sm:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
@@ -129,7 +130,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               </div>
 
               {/* Threat Map */}
-              <div className="lg:col-span-1 h-[400px] lg:h-auto">
+              <div className="h-[340px] min-w-0 sm:h-[400px] lg:col-span-1 lg:h-auto">
                 <ThreatMap sessions={sessions} />
               </div>
             </div>
@@ -138,11 +139,17 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
             <TwilioPhonePanel />
 
             {/* Recent Sessions Table */}
-            <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-xl mt-8">
-              <h3 className="text-lg font-bold text-white mb-6">Recent Sessions Audit</h3>
+            <div className="min-w-0 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-4 shadow-2xl backdrop-blur-xl sm:mt-1 sm:p-6">
+              <div className="mb-5 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-bold text-white sm:text-lg">Recent Sessions Audit</h3>
+                  <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-slate-500">Latest detection records</p>
+                </div>
+                <span className="rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[10px] font-mono text-slate-400">{sessions.length} records</span>
+              </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full min-w-[680px] border-collapse text-left">
                   <thead>
                     <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500">
                       <th className="pb-3 px-4 font-semibold">Session ID</th>
@@ -207,7 +214,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
           </div>
 
           {/* Right Sidebar - Realtime Session Feed */}
-          <div className="xl:col-span-1 h-[calc(100vh-6rem)] sticky top-10">
+          <div className="min-w-0 xl:sticky xl:top-24 xl:h-[calc(100vh-7rem)]">
             <RealtimeSessionFeed />
           </div>
 
@@ -219,25 +226,25 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
 
 function EvidenceCard({ title, value, detail }: { title: string; value: string; detail: string }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</p>
-      <p className="mt-3 font-mono text-lg font-bold text-emerald-300">{value}</p>
-      <p className="mt-1 text-xs text-slate-400">{detail}</p>
+    <div className="flex min-h-[124px] flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-4 sm:p-5">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">{title}</p>
+      <p className="mt-3 break-words font-mono text-sm font-bold uppercase leading-relaxed text-emerald-300 sm:text-base">{value}</p>
+      <p className="mt-1 text-[11px] leading-relaxed text-slate-400">{detail}</p>
     </div>
   );
 }
 
 function StatCard({ title, value, icon, trend, trendColor = "text-blue-400" }: any) {
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-lg backdrop-blur-md">
+    <div className="min-h-[142px] rounded-xl border border-slate-800 bg-slate-900/60 p-3 shadow-lg backdrop-blur-md sm:p-5">
       <div className="flex items-start justify-between mb-2">
-        <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">{title}</span>
-        <div className="p-2 bg-slate-950 rounded-lg border border-slate-800/50">
+        <span className="max-w-[9rem] text-[10px] font-semibold uppercase leading-tight tracking-wider text-slate-400 sm:text-xs">{title}</span>
+        <div className="hidden rounded-lg border border-slate-800/50 bg-slate-950 p-2 sm:block">
           {icon}
         </div>
       </div>
-      <div className="text-3xl font-extrabold text-white mb-1 font-mono tracking-tight">{value}</div>
-      <div className={`text-xs font-semibold uppercase tracking-wider ${trendColor}`}>
+      <div className="mb-1 text-2xl font-extrabold tracking-tight text-white font-mono sm:text-3xl">{value}</div>
+      <div className={`text-[10px] font-semibold uppercase tracking-wider ${trendColor}`}>
         {trend}
       </div>
     </div>

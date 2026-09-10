@@ -1,14 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseConfig } from "./config";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
+  const { url, key } = getSupabaseConfig();
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://mock.supabase.co",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "mock-key",
+    url,
+    key,
     {
       cookies: {
         getAll() {

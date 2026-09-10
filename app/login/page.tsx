@@ -91,29 +91,37 @@ export default function LoginPage() {
     setBusy("email");
     setMessage(null);
 
-    const result = isReset
-      ? await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${appOrigin}/auth/callback?next=/dashboard`,
-        })
-      : isSignUp
-        ? await supabase.auth.signUp({
-            email,
-            password,
-            options: { emailRedirectTo: `${appOrigin}/auth/callback` },
+    try {
+      const result = isReset
+        ? await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${appOrigin}/auth/callback?next=/dashboard`,
           })
-        : await supabase.auth.signInWithPassword({ email, password });
+        : isSignUp
+          ? await supabase.auth.signUp({
+              email,
+              password,
+              options: { emailRedirectTo: `${appOrigin}/auth/callback` },
+            })
+          : await supabase.auth.signInWithPassword({ email, password });
 
-    if (result.error) {
-      setMessage({ type: "error", text: result.error.message });
-    } else if (isReset) {
-      setMessage({ type: "success", text: "Security reset link dispatched. Please check your inbox." });
-    } else if (isSignUp && !("session" in result.data && result.data.session)) {
-      setMessage({ type: "success", text: "Clearance requested. Please check your email to confirm registration." });
-    } else {
-      router.push("/dashboard");
-      router.refresh();
+      if (result.error) {
+        setMessage({ type: "error", text: result.error.message });
+      } else if (isReset) {
+        setMessage({ type: "success", text: "Security reset link dispatched. Please check your inbox." });
+      } else if (isSignUp && !("session" in result.data && result.data.session)) {
+        setMessage({ type: "success", text: "Clearance requested. Please check your email to confirm registration." });
+      } else {
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch (error) {
+      setMessage({
+        type: "error",
+        text: error instanceof Error ? error.message : "Unable to connect to the authentication service.",
+      });
+    } finally {
+      setBusy(null);
     }
-    setBusy(null);
   }
 
   async function signInWithProvider(provider: "google" | "github") {

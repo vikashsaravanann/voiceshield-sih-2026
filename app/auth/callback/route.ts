@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
+  const configuredOrigin = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  const appOrigin = configuredOrigin || origin;
   const code = searchParams.get("code");
   const providerError = searchParams.get("error");
   const providerErrorCode = searchParams.get("error_code");
@@ -13,7 +15,7 @@ export async function GET(request: Request) {
     : "/dashboard";
 
   if (providerError) {
-    const loginUrl = new URL("/login", origin);
+    const loginUrl = new URL("/login", appOrigin);
     loginUrl.searchParams.set("error", providerError);
     if (providerErrorCode) loginUrl.searchParams.set("error_code", providerErrorCode);
     if (providerErrorDescription) {
@@ -26,14 +28,14 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${appOrigin}${next}`);
     }
     console.error("OAuth code exchange error:", error.message);
-    const loginUrl = new URL("/login", origin);
+    const loginUrl = new URL("/login", appOrigin);
     loginUrl.searchParams.set("error", "auth-callback-failed");
     loginUrl.searchParams.set("error_description", error.message);
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth-callback-failed`);
+  return NextResponse.redirect(`${appOrigin}/login?error=auth-callback-failed`);
 }
