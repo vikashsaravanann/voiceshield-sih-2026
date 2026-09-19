@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
-import UserMenu from "@/components/UserMenu";
+import { UserMenu } from "@/components/UserMenu";
 
 export const revalidate = 0;
 
