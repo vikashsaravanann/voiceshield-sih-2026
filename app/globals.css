@@ -35,6 +35,12 @@ html, body {
   word-spacing: 0.025em;
   overflow-x: hidden;
 }
+
+@media (max-width: 640px) {
+  html, body {
+    font-size: 12px;
+  }
+}
 body {
   position: relative;
   background-image:
