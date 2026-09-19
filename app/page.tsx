@@ -14,21 +14,21 @@ import {
 export const metadata: Metadata = {
   title: "VoiceShield | AI Anti-Spoofing for Telephony",
   description:
-    "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+    "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. A Logic Intelligence Technologies product.",
   icons: { icon: "/logo.png", apple: "/logo.png" },
   openGraph: {
     type: "website",
     siteName: "VoiceShield",
     title: "VoiceShield | AI Anti-Spoofing for Telephony",
     description:
-      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. A Logic Intelligence Technologies product.",
     images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "VoiceShield | AI Anti-Spoofing for Telephony",
     description:
-      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. SIH 2026 — Problem ID SIH26104.",
+      "Detect the clone. Protect the conversation. Real-time AI voice-cloning detection for Indian telecoms and BFSI networks. A Logic Intelligence Technologies product.",
     images: ["/banner.png"],
   },
 };
@@ -42,7 +42,7 @@ export default function HomePage() {
       <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/20 py-2.5 px-4 text-center">
         <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-emerald-300">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>SMART INDIA HACKATHON 2026 | PROBLEM ID: SIH26104 | AICTE CYBER SECURITY CELL</span>
+          <span>A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY & VOICE FRAUD INTELLIGENCE</span>
         </div>
       </div>
 

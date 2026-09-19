@@ -25,7 +25,7 @@ const NAV = [
   { href: "/dashboard", label: "SOC DASHBOARD", icon: LayoutDashboard },
   { href: "/architecture", label: "ARCHITECTURE", icon: Cpu },
   { href: "/docs", label: "DOCS", icon: BookOpen },
-  { href: "/brief", label: "JUDGE BRIEF", icon: FileCheck2 },
+  { href: "/brief", label: "PRODUCT BRIEF", icon: FileCheck2 },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -74,7 +74,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 VOICESHIELD
               </span>
               <span className="px-1 py-0.5 sm:px-1.5 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono font-bold tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 uppercase whitespace-nowrap hidden min-[360px]:inline-block">
-                SIH26104
+                LIT
               </span>
             </div>
           </Link>
@@ -312,7 +312,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <li>
                   <Link href="/brief" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
                     <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">JUDGE BRIEF</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRODUCT BRIEF</span>
                   </Link>
                 </li>
                 <li>
@@ -370,11 +370,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <Zap className="w-3.5 h-3.5 text-emerald-400" />
               <span className="text-white text-[11px] font-bold tracking-[0.2em]">VOICESHIELD</span>
               <span className="text-slate-600">·</span>
-              <span className="text-slate-400 text-[11px] tracking-widest">SIH 2026</span>
+              <span className="text-slate-400 text-[11px] tracking-widest">LIT PRODUCT</span>
             </div>
             
             <p className="text-[10px] text-slate-500 tracking-widest uppercase text-center shrink-0">
-              AICTE CYBER SECURITY CELL <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT SIH26104
+              AICTE CYBER SECURITY CELL <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT LIT
             </p>
             
             <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-[9px] uppercase tracking-widest bg-emerald-950/20 px-3 py-2 rounded border border-emerald-900/40 whitespace-nowrap shrink-0">
