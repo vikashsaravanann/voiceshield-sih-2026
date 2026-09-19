@@ -8,7 +8,7 @@ type Message = { role: "user" | "assistant"; content: string };
 const welcome: Message = {
   role: "assistant",
   content:
-    "System initialized. I am the VoiceShield Multi-Agent Copilot, powered by NVIDIA Nemotron Nano.\n\nMy sub-agents (Forensics, Legal, SecOps) are online. How can we assist you with SIH26104?",
+    "System initialized. I am the VoiceShield Multi-Agent Copilot, powered by NVIDIA Nemotron Nano.\n\nMy sub-agents (Forensics, Legal, SecOps) are online. How can we assist you with VoiceShield?",
 };
 
 export function VoiceShieldAssistant() {

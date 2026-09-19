@@ -374,7 +374,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
             
             <p className="text-[10px] text-slate-500 tracking-widest uppercase text-center shrink-0">
-              AICTE CYBER SECURITY CELL <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT LIT
+              LOGIC INTELLIGENCE TECHNOLOGIES <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT LIT
             </p>
             
             <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-[9px] uppercase tracking-widest bg-emerald-950/20 px-3 py-2 rounded border border-emerald-900/40 whitespace-nowrap shrink-0">

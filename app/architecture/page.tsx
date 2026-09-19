@@ -72,7 +72,7 @@ export default function ArchitecturePage() {
         <div className="space-y-4 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
             <Cpu className="w-3.5 h-3.5" />
-            <span>SIH26104 · TECHNICAL ARCHITECTURE SPECIFICATION</span>
+            <span>VoiceShield · TECHNICAL ARCHITECTURE SPECIFICATION</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">
             SYSTEM ARCHITECTURE &amp; DETECTION PIPELINE

@@ -73,7 +73,7 @@ export default function PrivacyPolicyPage() {
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
               <Scale className="w-3.5 h-3.5" />
-              <span>STATUTORY COMPLIANCE SPECIFICATION · AICTE SIH26104</span>
+              <span>STATUTORY COMPLIANCE SPECIFICATION · AICTE VoiceShield</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight uppercase">
@@ -405,7 +405,7 @@ export default function PrivacyPolicyPage() {
                 VOICESHIELD CYBERSECURITY CELL
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Smart India Hackathon 2026 · AICTE Cyber Security Cell (Problem Statement SIH26104)<br />
+                Logic Intelligence Technologies · Logic Intelligence Technologies (Problem Statement VoiceShield)<br />
                 Address: Technology Tower, National Capital Region, New Delhi, India<br />
                 Official Grievance Email: <a href="mailto:grievance@voiceshield.internal" className="text-emerald-300 underline underline-offset-4 font-mono">grievance@voiceshield.internal</a>
               </p>

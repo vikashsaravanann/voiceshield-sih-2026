@@ -183,11 +183,11 @@ export default function LoginPage() {
                     VOICESHIELD
                   </span>
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-emerald-950 text-emerald-400 border border-emerald-500/40 uppercase">
-                    SIH26104
+                    VoiceShield
                   </span>
                 </div>
                 <div className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-                  AICTE CYBER SECURITY CELL
+                  LOGIC INTELLIGENCE TECHNOLOGIES
                 </div>
               </div>
             </Link>
@@ -313,7 +313,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => {
                     setBusy("demo");
-                    document.cookie = "voiceshield_judge_demo=1; path=/; max-age=3600; SameSite=Lax";
+                    document.cookie = "voiceshield_demo_access=1; path=/; max-age=3600; SameSite=Lax";
                     window.location.assign("/dashboard");
                   }}
                   disabled={busy !== null}
@@ -321,7 +321,7 @@ export default function LoginPage() {
                 >
                   {busy === "demo" && <Loader2 className="w-4 h-4 animate-spin text-amber-300" />}
                   <span className="text-amber-300">
-                    {busy === "demo" ? "OPENING JUDGE DEMO..." : "ENTER JUDGE DEMO — NO LOGIN"}
+                    {busy === "demo" ? "OPENING DEMO ACCESS..." : "ENTER DEMO ACCESS — NO LOGIN"}
                   </span>
                 </button>
 
@@ -515,7 +515,7 @@ export default function LoginPage() {
 
       {/* ── Footer Bar with Generous Spacing ── */}
       <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
-        <div>VOICESHIELD SIH26104 · AICTE CYBER SECURITY CELL · FIPS 140-2 ENCRYPTED</div>
+        <div>VOICESHIELD VoiceShield · LOGIC INTELLIGENCE TECHNOLOGIES · FIPS 140-2 ENCRYPTED</div>
         <div className="text-slate-500">MUMBAI SOVEREIGN HOSTING (AP-SOUTH-1) · ZERO RAW AUDIO DISK RETENTION</div>
       </footer>
 

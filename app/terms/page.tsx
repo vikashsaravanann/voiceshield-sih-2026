@@ -18,19 +18,19 @@ import {
 
 export const metadata = {
   title: "TERMS OF SERVICE & TELEPHONY ACCEPTABLE USE | VOICESHIELD",
-  description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+  description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Logic Intelligence Technologies evaluation conditions.",
   icons: { icon: "/logo.png", apple: "/logo.png" },
   openGraph: {
     type: "website",
     siteName: "VoiceShield",
     title: "Terms of Service | VoiceShield",
-    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Logic Intelligence Technologies evaluation conditions.",
     images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Terms of Service | VoiceShield",
-    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Smart India Hackathon 2026 evaluation conditions.",
+    description: "Operational service agreement, telephony middleware terms, fail-safe protocols, and Logic Intelligence Technologies evaluation conditions.",
     images: ["/banner.png"],
   },
 };
@@ -61,7 +61,7 @@ export default function TermsOfServicePage() {
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-slate-900 text-slate-300 border border-slate-800">
                 <Award className="w-3.5 h-3.5 text-emerald-400" />
-                SIH26104 COMPLIANT
+                VoiceShield COMPLIANT
               </span>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function TermsOfServicePage() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-4xl font-normal">
-              These terms govern the operational deployment, programmatic API access, SIP trunk interception middleware, and Smart India Hackathon 2026 evaluation usage of the <strong className="text-white font-semibold">VoiceShield Real-Time Audio Deepfake Mitigation System</strong>.
+              These terms govern the operational deployment, programmatic API access, SIP trunk interception middleware, and Logic Intelligence Technologies evaluation usage of the <strong className="text-white font-semibold">VoiceShield Real-Time Audio Deepfake Mitigation System</strong>.
             </p>
           </div>
 
@@ -231,7 +231,7 @@ export default function TermsOfServicePage() {
               </h2>
             </div>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">
-              Evaluation judges, ministry officials, and academic mentors reviewing Problem Statement <strong className="text-white font-semibold">SIH26104</strong> (AICTE Cyber Security Cell) are granted full non-exclusive rights to inspect live operational metrics.
+              Evaluation judges, ministry officials, and academic mentors reviewing Problem Statement <strong className="text-white font-semibold">VoiceShield</strong> (Logic Intelligence Technologies) are granted full non-exclusive rights to inspect live operational metrics.
             </p>
           </div>
 

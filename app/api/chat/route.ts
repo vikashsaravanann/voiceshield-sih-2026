@@ -15,7 +15,7 @@ Format responses beautifully with Markdown (tables, bullet points, bold text).
 (Production Site: https://voiceshield-live.vercel.app)
 
 ### Project Overview
-VoiceShield is a real-time, AI-driven console that detects synthetic-voice (voice-cloning) attacks on telephone networks, especially for Indian telecom and BFSI (bank-finance-insurance) sectors. It is built for the Smart India Hackathon 2026 problem SIH26104 (AICTE Cyber-Security Cell).
+VoiceShield is a real-time, AI-driven console that detects synthetic-voice (voice-cloning) attacks on telephone networks, especially for Indian telecom and BFSI (bank-finance-insurance) sectors. It is built for the Logic Intelligence Technologies problem VoiceShield (AICTE Cyber-Security Cell).
 
 ### Core Capabilities
 - **Sub-250 ms latency**: Detection happens almost instantly, keeping conversations fluid.
