@@ -38,7 +38,7 @@ html, body {
 
 @media (max-width: 640px) {
   html, body {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 body {
