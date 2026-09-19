@@ -7,7 +7,7 @@
  * cryptographic evidence hashes under Section 65B of the Indian Evidence Act
  * and Section 63 of the Bharatiya Sakshya Adhiniyam (BSA), 2023.
  *
- * Architecture Compliance: SIH26104 | AICTE Cyber Security Cell
+ * Architecture Compliance: VoiceShield Platform | Logic Intelligence Technologies
  * Privacy Boundary: Zero disk writes — operates strictly on in-memory buffers.
  */
 

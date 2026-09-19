@@ -1,7 +1,7 @@
 """
 VoiceShield — Phonemic Challenge-Response Service
 Provides unpredictable multilingual phonemic phrases (EN, HI, TA) for active fraud prevention.
-SIH26104 | AICTE Cyber Security Cell
+VoiceShield Platform | Logic Intelligence Technologies
 """
 
 import os

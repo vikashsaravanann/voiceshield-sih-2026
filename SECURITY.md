@@ -17,7 +17,7 @@ vulnerability, please **do not open a public GitHub issue**.
 
 ### How to Report
 
-**Email:** voiceshield.sih@gmail.com  
+**Email:** info@logicintelligencetechnologies.in  
 **Subject:** `[SECURITY] Brief description of vulnerability`
 
 Please include:

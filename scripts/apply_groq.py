@@ -219,7 +219,7 @@ async def audio_stream_endpoint(websocket: WebSocket):
 """
 
 files["README.md"] = """# V-SHIELD: AI-Powered Real-Time Voice Cloning Detection & Prevention
-**Smart India Hackathon 2026 | Problem Statement ID: SIH26104**  
+**Logic Intelligence Technologies | Problem Statement ID: VoiceShield Platform**  
 **Category:** Software | **Theme:** Blockchain & Cybersecurity  
 **Organization:** All India Council for Technical Education (AICTE – Cyber Security Cell)
 

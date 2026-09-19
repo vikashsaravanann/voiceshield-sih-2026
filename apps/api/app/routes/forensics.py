@@ -2,7 +2,7 @@
 VoiceShield — Forensic Audio Splicing & Deepfake Analysis API
 Evaluates uploaded audio recordings across 333ms inspection windows,
 detects exact millisecond splice boundaries, and generates SHA-256 evidence data.
-SIH26104 | AICTE Cyber Security Cell
+VoiceShield Platform | Logic Intelligence Technologies
 """
 
 import hashlib

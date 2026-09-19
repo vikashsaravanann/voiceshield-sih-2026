@@ -1,6 +1,6 @@
 /**
  * VoiceShield — Protocol and Detection Types
- * SIH26104 | voiceshield-team/voiceshield-sih-2026
+ * VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
  */
 
 export type RiskLevel = "low" | "medium" | "high";

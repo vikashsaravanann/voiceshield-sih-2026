@@ -1,7 +1,7 @@
 """
 VoiceShield — Session Management Service
 Persists active streaming sessions and batches detection telemetry.
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 from datetime import datetime, timezone

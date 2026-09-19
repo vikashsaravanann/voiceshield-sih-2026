@@ -38,4 +38,4 @@ An OAuth callback without a valid code must never grant dashboard access.
 
 ## Responsible disclosure
 
-Do not publish vulnerabilities in a public issue. Email `voiceshield.sih@gmail.com` with `[SECURITY]` in the subject, affected component, reproduction steps, impact, and any suggested mitigation. We aim to acknowledge reports within 48 hours.
+Do not publish vulnerabilities in a public issue. Email `info@logicintelligencetechnologies.in` with `[SECURITY]` in the subject, affected component, reproduction steps, impact, and any suggested mitigation. We aim to acknowledge reports within 48 hours.

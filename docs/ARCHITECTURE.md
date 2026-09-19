@@ -1,10 +1,10 @@
-# VoiceShield Architecture (SIH 2026)
+# VoiceShield Architecture (Logic Intelligence Technologies)
 
 *Written by Vikash | 3:00 AM, the night before submission*
 
 ## High-Level Overview
 
-This is the technical architecture for **VoiceShield (SIH26104)**. I didn't want to build just another "upload an MP3 and wait 10 minutes" app. The challenge specifically asks for *real-time* telecommunication protection, so I built a WebSocket-based streaming architecture.
+This is the technical architecture for **VoiceShield (VoiceShield Platform)**. I didn't want to build just another "upload an MP3 and wait 10 minutes" app. The challenge specifically asks for *real-time* telecommunication protection, so I built a WebSocket-based streaming architecture.
 
 ```mermaid
 graph TD

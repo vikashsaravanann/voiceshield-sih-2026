@@ -1,6 +1,6 @@
 # VoiceShield ML assets
 
-SIH default path (after export):
+LIT default path (after export):
 
 ```
 apps/api/models/voiceshield-spoof-v0.1.pt

@@ -1,4 +1,4 @@
-/** VoiceShield streaming defaults — SIH demo-tuned. */
+/** VoiceShield streaming defaults — LIT demo-tuned. */
 
 export const AUDIO_CONFIG = {
   sampleRate: 16000,

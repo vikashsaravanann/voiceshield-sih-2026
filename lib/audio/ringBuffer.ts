@@ -2,7 +2,7 @@
  * VoiceShield — Circular Audio Ring Buffer
  * Retains the last N seconds of raw PCM16 audio in volatile RAM
  * to enable zero-loss replay upon WebSocket session resumption.
- * SIH26104 | voiceshield-team/voiceshield-sih-2026
+ * VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
  */
 
 export interface BufferedChunk {

@@ -58,7 +58,7 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
             <BackendHealth />
 
             <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
-              <EvidenceCard title="SIH prevention loop" value="Detect → Challenge → Block" detail="Active mitigation, not passive scoring" />
+              <EvidenceCard title="Prevention loop" value="Detect → Challenge → Block" detail="Active mitigation, not passive scoring" />
               <EvidenceCard title="Privacy posture" value="0 bytes stored" detail="PCM remains in volatile memory only" />
               <EvidenceCard title="Telephony target" value="< 250 ms" detail="Designed for real-time G.711 call paths" />
             </div>

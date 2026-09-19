@@ -1,6 +1,6 @@
 """
 VoiceShield — WebSocket Message Schemas
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 from typing import Any

@@ -3,7 +3,7 @@
  * Extracts multi-dimensional acoustic embeddings (pitch F0, spectral centroid,
  * formant approximations, and sub-band cepstral coefficients) to perform 1:1
  * speaker similarity verification against enrolled voiceprints.
- * SIH26104 | AICTE Cyber Security Cell
+ * VoiceShield Platform | Logic Intelligence Technologies
  */
 
 export interface VoiceprintProfile {

@@ -1,7 +1,7 @@
 """
 VoiceShield — Anti-Spoofing Metric Evaluation
 Computes Equal Error Rate (EER), minDCF, and False Acceptance/Rejection Rates (FAR/FRR).
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 import numpy as np

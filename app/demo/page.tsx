@@ -236,7 +236,7 @@ export default function DemoPage() {
             <div className="space-y-3 sm:space-y-4 max-w-2xl">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
                 <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-mono font-bold tracking-widest uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
-                  VoiceShield · AICTE CYBER CELL
+                  VoiceShield · LOGIC INTELLIGENCE TECHNOLOGIES
                 </span>
                 <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-mono font-bold tracking-widest uppercase bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
                   REAL-TIME TELEPHONY MITIGATION
@@ -390,7 +390,7 @@ export default function DemoPage() {
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-                OFFICIAL BENCHMARK EVALUATION PRESETS (JUDGE QUICK-TEST)
+                OFFICIAL BENCHMARK EVALUATION PRESETS (EVALUATION)
               </span>
             </div>
             <span className="text-[10px] font-mono text-slate-400 uppercase">

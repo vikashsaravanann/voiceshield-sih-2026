@@ -1,6 +1,6 @@
 """
 VoiceShield — Health Check Endpoint
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 from fastapi import APIRouter, Request

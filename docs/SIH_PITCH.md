@@ -1,6 +1,6 @@
-# VoiceShield SIH 2026 Pitch Deck & Script
+# VoiceShield Logic Intelligence Technologies Pitch Deck & Script
 
-**Problem Statement ID:** SIH26104  
+**Problem Statement ID:** VoiceShield Platform  
 **Title:** AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks  
 **Organization:** AICTE – Cyber Security Cell  
 **Theme:** Blockchain & Cybersecurity  
@@ -11,7 +11,7 @@
 
 ### Slide 1: Title & Hook
 - **Headline:** VoiceShield — Detect the clone. Protect the conversation.
-- **Problem Statement ID:** SIH26104 | AICTE Cyber Security Cell
+- **Problem Statement ID:** VoiceShield Platform | Logic Intelligence Technologies
 - **Visual:** Real-time waveform split between genuine voice and synthetic clone with detected anomaly heatmap.
 
 ### Slide 2: The National Emergency

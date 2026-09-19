@@ -1,6 +1,6 @@
 # VoiceShield ML Pipeline Specification
 
-**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+**Logic Intelligence Technologies | Problem ID: VoiceShield Platform | AICTE – Cyber Security Cell**  
 *AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
 ---
@@ -13,7 +13,7 @@ VoiceShield employs a **hybrid signal processing (DSP) and deep representation l
 
 ## 2. Model Benchmarks & Comparison
 
-| Model Architecture | Strengths & In-Domain Performance | Target Latency | Compute / RAM | Recommended SIH Context |
+| Model Architecture | Strengths & In-Domain Performance | Target Latency | Compute / RAM | Recommended LIT Context |
 |---|---|---|---|---|
 | **AASIST** (Graph Attention) | Graph attention over spectro-temporal nodes; EER ~0.83% on ASVspoof 2019 LA. | ~180ms (CPU) / ~45ms (GPU) | 85MB / 1GB VRAM | **Default for balanced deployment** (TorchScript) |
 | **RawNet2** (Sinc-Conv Waveform) | End-to-end raw audio processing; robust to compression; EER ~1.91% on ASVspoof 2019. | ~120ms (CPU) / ~35ms (GPU) | 42MB / 512MB VRAM | **CPU Fallback / Low-Resource Edge** |

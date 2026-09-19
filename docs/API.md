@@ -1,6 +1,6 @@
 # VoiceShield API and streaming protocol
 
-**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+**Logic Intelligence Technologies | Problem ID: VoiceShield Platform | AICTE – Cyber Security Cell**  
 *AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
 ---

@@ -12,7 +12,7 @@ Format responses beautifully with Markdown (tables, bullet points, bold text).
 ---
 
 # VoiceShield – AI Anti-Spoofing for Telephony
-(Production Site: https://voiceshield-live.vercel.app)
+(Production Site: https://voiceshield.logicintelligencetechnologies.in)
 
 ### Project Overview
 VoiceShield is a real-time, AI-driven console that detects synthetic-voice (voice-cloning) attacks on telephone networks, especially for Indian telecom and BFSI (bank-finance-insurance) sectors. It is built for the Logic Intelligence Technologies problem VoiceShield (AICTE Cyber-Security Cell).

@@ -19,7 +19,7 @@ Open the landing page and say:
 
 > “Voice cloning turns a familiar voice into an attack surface. VoiceShield watches the conversation in real time and gives an operator evidence and a response path before trust becomes a transfer.”
 
-Point out SIH26104, the privacy boundary, and the live inference status.
+Point out VoiceShield Platform, the privacy boundary, and the live inference status.
 
 ### 2. Clean speech baseline — 0:45–1:45
 

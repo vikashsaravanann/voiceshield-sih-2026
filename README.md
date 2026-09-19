@@ -2,13 +2,13 @@
 
 > **Detect the clone. Protect the conversation.**
 
-VoiceShield is a real-time voice-cloning detection and response console built for **Smart India Hackathon 2026 — SIH26104, AICTE Cyber Security Cell**. It streams short PCM audio windows to an inference service, scores synthetic-voice risk, surfaces interpretable markers, and keeps an operator focused on the decision that matters: trust, challenge, or escalate.
+VoiceShield is a real-time voice-cloning detection and response console built for **Logic Intelligence Technologies — VoiceShield Platform, Logic Intelligence Technologies**. It streams short PCM audio windows to an inference service, scores synthetic-voice risk, surfaces interpretable markers, and keeps an operator focused on the decision that matters: trust, challenge, or escalate.
 
 ## Live system
 
 | Surface | URL | Purpose |
 | --- | --- | --- |
-| Web console | [voiceshield-live.vercel.app](https://voiceshield-live.vercel.app) | Landing page, live demo, reports, documentation, and authenticated dashboard |
+| Web console | [voiceshield.logicintelligencetechnologies.in](https://voiceshield.logicintelligencetechnologies.in) | Landing page, live demo, reports, documentation, and authenticated dashboard |
 | Inference API | [voiceshield-sih-2026-production.up.railway.app](https://voiceshield-sih-2026-production.up.railway.app) | FastAPI health, WebSocket inference, session, audit, challenge, and telephony routes |
 | API health | [`/health`](https://voiceshield-sih-2026-production.up.railway.app/health) | Deployment and model readiness probe |
 
@@ -124,7 +124,7 @@ Voice biometrics and synthetic-speech detection can affect real people. Use Voic
 - [Security model](docs/SECURITY.md)
 - [ML pipeline](docs/ML_PIPELINE.md)
 - [Judge demo script](docs/DEMO_SCRIPT.md)
-- [SIH pitch](docs/SIH_PITCH.md)
+- [LIT pitch](docs/LIT_PITCH.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
 

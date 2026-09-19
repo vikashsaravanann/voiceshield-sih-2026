@@ -73,7 +73,7 @@ export function useForensicReport() {
 
     doc.setFontSize(7);
     doc.setTextColor(130, 160, 200);
-    doc.text("Smart India Hackathon 2026  |  Problem ID: SIH26104  |  AICTE Cyber Security Cell", 40, 31);
+    doc.text("Logic Intelligence Technologies  |  Problem ID: VoiceShield Platform  |  Logic Intelligence Technologies", 40, 31);
     doc.text("voiceshield-team/voiceshield-sih-2026  |  Powered by Groq LPU + FastAPI", 40, 36);
 
     // ── CLASSIFICATION BADGE ─────────────────────────────────────────────────
@@ -219,7 +219,7 @@ export function useForensicReport() {
 
     // Footer right
     doc.setTextColor(80, 120, 170);
-    doc.text("I4C / AICTE Cyber Security Cell", W - 14, H - 14, { align: "right" });
+    doc.text("I4C / Logic Intelligence Technologies", W - 14, H - 14, { align: "right" });
     doc.text("DPDP Compliant — No PCM audio retained", W - 14, H - 9, { align: "right" });
 
     // Page number

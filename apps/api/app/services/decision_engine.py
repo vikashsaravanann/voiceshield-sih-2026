@@ -1,7 +1,7 @@
 """
 VoiceShield — Risk Decision Engine
 Maps spoof probability to risk levels and suggested actions.
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 

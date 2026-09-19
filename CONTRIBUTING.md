@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to VoiceShield. This document outlines
 the standards and workflow we follow to keep the codebase professional, consistent,
-and SIH-ready.
+and LIT-ready.
 
 ---
 
@@ -156,6 +156,6 @@ Write tests for:
 ## Questions?
 
 Open a [GitHub Discussion](https://github.com/voiceshield-team/voiceshield-sih-2026/discussions)
-or email the team at **voiceshield.sih@gmail.com**.
+or email the team at **info@logicintelligencetechnologies.in**.
 
 We appreciate every contribution — code, documentation, testing, or feedback.

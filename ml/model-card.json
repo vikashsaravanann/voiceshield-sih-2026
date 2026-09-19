@@ -8,5 +8,5 @@
   "chunk_ms": 333,
   "device": "cpu",
   "status": "bootstrap",
-  "note": "SIH bootstrap head. Not a published AASIST checkpoint. Replace after ASVspoof fine-tune."
+  "note": "LIT bootstrap head. Not a published AASIST checkpoint. Replace after ASVspoof fine-tune."
 }

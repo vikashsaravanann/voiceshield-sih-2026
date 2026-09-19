@@ -2,7 +2,7 @@
 VoiceShield — ASVspoof Dataset Preparation & Augmentation
 Prepares ASVspoof 2019 LA and ASVspoof 5 Track 1 protocols
 with telephony transcoding (G.711 / AMR-NB) for Indian telecommunications defense.
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 import os

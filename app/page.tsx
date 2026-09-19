@@ -38,7 +38,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
-      {/* Top Banner - Added after user feedback to make SIH branding prominent */}
+      {/* Top Banner - Added after user feedback to make LIT branding prominent */}
       <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/20 py-2.5 px-4 text-center">
         <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-emerald-300">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

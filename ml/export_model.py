@@ -2,7 +2,7 @@
 """
 VoiceShield — Anti-Spoofing ML Model Exporter
 Exports TorchScript (.pt) and ONNX (.onnx) models for real-time voice clone detection.
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 
 Usage:
   python3 ml/export_model.py [--output-dir apps/api/models]

@@ -2,7 +2,7 @@
 VoiceShield — Chunk Latency Benchmarking
 Profiles audio ingestion, feature extraction, and inference runtimes
 across tunable audio hop budgets (250ms, 333ms, 500ms).
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 import time

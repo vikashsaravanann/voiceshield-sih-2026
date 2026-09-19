@@ -44,7 +44,7 @@ allowed_origins = [
     if origin.strip()
 ]
 _always_allow = [
-    "https://voiceshield-live.vercel.app",
+    "https://voiceshield.logicintelligencetechnologies.in",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]

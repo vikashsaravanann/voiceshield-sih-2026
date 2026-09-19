@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export VoiceShield SIH bootstrap spoof head as TorchScript.
+"""Export VoiceShield LIT bootstrap spoof head as TorchScript.
 
 Not a published AASIST / RawNet2 checkpoint. Swap after ASVspoof fine-tune.
 

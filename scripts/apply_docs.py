@@ -33,7 +33,7 @@ jobs:
 """
 
 # 2. Demo Script
-files["docs/DEMO_SCRIPT.md"] = """# VoiceShield SIH 2026 - Demo Script
+files["docs/DEMO_SCRIPT.md"] = """# VoiceShield Logic Intelligence Technologies - Demo Script
 
 ## 1. The Hook (0:00 - 1:00)
 - **Action:** Open the VoiceShield Landing Page.

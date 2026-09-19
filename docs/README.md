@@ -1,6 +1,6 @@
 # VoiceShield documentation
 
-This directory is the technical source of truth for the VoiceShield SIH26104 demonstration. Documentation is written against the current repository layout: a Next.js web console at the repository root and a FastAPI inference service under `apps/api`.
+This directory is the technical source of truth for the VoiceShield VoiceShield Platform demonstration. Documentation is written against the current repository layout: a Next.js web console at the repository root and a FastAPI inference service under `apps/api`.
 
 ## Start here
 
@@ -12,7 +12,7 @@ This directory is the technical source of truth for the VoiceShield SIH26104 dem
 | [Security](SECURITY.md) | Authentication, privacy, RLS, and threat boundaries |
 | [ML pipeline](ML_PIPELINE.md) | Features, models, evaluation, and limitations |
 | [Demo script](DEMO_SCRIPT.md) | A reliable five-minute judge walkthrough |
-| [SIH pitch](SIH_PITCH.md) | Problem, differentiation, impact, and roadmap |
+| [LIT pitch](LIT_PITCH.md) | Problem, differentiation, impact, and roadmap |
 
 ## Documentation principles
 

@@ -12,7 +12,7 @@
  * - Millisecond-aligned splice injection audit logs with acoustic anomaly breakdown.
  * - Official examiner declaration, seal block, and verification stamp.
  *
- * SIH26104 | AICTE Cyber Security Cell
+ * VoiceShield Platform | Logic Intelligence Technologies
  */
 
 import { jsPDF } from "jspdf";
@@ -29,7 +29,7 @@ export interface ForensicExaminerDetails {
 const DEFAULT_EXAMINER: ForensicExaminerDetails = {
   examinerName: "Inspector / Senior Cyber Forensic Examiner",
   examinerTitle: "Certified Digital Evidence Examiner (Audio Biometrics)",
-  organization: "AICTE Cyber Security Cell & National Cybercrime Forensic Lab",
+  organization: "Logic Intelligence Technologies & National Cybercrime Forensic Lab",
   accreditationId: "CERT-IN/NCFL-AUD-2026-9814",
   caseReference: `VS-SEC65B-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`,
 };
@@ -63,7 +63,7 @@ export function generateSection65BCertificate(
   doc.setFont("helvetica", "normal");
   doc.setTextColor(52, 211, 153); // emerald-400
   doc.text(
-    "AICTE CYBER SECURITY CELL · PROBLEM ID: SIH26104 · I4C INTEGRATED FORENSICS",
+    "LOGIC INTELLIGENCE TECHNOLOGIES · PROBLEM ID: VoiceShield Platform · I4C INTEGRATED FORENSICS",
     pageWidth / 2,
     16,
     { align: "center" }
@@ -268,7 +268,7 @@ export function generateSection65BCertificate(
   doc.text(`${new Date().toLocaleDateString("en-IN", { dateStyle: "full" })} · New Delhi, India`, pageWidth - 80, y);
   y += 3.5;
   doc.text(examiner.examinerTitle, 15, y);
-  doc.text("AICTE Cyber Security Cell Laboratory", pageWidth - 80, y);
+  doc.text("Logic Intelligence Technologies Laboratory", pageWidth - 80, y);
 
   // ─── 8. Watermarked Verification Bar ─────────────────────────────────────────
   doc.setFillColor(15, 23, 42);

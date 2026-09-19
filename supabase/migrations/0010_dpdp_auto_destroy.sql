@@ -1,7 +1,7 @@
 -- ============================================================
 -- VoiceShield — DPDP Automated Data Destruction
 -- Supabase pg_cron job: runs every night at midnight IST
--- SIH26104 | AICTE Cyber Security Cell
+-- VoiceShield Platform | Logic Intelligence Technologies
 -- ============================================================
 -- INSTRUCTIONS:
 -- 1. Go to https://supabase.com/dashboard/project/ynxmidkzwxhsvoyqmpsh/sql/new

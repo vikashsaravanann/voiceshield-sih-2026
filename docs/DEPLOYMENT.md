@@ -1,6 +1,6 @@
 # VoiceShield Production Deployment Guide
 
-**SIH 2026 | Problem ID: SIH26104 | AICTE – Cyber Security Cell**  
+**Logic Intelligence Technologies | Problem ID: VoiceShield Platform | AICTE – Cyber Security Cell**  
 *AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks*
 
 ---
@@ -18,7 +18,7 @@ Configure under Vercel Project Settings → Environment Variables:
 | Variable | Value Description |
 |---|---|
 | `NEXT_PUBLIC_APP_NAME` | `VoiceShield` |
-| `NEXT_PUBLIC_SITE_URL` | `https://voiceshield-live.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | `https://voiceshield.logicintelligencetechnologies.in` |
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT_REF.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `YOUR_SUPABASE_ANON_KEY` |
 | `NEXT_PUBLIC_FASTAPI_HTTP_URL` | `https://voiceshield-sih-2026-production.up.railway.app` |

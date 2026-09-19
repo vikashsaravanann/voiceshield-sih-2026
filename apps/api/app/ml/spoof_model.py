@@ -1,7 +1,7 @@
 """
 VoiceShield — Anti-Spoofing Model Interface
 Wraps AASIST / RawNet2 / Wav2Vec2-AASIST for streaming inference.
-SIH26104 | voiceshield-team/voiceshield-sih-2026
+VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
 """
 
 from typing import Any

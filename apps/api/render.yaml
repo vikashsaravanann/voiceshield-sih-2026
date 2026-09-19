@@ -21,7 +21,7 @@ services:
       - key: STORE_RAW_AUDIO
         value: "false"
       - key: NEXT_PUBLIC_SITE_URL
-        value: https://voiceshield-live.vercel.app
+        value: https://voiceshield.logicintelligencetechnologies.in
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
