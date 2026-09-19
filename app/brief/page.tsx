@@ -5,13 +5,13 @@ export default function BriefPage() {
       <div className="relative z-10 mx-auto max-w-5xl space-y-10 px-4 py-12 sm:px-8">
         <header className="space-y-4 border-b border-slate-800 pb-10">
           <p className="text-[11px] font-semibold tracking-[0.28em] text-emerald-400">
-            SIH26104 · JUDGE BRIEF
+            VoiceShield · PRODUCT BRIEF
           </p>
           <h1 className="text-4xl font-extrabold tracking-[0.12em] text-white">
             ARCHITECTURE AND LIVE SCRIPT
           </h1>
           <p className="max-w-2xl text-sm leading-7 tracking-wide text-slate-400">
-            One page for evaluators. Architecture, prevention loop, and the nine-minute demo live in the same brief so the pack and the stack are not split.
+            Product brief for VoiceShield — a Logic Intelligence Technologies product. Architecture, prevention loop, and the live demo script in one page so evaluators see the full stack without splitting the pack.
           </p>
         </header>
         <section className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
@@ -36,7 +36,7 @@ export default function BriefPage() {
           <h2 className="text-sm font-bold tracking-[0.22em] text-emerald-300">NINE-MINUTE SCRIPT</h2>
           <ol className="space-y-4">
             {[
-              "Open VoiceShield. State SIH26104 — cloned voices on Indian telephony.",
+              "Open VoiceShield. State the product mission — cloned voices on telephony and enterprise channels.",
               "Start the live path. Speak ten seconds. Show GREEN and hop latency.",
               "Inject the cloned stream. Risk should cross 75% and arm the challenge.",
               "Switch Hindi / Tamil prompt. Fail-closed if clone injection stays on.",
@@ -63,6 +63,23 @@ export default function BriefPage() {
             </article>
           ))}
         </section>
+
+        <section className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+          <h2 className="text-sm font-bold tracking-[0.22em] text-emerald-300">LOGIC INTELLIGENCE TECHNOLOGIES · PRODUCT OWNERSHIP</h2>
+          <p className="text-sm leading-7 tracking-wide text-slate-400">
+            VoiceShield is designed, built, and operated by Logic Intelligence Technologies as an enterprise AI security product — not a separate company.
+          </p>
+          <ul className="space-y-3 text-sm leading-7 tracking-wide text-slate-300">
+            <li><span className="text-emerald-400 font-semibold">Product &amp; architecture</span> — real-time anti-spoofing pipeline, WebSocket inference path, forensic and SOC surfaces.</li>
+            <li><span className="text-emerald-400 font-semibold">Engineering</span> — Next.js console, FastAPI inference host, AASIST / feature fusion, challenge-response, audit logging.</li>
+            <li><span className="text-emerald-400 font-semibold">Security &amp; compliance</span> — DPDP-aligned defaults, no waveform on disk, server-side secrets only, enterprise evaluation access control.</li>
+            <li><span className="text-emerald-400 font-semibold">Go-to-market</span> — demo request workflow on logicintelligencetechnologies.in, partner pilots, and production deployment planning.</li>
+          </ul>
+          <p className="text-xs tracking-wide text-slate-500">
+            Company: Logic Intelligence Technologies · Product: VoiceShield · Domain: www.logicintelligencetechnologies.in/voice-shield
+          </p>
+        </section>
+
       </div>
     </div>
   );
