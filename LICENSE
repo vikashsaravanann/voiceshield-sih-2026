@@ -1,8 +1,7 @@
 MIT License
 
-Copyright (c) 2026 VoiceShield SIH Team
-voiceshield-team/voiceshield-sih-2026
-Smart India Hackathon 2026 — Problem ID: SIH26104
+Copyright (c) 2026 Logic Intelligence Technologies Pvt. Ltd.
+VoiceShield — an AI security product by Logic Intelligence Technologies Pvt. Ltd.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +23,8 @@ SOFTWARE.
 
 ---
 
-This project was developed as part of Smart India Hackathon 2026 for the
-purpose of academic research and national cybersecurity innovation. The
+This project is maintained as VoiceShield, an AI security product by Logic Intelligence Technologies Pvt. Ltd., for the
+purpose of enterprise voice security research and product development. The
 anti-spoofing models integrated in this project are used under their
 respective open-source licenses (see /ml/model_cards/ for details).
 
