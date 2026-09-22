@@ -17,6 +17,10 @@ import {
   Layers,
 } from "lucide-react";
 
+const LIT_HOME = "https://www.logicintelligencetechnologies.in";
+const LIT_REQUEST =
+  "https://www.logicintelligencetechnologies.in/voice-shield/request";
+
 const NAV = [
   { href: "/", label: "OVERVIEW", icon: Activity },
   { href: "/demo", label: "LIVE DEMO", icon: Radio },
@@ -97,6 +101,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap">
+            <a
+              href={LIT_HOME}
+              className="hidden md:inline-flex items-center px-2 py-1 rounded-lg border border-slate-800 text-[10px] font-mono text-slate-400 hover:text-emerald-300 hover:border-slate-700 uppercase tracking-wider"
+            >
+              Company
+            </a>
+
             <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-300 whitespace-nowrap shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-emerald-400 font-bold uppercase whitespace-nowrap">LIVE</span>
@@ -163,14 +174,20 @@ export function Shell({ children }: { children: React.ReactNode }) {
             })}
 
             <div className="pt-6 mt-4 border-t border-slate-800/80 space-y-3">
-              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400 uppercase">CORE ENGINE:</span>
-                <span className="text-emerald-400 font-bold uppercase whitespace-nowrap">LOW-LATENCY REAL-TIME</span>
-              </div>
-              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400 uppercase">TELEPHONY CODEC:</span>
-                <span className="text-cyan-400 font-bold uppercase whitespace-nowrap">G.711 / AMR RESILIENT</span>
-              </div>
+              <a
+                href={LIT_HOME}
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 p-3.5 rounded-xl border border-slate-800 text-slate-300 font-mono font-bold text-xs tracking-widest uppercase hover:border-emerald-500/40 hover:text-emerald-300"
+              >
+                LOGIC INTELLIGENCE TECHNOLOGIES
+              </a>
+              <a
+                href={LIT_REQUEST}
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 p-3.5 rounded-xl border border-emerald-500/30 text-emerald-300 font-mono font-bold text-xs tracking-widest uppercase"
+              >
+                REQUEST ACCESS
+              </a>
               <div className="flex items-center justify-center gap-3 pt-2 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
                 <Link href="/privacy" onClick={() => setMobileMenuOpen(false)} className="block py-2 md:py-0 hover:text-emerald-400 transition-colors">
                   PRIVACY POLICY
@@ -211,21 +228,25 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </Link>
 
             <p className="text-[13px] sm:text-sm text-slate-300 leading-relaxed font-medium">
-              Real-time telephony middleware mitigating AI synthetic voice clones<br className="hidden sm:block" />
-              and conversational deepfake fraud with a low-latency detection path.
+              VoiceShield — an AI security product by Logic Intelligence Technologies
+              Pvt. Ltd. Low-latency voice risk signals and structured evidence for
+              enterprise workflows.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-[10px] font-bold uppercase tracking-widest">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 shadow-sm transition-colors hover:border-emerald-500/40 cursor-default">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 LOW-LATENCY PATH
               </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-slate-300 transition-colors hover:border-slate-700 cursor-default">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-slate-300">
                 DPDP-AWARE DESIGN
               </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-cyan-400 transition-colors hover:border-slate-700 cursor-default">
-                G.711 / AMR
-              </span>
+              <a
+                href={LIT_REQUEST}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20"
+              >
+                REQUEST ACCESS
+              </a>
             </div>
           </div>
 
@@ -279,9 +300,27 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
             <div className="flex flex-col min-w-[200px]">
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
-                LEGAL
+                COMPANY
               </h3>
               <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
+                <li>
+                  <a href={LIT_HOME} className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">LIT HOME</span>
+                  </a>
+                </li>
+                <li>
+                  <a href={`${LIT_HOME}/voice-shield`} className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRODUCT OVERVIEW</span>
+                  </a>
+                </li>
+                <li>
+                  <a href={LIT_REQUEST} className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">REQUEST ACCESS</span>
+                  </a>
+                </li>
                 <li>
                   <Link href="/privacy" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
                     <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
