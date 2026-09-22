@@ -14,7 +14,6 @@ import {
   Menu,
   X,
   ChevronRight,
-  Zap,
   Layers,
 } from "lucide-react";
 
@@ -32,12 +31,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  // Prevent background scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -53,11 +50,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans overflow-x-hidden">
-      {/* ── Primary Enterprise Cyber Header (Single Clean Line) ── */}
       <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#030712]/90 border-b border-slate-800/80 shadow-2xl transition-all duration-200">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
-          
-          {/* Brand Logo & Identification in 1 single horizontal line */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group shrink-0 whitespace-nowrap">
             <div className="relative shrink-0">
               <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border-2 border-emerald-500/60 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:border-emerald-400 group-hover:shadow-emerald-400/30 transition-all duration-300 group-hover:scale-105 overflow-hidden bg-slate-950 ring-1 ring-emerald-500/20 ring-offset-1 ring-offset-slate-950">
@@ -79,7 +73,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links — Strictly 1 Line (whitespace-nowrap) */}
           <nav className="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800/80 backdrop-blur-md whitespace-nowrap flex-nowrap shrink-0">
             {NAV.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -103,15 +96,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          {/* Right Action: Live Ping & Sign In in 1 Line */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap">
-            {/* Live Telemetry Ping */}
             <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-300 whitespace-nowrap shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-emerald-400 font-bold uppercase whitespace-nowrap">LIVE</span>
             </div>
 
-            {/* Operator Sign In Button — Single Line */}
             <Link
               href="/login"
               className="
@@ -125,7 +115,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <span className="whitespace-nowrap">SIGN IN</span>
             </Link>
 
-            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-colors shrink-0"
@@ -136,11 +125,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Subtle glowing accent underline */}
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
       </header>
 
-      {/* ── Mobile Full-Featured Cyber Navigation Drawer ── */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-[#030712]/98 backdrop-blur-2xl border-b border-slate-800 p-4 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="flex flex-col space-y-2 max-w-md mx-auto pt-2">
@@ -175,31 +162,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
               );
             })}
 
-            {/* Mobile Footer Identity */}
             <div className="pt-6 mt-4 border-t border-slate-800/80 space-y-3">
               <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400 uppercase">CORE ENGINE:</span>
-                <span className="text-emerald-400 font-bold uppercase whitespace-nowrap">SUB-300MS REAL-TIME</span>
+                <span className="text-emerald-400 font-bold uppercase whitespace-nowrap">LOW-LATENCY REAL-TIME</span>
               </div>
               <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400 uppercase">TELEPHONY CODEC:</span>
                 <span className="text-cyan-400 font-bold uppercase whitespace-nowrap">G.711 / AMR RESILIENT</span>
               </div>
-              {/* Mobile Legal Links */}
               <div className="flex items-center justify-center gap-3 pt-2 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                <Link
-                  href="/privacy"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 md:py-0 hover:text-emerald-400 transition-colors"
-                >
+                <Link href="/privacy" onClick={() => setMobileMenuOpen(false)} className="block py-2 md:py-0 hover:text-emerald-400 transition-colors">
                   PRIVACY POLICY
                 </Link>
                 <span>·</span>
-                <Link
-                  href="/terms"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 md:py-0 hover:text-emerald-400 transition-colors"
-                >
+                <Link href="/terms" onClick={() => setMobileMenuOpen(false)} className="block py-2 md:py-0 hover:text-emerald-400 transition-colors">
                   TERMS OF SERVICE
                 </Link>
               </div>
@@ -217,17 +194,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      {/* ── Main Content Area ── */}
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
-      {/* ── High-Tech Cyber Enterprise Footer ── */}
       <footer className="relative w-full border-t border-slate-800/50 bg-[#030712] pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-12 text-slate-400 font-sans overflow-hidden">
-        {/* Subtle ambient lighting */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
-        
+
         <div className="max-w-7xl mx-auto flex flex-col space-y-16">
-          
-          {/* Top Section: Brand & Mission */}
           <div className="flex flex-col items-center justify-center text-center w-full max-w-3xl mx-auto space-y-4">
             <Link href="/" className="inline-flex items-center gap-4 group">
               <div className="w-10 h-10 rounded-full border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:shadow-emerald-500/20 transition-all bg-slate-950 shrink-0 p-0.5">
@@ -237,19 +209,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 VOICESHIELD
               </span>
             </Link>
-            
+
             <p className="text-[13px] sm:text-sm text-slate-300 leading-relaxed font-medium">
               Real-time telephony middleware mitigating AI synthetic voice clones<br className="hidden sm:block" />
-              and conversational deepfake fraud within 269ms.
+              and conversational deepfake fraud with a low-latency detection path.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-[10px] font-bold uppercase tracking-widest">
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 shadow-sm transition-colors hover:border-emerald-500/40 cursor-default">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
-                SUB-300MS RTT
+                LOW-LATENCY PATH
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-slate-300 transition-colors hover:border-slate-700 cursor-default">
-                DPDP ACT 2023
+                DPDP-AWARE DESIGN
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/40 border border-slate-800 text-cyan-400 transition-colors hover:border-slate-700 cursor-default">
                 G.711 / AMR
@@ -259,130 +231,77 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
           <div className="w-full max-w-6xl mx-auto h-[1px] bg-slate-800/60" />
 
-          {/* Middle Section: Navigation Links */}
           <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row justify-center gap-12 lg:gap-32 pt-6">
-            {/* Col 1: Core Modules */}
             <div className="flex flex-col min-w-[200px]">
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
                 CORE MODULES
               </h3>
               <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
-                <li>
-                  <Link href="/" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">OVERVIEW</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/demo" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300 flex items-center">
-                      LIVE DEMO
-                      <span className="ml-3 px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 text-[10px] font-bold tracking-wider border border-emerald-500/30 leading-none shadow-sm shadow-emerald-500/20">MIC</span>
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/dashboard" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">SOC DASHBOARD</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/architecture" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">ARCHITECTURE</span>
-                  </Link>
-                </li>
+                {["/", "/demo", "/dashboard", "/architecture"].map((href, i) => {
+                  const labels = ["OVERVIEW", "LIVE DEMO", "SOC DASHBOARD", "ARCHITECTURE"];
+                  return (
+                    <li key={href}>
+                      <Link href={href} className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                        <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                        <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">{labels[i]}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
-            {/* Col 2: Documentation */}
             <div className="flex flex-col min-w-[200px]">
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
                 DOCUMENTATION
               </h3>
               <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/docs" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                  <Link href="/docs" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
                     <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">DEVELOPER API</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/brief" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
+                  <Link href="/brief" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
                     <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRODUCT BRIEF</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/docs#websocket" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">WEBSOCKET WSS</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/docs#forensics" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">FORENSIC FIR PDF</span>
+                  <Link href="/sandbox" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">FORENSIC LAB</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Col 3: Legal */}
             <div className="flex flex-col min-w-[200px]">
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-widest border-l-[3px] border-emerald-400 pl-4 py-1 mb-4 leading-none">
-                COMPLIANCE &amp; LEGAL
+                LEGAL
               </h3>
               <ul className="space-y-2 font-mono text-xs text-slate-400/90 font-medium tracking-wide">
                 <li>
-                  <Link href="/privacy" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRIVACY POLICY</span>
+                  <Link href="/privacy" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">PRIVACY</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 hover:shadow-md hover:shadow-emerald-900/5 border border-transparent hover:border-slate-800/50 transition-all duration-300">
-                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 transition-colors text-sm font-bold">+</span>
-                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">TERMS OF SERVICE</span>
+                  <Link href="/terms" className="group flex items-center px-3 py-2.5 -mx-3 rounded-lg hover:bg-slate-900/60 border border-transparent hover:border-slate-800/50 transition-all duration-300">
+                    <span className="text-slate-600/80 w-5 group-hover:text-emerald-400 text-sm font-bold">+</span>
+                    <span className="group-hover:text-emerald-300 group-hover:translate-x-1 transition-transform duration-300">TERMS</span>
                   </Link>
-                </li>
-                <li>
-                  <span className="flex items-center px-3 py-2.5 -mx-3 text-slate-500/80 uppercase">
-                    <span className="text-slate-600/80 w-5 text-sm font-bold">+</span>
-                    <span>DPDP ACT (INDIA) 2023</span>
-                  </span>
-                </li>
-                <li>
-                  <span className="flex items-center px-3 py-2.5 -mx-3 text-slate-500/80 uppercase">
-                    <span className="text-slate-600/80 w-5 text-sm font-bold">+</span>
-                    <span>CERT-IN DIRECTIVES</span>
-                  </span>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Bottom Bar: Copyright & Badges */}
-          <div className="pt-12 pb-8 flex flex-col lg:flex-row items-center justify-between gap-6 font-mono w-full">
-            <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-slate-900/40 border border-slate-800/80 hover:bg-slate-900/60 transition-colors cursor-default whitespace-nowrap shrink-0">
-              <Zap className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-white text-[11px] font-bold tracking-[0.2em]">VOICESHIELD</span>
-              <span className="text-slate-600">·</span>
-              <span className="text-slate-400 text-[11px] tracking-widest">LIT PRODUCT</span>
-            </div>
-            
-            <p className="text-[10px] text-slate-500 tracking-widest uppercase text-center shrink-0">
-              LOGIC INTELLIGENCE TECHNOLOGIES <span className="text-slate-700 mx-2">·</span> PROBLEM STATEMENT LIT
-            </p>
-            
-            <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-[9px] uppercase tracking-widest bg-emerald-950/20 px-3 py-2 rounded border border-emerald-900/40 whitespace-nowrap shrink-0">
-              <Lock className="w-3 h-3" />
-              ZERO RAW AUDIO DISK STORAGE <span className="text-emerald-900 mx-1">·</span> EPHEMERAL RAM ONLY
-            </div>
+          <div className="w-full max-w-6xl mx-auto pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+            <span>VoiceShield — a Logic Intelligence Technologies Pvt. Ltd. product</span>
+            <span>© {new Date().getFullYear()} LIT</span>
           </div>
-
         </div>
       </footer>
     </div>
