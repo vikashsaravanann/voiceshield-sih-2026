@@ -1,49 +1,43 @@
 # VoiceShield Final Verification Report
 
 **Date:** 2026-09-22  
-**Repository:** voiceshield-sih-2026  
-**Scope:** Repository B only (not LIT corporate site)
+**Repository:** voiceshield-sih-2026 (Repository B only)  
+**Site:** https://voiceshield.logicintelligencetechnologies.in/
 
 ## Summary
 
-Production verification is **partial**. UI, console, FastAPI code, and migrations exist. Live inference host, weights, full RLS proof, and several provider abstractions remain open.
+Architecture is **placeholder-first ready** for async providers. Real-time FastAPI path and product UI exist. Production gate is **not** fully verified without host + weights + live RLS + SMTP/corporate access flows.
 
 | AREA | STATUS |
 |------|--------|
 | Product identity (LIT product) | IMPLEMENTED |
-| Homepage claims hygiene | IMPLEMENTED (2026-09-22 pass) |
-| Shell absolute latency badges | WARNING (soften remaining SUB-300 / 269ms strings) |
+| Homepage claims hygiene | IMPLEMENTED |
+| Shell latency badges | IMPLEMENTED (softened) |
 | Live console UI | IMPLEMENTED |
 | FastAPI real-time code | IMPLEMENTED |
 | FastAPI production host | BLOCKED / REQUIRES MANUAL CONFIGURATION |
 | Model weights on host | REQUIRES MANUAL CONFIGURATION |
+| Transcription abstraction | IMPLEMENTED (mock + config gate) |
+| THROUGHPUTS abstraction | IMPLEMENTED (mock + config gate) |
+| Structured analysis validation | IMPLEMENTED |
 | Supabase migrations (files) | IMPLEMENTED |
 | RLS live role matrix | REQUIRES MANUAL VERIFICATION |
 | Auth login UI | IMPLEMENTED |
-| Request-access state machine in-repo | NOT IMPLEMENTED |
-| Transcription abstraction | NOT IMPLEMENTED |
-| THROUGHPUTS async path | NOT IMPLEMENTED |
-| Prod rate limiting (Redis) | NOT IMPLEMENTED |
+| Request-access in this repo | NOT IMPLEMENTED (corporate `/voice-shield/request`) |
+| Prod Redis rate limits | NOT IMPLEMENTED |
 | Automated root tests | NOT IMPLEMENTED |
 | API unit tests | PARTIALLY IMPLEMENTED |
 | Deployment E2E verified | REQUIRES MANUAL VERIFICATION |
 
-## Evidence of this pass
+## Provider activation (when keys arrive)
 
-- Audit: `docs/voiceshield-production-audit.md`  
-- Homepage: absolute &lt;250ms / EER / 0 bytes / 100% audit metrics replaced with capability language  
-- Docs: `environment.md`, `provider-configuration.md`, `data-retention.md`
+1. Set `TRANSCRIPTION_PROVIDER` / `ANALYSIS_PROVIDER` only when ready.  
+2. Set `THROUGHPUTS_*` with **verified** model ID — do not invent.  
+3. Missing keys with non-mock provider → **FAILED** (not silent mock).  
+4. Keep real-time detector on FastAPI/AASIST path — no LLM in the loop.
 
-## Remaining blockers (honest)
+## Honest completion
 
-1. Always-on FastAPI host with `MODEL_PATH`  
-2. Production Supabase env + migration apply + RLS tests  
-3. Soften residual Shell latency badges  
-4. Optional: request-access workflow if product requires it inside this domain  
-5. Redis rate limits for upload/login/API  
-
-## Definition of done
-
-**Not met** for full production gate. System is architecture-ready for key insertion; credentials and host provisioning remain external.
-
-Do not state “everything is perfect.”
+**CODE COMPLETE** for provider interfaces + claims hygiene + docs.  
+**EXTERNAL PROVIDER READY** only after secrets + host.  
+**PRODUCTION VERIFIED** — not claimed.

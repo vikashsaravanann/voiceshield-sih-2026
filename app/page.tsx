@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   },
 };
 
+const CORPORATE_REQUEST =
+  "https://www.logicintelligencetechnologies.in/voice-shield/request";
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
@@ -67,23 +70,28 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/demo"
+          <a
+            href={CORPORATE_REQUEST}
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group active:scale-95"
           >
-            <span>START LIVE DEMO</span>
+            <span>REQUEST ACCESS</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          </a>
           <Link
             href="/architecture"
             className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 font-mono font-bold text-xs tracking-widest uppercase transition-all active:scale-95"
           >
             EXPLORE PLATFORM
           </Link>
+          <Link
+            href="/docs"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/40 text-slate-400 font-mono font-bold text-xs tracking-widest uppercase transition-all active:scale-95"
+          >
+            VIEW API / DOCS
+          </Link>
         </div>
       </section>
 
-      {/* Capability pillars — no unverified numeric SLAs */}
       <section className="border-y border-slate-800/80 bg-slate-900/40 py-12 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="p-4">
